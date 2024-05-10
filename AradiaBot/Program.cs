@@ -91,7 +91,7 @@ public class Program
         // await _client.CreateGlobalApplicationCommandAsync(globalCommand.Build());
         // Using the ready event is a simple implementation for the sake of the example. Suitable for testing and development.
         // For a production bot, it is recommended to only run the CreateGlobalApplicationCommandAsync() once for each command.
-    }
+    }   
     catch(HttpException exception)
     {
         // If our command was invalid, we should catch an ApplicationCommandException. This exception contains the path of the error as well as the error message. You can serialize the Error field in the exception to get a visual of where your error is.
