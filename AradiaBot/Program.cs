@@ -36,6 +36,7 @@
  */
 
 
+using AradiaBot.CommandHandlers;
 using Discord;
 using Discord.Net;
 using Discord.WebSocket;
@@ -59,53 +60,143 @@ public class Program
         await _client.StartAsync();
 
         // Block this task until the program is closed.
+        _client.Ready += Client_Ready;
+        _client.SlashCommandExecuted += SlashCommandHandler;
 
 
         await Task.Delay(-1);
     }
-    public async Task Client_Ready()
+
+    private static async Task SlashCommandHandler(SocketSlashCommand command)
+    {
+        switch (command.Data.Name)
+        {
+            case "list-roles":
+                await HandleListRoleCommand(command);
+                break;
+            case "debugInit":
+                await HandleDebugInit();
+                break;
+            case "quote":
+                await QuoteHandler.ProcessSlashCommand(command);
+                break;
+        }
+
+    }
+
+    private static async Task HandleQuote(SocketSlashCommand command)
+    {
+        var subCommand = command.Data.Options.First().Name;
+        var subSubCommand = command.Data.Options.First().Options.First().Name;
+        var data = command.Data.Options.First().Options.First().Options;
+        Console.WriteLine(data);
+
+        switch (subSubCommand)
+        {
+            case "static":
+                Console.WriteLine(subCommand);
+                var embedBuiler = new EmbedBuilder()
+                    .WithTitle("Quotes")
+                    .WithDescription("A")
+                    .WithColor(Color.Green)
+                    .WithCurrentTimestamp();
+                await command.RespondAsync(embed: embedBuiler.Build());
+                break;
+            case "dynamic":
+                Console.WriteLine(subCommand);
+                var user = (SocketGuildUser)data.ElementAt(0).Value;
+
+                var embedBuiler2 = new EmbedBuilder()
+                   .WithTitle("Quotes")
+                   .WithDescription(user.Id+"\n\n"+data.ElementAt(1).Value)
+                   .WithColor(Color.Green)
+                   .WithCurrentTimestamp();
+                await command.RespondAsync(embed: embedBuiler2.Build());
+                break;
+        }
+    }
+
+    private static async Task HandleDebugInit()
+    {
+        throw new NotImplementedException();
+    }
+
+    public static async Task Client_Ready()
 {
     // Let's build a guild command! We're going to need a guild so lets just put that in a variable.
     var guild = _client.GetGuild(_guildID);
 
-    // Next, lets create our slash command builder. This is like the embed builder but for slash commands.
-    var guildCommand = new SlashCommandBuilder();
+        // Next, lets create our slash command builder. This is like the embed builder but for slash commands.
+        List<SlashCommandBuilder> slashCommandBuilders = [
+            new SlashCommandBuilder()
+            .WithName("list-roles")
+            .WithDescription("Lists all roles of a user.")
+            .AddOption("user", ApplicationCommandOptionType.User, "The users whos roles you want to be listed", isRequired: true),
+            new SlashCommandBuilder()
+            .WithName("quote")
+            .WithDescription("Quotes!!")
+            .AddOption(new SlashCommandOptionBuilder()
+            .WithName("add")
+            .WithDescription("Adds Quote")
+            .WithType(ApplicationCommandOptionType.SubCommandGroup)
+            .AddOption(new SlashCommandOptionBuilder()
+                .WithName("dynamic")
+                .WithDescription("Add using Discord User")
+                .WithType(ApplicationCommandOptionType.SubCommand)
+                .AddOption("author", ApplicationCommandOptionType.User, "The User Of The Quote Author", isRequired: true)
+                .AddOption("body", ApplicationCommandOptionType.String, "The content of it", isRequired: true)
+            ).AddOption(new SlashCommandOptionBuilder()
+                .WithName("static")
+                .WithDescription("Add Quote by putting in the name directly")
+                .WithType(ApplicationCommandOptionType.SubCommand)
+                .AddOption("author", ApplicationCommandOptionType.String, "The name Of The Quote author", isRequired: true)
+                .AddOption("body", ApplicationCommandOptionType.String, "The content of it", isRequired: true)
+            ))
 
-    // Note: Names have to be all lowercase and match the regular expression ^[\w-]{3,32}$
-    guildCommand.WithName("first-command");
+        ];
 
-    // Descriptions can have a max length of 100.
-    guildCommand.WithDescription("This is my first guild slash command!");
-/*
-    // Let's do our global command
-    var globalCommand = new SlashCommandBuilder();
-    globalCommand.WithName("first-global-command");
-    globalCommand.WithDescription("This is my first global slash command");*/
 
-    try
-    {
-        // Now that we have our builder, we can call the CreateApplicationCommandAsync method to make our slash command.
-        await guild.CreateApplicationCommandAsync(guildCommand.Build());
+        foreach ( var slashCommand in slashCommandBuilders) {
+            try
+            {
+                await guild.CreateApplicationCommandAsync(slashCommand.Build());
 
-        // With global commands we don't need the guild.
-        // await _client.CreateGlobalApplicationCommandAsync(globalCommand.Build());
-        // Using the ready event is a simple implementation for the sake of the example. Suitable for testing and development.
-        // For a production bot, it is recommended to only run the CreateGlobalApplicationCommandAsync() once for each command.
-    }   
-    catch(HttpException exception)
-    {
-        // If our command was invalid, we should catch an ApplicationCommandException. This exception contains the path of the error as well as the error message. You can serialize the Error field in the exception to get a visual of where your error is.
-        var json = JsonConvert.SerializeObject(exception.Errors, Formatting.Indented);
+            }
+            catch (HttpException exception)
+            {
+                // If our command was invalid, we should catch an ApplicationCommandException. This exception contains the path of the error as well as the error message. You can serialize the Error field in the exception to get a visual of where your error is.
+                var json = JsonConvert.SerializeObject(exception.Errors, Formatting.Indented);
 
-        // You can send this error somewhere or just print it to the console, for this example we're just going to print it.
-        Console.WriteLine(json);
-    }
+                // You can send this error somewhere or just print it to the console, for this example we're just going to print it.
+                Console.WriteLine(json);
+            }
+        }
+        
 }
 
     private static Task Log(LogMessage msg)
     {
         Console.WriteLine(msg.ToString());
         return Task.CompletedTask;
+    }
+
+    private static async Task HandleListRoleCommand(SocketSlashCommand command)
+    {
+        // We need to extract the user parameter from the command. since we only have one option and it's required, we can just use the first option.
+        var guildUser = (SocketGuildUser)command.Data.Options.First().Value;
+
+        // We remove the everyone role and select the mention of each role.
+        var roleList = string.Join(",\n", guildUser.Roles.Where(x => !x.IsEveryone).Select(x => x.Mention));
+
+        var embedBuiler = new EmbedBuilder()
+            .WithAuthor(guildUser.ToString(), guildUser.GetAvatarUrl() ?? guildUser.GetDefaultAvatarUrl())
+            .WithTitle("Roles")
+            .WithDescription(roleList)
+            .WithColor(Color.Green)
+            .WithCurrentTimestamp();
+
+        // Now, Let's respond with the embed.
+        await command.RespondAsync(embed: embedBuiler.Build());
     }
 
 }
