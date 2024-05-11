@@ -84,9 +84,19 @@ public class Program
         // Block this task until the program is closed.
         _client.Ready += Client_Ready;
         _client.SlashCommandExecuted += SlashCommandHandler;
+        _client.MessageCommandExecuted += MessageCommandHandler;
 
 
         await Task.Delay(-1);
+    }
+
+    private static async Task MessageCommandHandler(SocketMessageCommand command)
+    {
+        switch (command.CommandName) {
+            case "Quote Message":
+                QuoteHandler.ProcessMessageCommand(_database, command); 
+                break;
+        }
     }
 
     private static async Task SlashCommandHandler(SocketSlashCommand command)
@@ -101,10 +111,10 @@ public class Program
                 await HandleDebugInit();
                 break;
             case "quote":
-                await QuoteHandler.ProcessSlashCommand(command);
+                await QuoteHandler.ProcessSlashCommand(_database, command);
                 break;
             case "db":
-                await DatabaseHandler.ProcessSlashCommand(command, _database);
+                await DatabaseHandler.ProcessSlashCommand(_database, command);
                 break;
         }
 
@@ -119,7 +129,12 @@ public class Program
 
     public static async Task Client_Ready()
 {
-    // Let's build a guild command! We're going to need a guild so lets just put that in a variable.
+        // Let's build a guild command! We're going to need a guild so lets just put that in a variable.
+
+
+        List<MessageCommandBuilder> messageCommands = [
+             new MessageCommandBuilder().WithName("Quote Message")
+        ];
 
         // Next, lets create our slash command builder. This is like the embed builder but for slash commands.
         List<SlashCommandBuilder> slashCommandBuilders = [
@@ -130,6 +145,11 @@ public class Program
             new SlashCommandBuilder()
             .WithName("quote")
             .WithDescription("Quotes!!")
+            .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("random")
+                    .WithDescription("get random quote")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                )
             .AddOption(new SlashCommandOptionBuilder()
             .WithName("add")
             .WithDescription("Adds Quote")
@@ -194,8 +214,10 @@ public class Program
                 )
 
         ];
-
+        await CommandSetup.RegisterMessageCommands(_client, messageCommands, _guildIDs);
         await CommandSetup.RegisterSlashCommandsAsync(_client, slashCommandBuilders, _guildIDs);
+
+        
 
 
 
