@@ -7,7 +7,7 @@ using Discord;
 
 namespace AradiaBot
 {
-    internal class Quotes
+    internal class Quote
     {
         public ulong Id { get; set; }
         public ulong Author { get; set; }
