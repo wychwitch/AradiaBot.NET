@@ -11,7 +11,7 @@ namespace AradiaBot.CommandHandlers
 {
     internal class DatabaseHandler
     {
-        public static async Task ProcessSlashCommand(SocketSlashCommand command, Database database)
+        public static async Task ProcessSlashCommand(Database database, SocketSlashCommand command)
         {
             var commandName = command.Data.Options.First().Name;
             Console.WriteLine(commandName);
