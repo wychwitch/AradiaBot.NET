@@ -49,6 +49,18 @@ namespace AradiaBot
             throw new Exception("something went wrong...... you shouldnt get this error");
         }
 
+        public ServerMember GetMember(ulong userId)
+        {
+            foreach (var member in Members)
+            {
+                if (member.Id == userId)
+                {
+                    return member;
+                }
+            }
+            throw new Exception("something went wrong...... you shouldnt get this error");
+        }
+
         public void SaveData()
         {
             string jsonString = JsonConvert.SerializeObject(this, Formatting.Indented);
@@ -59,5 +71,6 @@ namespace AradiaBot
         {
             throw new NotImplementedException();
         }
+
     }
 }
