@@ -46,17 +46,17 @@ using Newtonsoft.Json;
 public class Program
 {
     private static DiscordSocketClient _client;
-    private static ulong _guildID;
+    private static List<ulong> _guildIDs;
     private static Database _database;
 
     public static async Task Main()
     {
-        var config = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText("config.json"));
+        Config config = JsonConvert.DeserializeObject<Config>(File.ReadAllText("config.json"));
 
         
         _client = new DiscordSocketClient();
-        var token = config["token"];
-        _guildID = ulong.Parse(config["guildID"]);
+
+        _guildIDs = config.guildIds;
 
         _client.Log += Log;
 
@@ -66,17 +66,19 @@ public class Program
         }
         catch (FileNotFoundException exception)
         {
-            // If our command was invalid, we should catch an ApplicationCommandException. This exception contains the path of the error as well as the error message. You can serialize the Error field in the exception to get a visual of where your error is.
+            _database = new Database();
+            _database.SaveData();
+        } catch (Exception exception)
+        {
+           
             var json = JsonConvert.SerializeObject(exception, Formatting.Indented);
 
-            // You can send this error somewhere or just print it to the console, for this example we're just going to print it.
+           //Somethign went wrong, needs to be sent out to the terminal
             Console.WriteLine(json);
 
-            ///// PLEASE DON'T LEAVE THIS IN FIND A BETTER WAY TO CHECK FOR THIS
-            _database = new Database();
         }
 
-            await _client.LoginAsync(TokenType.Bot, token);
+        await _client.LoginAsync(TokenType.Bot, config.token);
         await _client.StartAsync();
 
         // Block this task until the program is closed.
@@ -118,7 +120,6 @@ public class Program
     public static async Task Client_Ready()
 {
     // Let's build a guild command! We're going to need a guild so lets just put that in a variable.
-    var guild = _client.GetGuild(_guildID);
 
         // Next, lets create our slash command builder. This is like the embed builder but for slash commands.
         List<SlashCommandBuilder> slashCommandBuilders = [
@@ -146,34 +147,60 @@ public class Program
                 .AddOption("author", ApplicationCommandOptionType.String, "The name Of The Quote author", isRequired: true)
                 .AddOption("body", ApplicationCommandOptionType.String, "The content of it", isRequired: true)
             )),
+
             new SlashCommandBuilder()
-            .WithName("db")
-            .WithDescription("Database!!")
-            .AddOption(new SlashCommandOptionBuilder()
-            .WithName("join")
-            .WithDescription("Join Database")
-            .WithType(ApplicationCommandOptionType.SubCommand)
-            )
+                .WithName("db")
+                .WithDescription("Database!!")
+                .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("join")
+                    .WithDescription("Join Database")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                )
+
+                .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("settings-view")
+                    .WithDescription("Setting Subgroup")
+                    .WithType(ApplicationCommandOptionType.SubCommand))
+                .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("settings-edit")
+                    .WithDescription("edit setting")
+                    .WithType(ApplicationCommandOptionType.SubCommandGroup)
+                    .AddOption(new SlashCommandOptionBuilder()
+                        .WithName("pingable")
+                        .WithDescription("Activates Pings")
+                        .WithType(ApplicationCommandOptionType.SubCommand)
+                        .AddOption("enable", ApplicationCommandOptionType.Boolean, "Enables the ping", isRequired: true)
+
+                    ).AddOption(new SlashCommandOptionBuilder()
+                        .WithName("name")
+                        .WithDescription("Edit Name")
+                        .WithType(ApplicationCommandOptionType.SubCommand)
+                        .AddOption("name", ApplicationCommandOptionType.String, "Name to set yours to", isRequired: true)
+                    
+                    ).AddOption(new SlashCommandOptionBuilder()
+                        .WithName("add-ping-trigger")
+                        .WithDescription("Add Ping Trigger")
+                        .WithType(ApplicationCommandOptionType.SubCommand)
+                        .AddOption("trigger", ApplicationCommandOptionType.String, "trigger to add", isRequired: true)
+
+                    ).AddOption(new SlashCommandOptionBuilder()
+                        .WithName("use-nickname")
+                        .WithDescription("Use your nickname instead of your username")
+                        .WithType(ApplicationCommandOptionType.SubCommand)
+                        .AddOption("enable", ApplicationCommandOptionType.Boolean, "Enables the use of the nickname", isRequired: true)
+                    )
+
+
+                )
 
         ];
 
+        await CommandSetup.RegisterSlashCommandsAsync(_client, slashCommandBuilders, _guildIDs);
 
-        foreach ( var slashCommand in slashCommandBuilders) {
-            try
-            {
-                await guild.CreateApplicationCommandAsync(slashCommand.Build());
 
-            }
-            catch (HttpException exception)
-            {
-                // If our command was invalid, we should catch an ApplicationCommandException. This exception contains the path of the error as well as the error message. You can serialize the Error field in the exception to get a visual of where your error is.
-                var json = JsonConvert.SerializeObject(exception.Errors, Formatting.Indented);
 
-                // You can send this error somewhere or just print it to the console, for this example we're just going to print it.
-                Console.WriteLine(json);
-            }
-        }
-        
+
+
 }
 
     private static Task Log(LogMessage msg)
