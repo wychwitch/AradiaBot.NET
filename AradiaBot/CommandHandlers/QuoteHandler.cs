@@ -50,7 +50,9 @@ namespace AradiaBot.CommandHandlers
             var quote = quotes[randomNum];
             Console.WriteLine($"Quote: {quote}");
 
-            await command.ModifyOriginalResponseAsync(x => x.Content = $"{quote.QuoteBody}");
+            var quoteString = QuoteFormatter(database, quote);
+
+            await command.ModifyOriginalResponseAsync(x => x.Content = quoteString);
 
         }
         private static async Task AddCommandMessage(Database database, SocketMessageCommand command)
@@ -108,6 +110,48 @@ namespace AradiaBot.CommandHandlers
 
             database.Quotes.Add(quote);
             database.SaveData();
+        }
+
+        private static string QuoteFormatter(Database database, Quote quote)
+        {
+            ulong authorId;
+
+            string authorString;
+            string quoterString;
+
+            string author = quote.Author;
+            Console.WriteLine("Quote Author: "+quote.Author);
+            bool isAuthorId = ulong.TryParse(author, out authorId);
+            Console.WriteLine("isAuthor: " +isAuthorId);
+            if (isAuthorId)
+            {
+                if (database.Members.Any(m => m.Id == authorId))
+                {
+                    var member = database.GetMember(authorId);
+                    authorString = member.GetName();
+                }
+                else
+                {
+                    authorString = MentionUtils.MentionUser(authorId);
+                }
+            }
+            else
+            {
+                authorString = author;
+            }
+
+            if (database.Members.Any(m => m.Id == quote.Quoter))
+            {
+                var member = database.GetMember(quote.Quoter);
+                quoterString = member.GetName(); 
+            }
+            else
+            {
+                quoterString = MentionUtils.MentionUser(quote.Quoter);
+            }
+
+            return $"<{authorString}>: {quote.QuoteBody}\n\n *quoted by {quoterString}*";
+
         }
 
     }
