@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Discord;
+using Newtonsoft.Json;
 
 namespace AradiaBot
 {
@@ -24,10 +26,34 @@ namespace AradiaBot
 
 
         }
+        public bool IsUserRegistered(IUser user)
+        {
+            foreach (var member in Members)
+            {
+                if (user.Id == member.Id)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public ServerMember GetMember(IUser user) { 
+            foreach(var member in Members)
+            {
+                if (member.Id == user.Id)
+                {
+                    return member;
+                }
+            }
+            throw new Exception("something went wrong...... you shouldnt get this error");
+        }
+
         public void SaveData()
         {
-            string jsonString = JsonSerializer.Serialize(this);
-            Console.Write(jsonString);
+            string jsonString = JsonConvert.SerializeObject(this, Formatting.Indented);
+            
+            File.WriteAllText("db.json", jsonString);
         }
         public static void LoadData()
         {
