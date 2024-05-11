@@ -36,6 +36,7 @@
  */
 
 
+using AradiaBot;
 using AradiaBot.CommandHandlers;
 using Discord;
 using Discord.Net;
@@ -46,17 +47,36 @@ public class Program
 {
     private static DiscordSocketClient _client;
     private static ulong _guildID;
+    private static Database _database;
 
     public static async Task Main()
     {
         var config = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText("config.json"));
+
+        
         _client = new DiscordSocketClient();
         var token = config["token"];
         _guildID = ulong.Parse(config["guildID"]);
 
         _client.Log += Log;
 
-        await _client.LoginAsync(TokenType.Bot, token);
+        try
+        {
+            _database = JsonConvert.DeserializeObject<Database>(File.ReadAllText("db.json"));
+        }
+        catch (FileNotFoundException exception)
+        {
+            // If our command was invalid, we should catch an ApplicationCommandException. This exception contains the path of the error as well as the error message. You can serialize the Error field in the exception to get a visual of where your error is.
+            var json = JsonConvert.SerializeObject(exception, Formatting.Indented);
+
+            // You can send this error somewhere or just print it to the console, for this example we're just going to print it.
+            Console.WriteLine(json);
+
+            ///// PLEASE DON'T LEAVE THIS IN FIND A BETTER WAY TO CHECK FOR THIS
+            _database = new Database();
+        }
+
+            await _client.LoginAsync(TokenType.Bot, token);
         await _client.StartAsync();
 
         // Block this task until the program is closed.
@@ -69,6 +89,7 @@ public class Program
 
     private static async Task SlashCommandHandler(SocketSlashCommand command)
     {
+        await command.DeferAsync();
         switch (command.Data.Name)
         {
             case "list-roles":
@@ -80,41 +101,14 @@ public class Program
             case "quote":
                 await QuoteHandler.ProcessSlashCommand(command);
                 break;
+            case "db":
+                await DatabaseHandler.ProcessSlashCommand(command, _database);
+                break;
         }
 
     }
 
-    private static async Task HandleQuote(SocketSlashCommand command)
-    {
-        var subCommand = command.Data.Options.First().Name;
-        var subSubCommand = command.Data.Options.First().Options.First().Name;
-        var data = command.Data.Options.First().Options.First().Options;
-        Console.WriteLine(data);
-
-        switch (subSubCommand)
-        {
-            case "static":
-                Console.WriteLine(subCommand);
-                var embedBuiler = new EmbedBuilder()
-                    .WithTitle("Quotes")
-                    .WithDescription("A")
-                    .WithColor(Color.Green)
-                    .WithCurrentTimestamp();
-                await command.RespondAsync(embed: embedBuiler.Build());
-                break;
-            case "dynamic":
-                Console.WriteLine(subCommand);
-                var user = (SocketGuildUser)data.ElementAt(0).Value;
-
-                var embedBuiler2 = new EmbedBuilder()
-                   .WithTitle("Quotes")
-                   .WithDescription(user.Id+"\n\n"+data.ElementAt(1).Value)
-                   .WithColor(Color.Green)
-                   .WithCurrentTimestamp();
-                await command.RespondAsync(embed: embedBuiler2.Build());
-                break;
-        }
-    }
+   
 
     private static async Task HandleDebugInit()
     {
@@ -151,7 +145,15 @@ public class Program
                 .WithType(ApplicationCommandOptionType.SubCommand)
                 .AddOption("author", ApplicationCommandOptionType.String, "The name Of The Quote author", isRequired: true)
                 .AddOption("body", ApplicationCommandOptionType.String, "The content of it", isRequired: true)
-            ))
+            )),
+            new SlashCommandBuilder()
+            .WithName("db")
+            .WithDescription("Database!!")
+            .AddOption(new SlashCommandOptionBuilder()
+            .WithName("join")
+            .WithDescription("Join Database")
+            .WithType(ApplicationCommandOptionType.SubCommand)
+            )
 
         ];
 
