@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Discord;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,11 @@ namespace AradiaBot
         public ulong Id { get; set; }
         public string NickName { get; set; }
         public ServerMemberSettings Settings { get; set; }
+        public ServerMember(IUser user) 
+        { 
+            Id = user.Id;
+            NickName = "";
+            Settings = new();
+        }
     }
 }
