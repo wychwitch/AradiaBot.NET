@@ -118,12 +118,6 @@ public class Program
         await command.DeferAsync();
         switch (command.Data.Name)
         {
-            case "list-roles":
-                await HandleListRoleCommand(command);
-                break;
-            case "debugInit":
-                await HandleDebugInit();
-                break;
             case "quote":
                 await QuoteHandler.ProcessSlashCommand(_database, command);
                 break;
@@ -135,11 +129,6 @@ public class Program
     }
 
    
-
-    private static async Task HandleDebugInit()
-    {
-        throw new NotImplementedException();
-    }
 
     public static async Task Client_Ready()
 {
@@ -251,25 +240,6 @@ public class Program
     {
         Console.WriteLine(msg.ToString());
         return Task.CompletedTask;
-    }
-
-    private static async Task HandleListRoleCommand(SocketSlashCommand command)
-    {
-        // We need to extract the user parameter from the command. since we only have one option and it's required, we can just use the first option.
-        var guildUser = (SocketGuildUser)command.Data.Options.First().Value;
-
-        // We remove the everyone role and select the mention of each role.
-        var roleList = string.Join(",\n", guildUser.Roles.Where(x => !x.IsEveryone).Select(x => x.Mention));
-
-        var embedBuiler = new EmbedBuilder()
-            .WithAuthor(guildUser.ToString(), guildUser.GetAvatarUrl() ?? guildUser.GetDefaultAvatarUrl())
-            .WithTitle("Roles")
-            .WithDescription(roleList)
-            .WithColor(Color.Green)
-            .WithCurrentTimestamp();
-
-        // Now, Let's respond with the embed.
-        await command.RespondAsync(embed: embedBuiler.Build());
     }
 
 }
