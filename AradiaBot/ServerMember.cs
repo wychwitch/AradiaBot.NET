@@ -16,6 +16,14 @@ namespace AradiaBot
         public string NickName { get; set; }
         public ServerMemberSettings Settings { get; set; }
 
+        [JsonConstructor]
+        public ServerMember(ulong id)
+        {
+            Id = id;
+            NickName = "";
+            Settings = new ServerMemberSettings();
+        }
+
         public string GetName() {
             if (Settings.UseNickname && NickName != null)
             {
