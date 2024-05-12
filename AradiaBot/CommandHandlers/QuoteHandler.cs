@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Discord;
 using Discord.Net;
 using Discord.WebSocket;
@@ -20,15 +21,59 @@ namespace AradiaBot.CommandHandlers
             switch (commandName)
             {
                 case "add":
-                    await AddCommand(command);
+                    await AddCommand(database, command);
                     break;
                 case "random":
                     await RandomQuote(database, command);
                     break;
-
+                case "get":
+                    await getQuote(database, command);
+                    break;
+                case "delete":
+                    await DeleteQuote(database, command);
+                    break;
+                case "edit":
+                    await EditQuote(database, command);
+                    break;
+                case "count":
+                    await CountQuote(database, command);
+                    break;
             }
         }
 
+        private static async Task getQuote(Database database, SocketSlashCommand command)
+        {
+            int quoteNum = database.Quotes.Count;
+            var value = command.Data.Options.First().Options.First().Value;
+            int requestedId = Convert.ToInt32(value);
+            if (requestedId > quoteNum)
+            {
+                await command.ModifyOriginalResponseAsync(x => x.Content = $"There are only {quoteNum} quotes!");
+            }
+            else
+            {
+                Quote quote = database.Quotes[requestedId - 1];
+                string formattedQuote = $"#{requestedId} "+QuoteFormatter(database, quote);
+                await command.ModifyOriginalResponseAsync(x=> x.Content = formattedQuote);
+            }
+        }
+
+        private static async Task DeleteQuote(Database database, SocketSlashCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static async Task EditQuote(Database database, SocketSlashCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static async Task CountQuote(Database database, SocketSlashCommand command)
+        {
+            int count = database.Quotes.Count;
+
+            command.ModifyOriginalResponseAsync(x => x.Content = $"There are {count} quotes in the database!");
+        }
 
         public static async Task ProcessMessageCommand(Database database, SocketMessageCommand command) 
         {
@@ -41,16 +86,36 @@ namespace AradiaBot.CommandHandlers
                     break;
             }
         }
-        public static async Task RandomQuote(Database database, SocketSlashCommand command, int num = 1)
+        public static async Task RandomQuote(Database database, SocketSlashCommand command)
         {
+            int num;
+            
+            
             var quotes = database.Quotes;
             var random = new Random();
-            var randomNum = random.Next(quotes.Count);
 
-            var quote = quotes[randomNum];
-            Console.WriteLine($"Quote: {quote}");
+           if (command.Data.Options.First().Options.Count == 1)
+            {
+                var value = command.Data.Options.First().Options.First().Value;
+                num = Convert.ToInt32(value);
+            }
+            else
+            {
+                num = 1;
+            }
+            
+            
 
-            var quoteString = QuoteFormatter(database, quote);
+            var quoteString = "";
+            
+            for ( var i = 0; i < num; i++ )
+            {
+                var randomNum = random.Next(quotes.Count);
+
+                var quote = quotes[randomNum];
+                quoteString += $"#{randomNum +1} "+QuoteFormatter(database, quote) + "\n\n";
+            }
+            
 
             await command.ModifyOriginalResponseAsync(x => x.Content = quoteString);
 
@@ -67,44 +132,57 @@ namespace AradiaBot.CommandHandlers
 
         }
 
-        private static async Task AddCommand(SocketSlashCommand command)
+        private static async Task AddCommand(Database database, SocketSlashCommand command)
         {
             var addType = command.Data.Options.First().Options.First().Name;
             
             switch (addType)
             {
                 case "dynamic":
-                    await AddDynamicQuote(command);
+                    await AddDynamicQuote(database, command);
                     break;
                 case "static":
-                    await AddStaticQuote(command);
+                    await AddStaticQuote(database, command);
                     break;
             }
 
         }
-        private static async Task AddDynamicQuote(SocketSlashCommand command) {
+        private static async Task AddDynamicQuote(Database database, SocketSlashCommand command) {
             var data = command.Data.Options.First().Options.First().Options;
             IUser author = (IUser)data.ElementAt(0).Value;
             string body = (string)data.ElementAt(1).Value;
-            IUser quotee = command.User;
-            await command.ModifyOriginalResponseAsync(x=>x.Content = $"{author.Mention}: {body}\n\n-{quotee.Mention}");
+            IUser quoter = command.User;
+
+            Quote quote = new Quote(author,quoter,body);
+
+            database.Quotes.Add(quote);
+            database.SaveData();
+
         }
 
-        private static async Task AddStaticQuote(SocketSlashCommand command) { }
+        private static async Task AddStaticQuote(Database database, SocketSlashCommand command) {
+            var data = command.Data.Options.First().Options.First().Options;
+            string author = (string)data.ElementAt(0).Value;
+            string body = (string)data.ElementAt(1).Value;
+            IUser quoter = command.User;
+
+            Quote quote = new Quote(author, quoter, body);
+
+            database.Quotes.Add(quote);
+            database.SaveData();
+
+        }
 
         
-
-        private static async Task DelCommand(SocketSlashCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static async Task EditCommand(SocketSlashCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
         private static async Task AddQuote(Database database, IUser author,  string body, IUser quoter)
+        {
+            Quote quote = new Quote(author, quoter, body);
+
+            database.Quotes.Add(quote);
+            database.SaveData();
+        }
+
+        private static async Task AddQuoteStatic(Database database, string author, string body, IUser quoter)
         {
             Quote quote = new Quote(author, quoter, body);
 
@@ -144,6 +222,10 @@ namespace AradiaBot.CommandHandlers
             {
                 var member = database.GetMember(quote.Quoter);
                 quoterString = member.GetName(); 
+            }
+            else if (quote.Quoter == 0)
+            {
+                quoterString = "unknown";
             }
             else
             {
