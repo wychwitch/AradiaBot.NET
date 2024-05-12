@@ -53,8 +53,15 @@ public class Program
     {
         Config config = JsonConvert.DeserializeObject<Config>(File.ReadAllText("config.json"));
 
-        
-        _client = new DiscordSocketClient();
+        var socket_config = new DiscordSocketConfig()
+        {
+            GatewayIntents = GatewayIntents.All
+        };
+       
+
+
+
+        _client = new DiscordSocketClient(socket_config);
 
         _guildIDs = config.guildIds;
 
@@ -85,11 +92,18 @@ public class Program
         _client.Ready += Client_Ready;
         _client.SlashCommandExecuted += SlashCommandHandler;
         _client.MessageCommandExecuted += MessageCommandHandler;
+        _client.MessageReceived += ReadMessageHandler;
 
 
         await Task.Delay(-1);
     }
+    private static async Task ReadMessageHandler(SocketMessage message)
+    {
+        if (!message.Author.IsBot)
+        await _database.CheckPings(_client, message);
 
+        
+    }
     private static async Task MessageCommandHandler(SocketMessageCommand command)
     {
         switch (command.CommandName) {
@@ -149,6 +163,20 @@ public class Program
                     .WithName("random")
                     .WithDescription("get random quote")
                     .WithType(ApplicationCommandOptionType.SubCommand)
+                    .AddOption("count", ApplicationCommandOptionType.Integer, "Number of quotes", isRequired: false)
+                    
+                )
+            .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("get")
+                    .WithDescription("get random quote")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                    .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The index of the quote", isRequired: true, minValue:1)
+                )
+            .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("count")
+                    .WithDescription("get number of quotes")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                    
                 )
             .AddOption(new SlashCommandOptionBuilder()
             .WithName("add")
@@ -186,12 +214,6 @@ public class Program
                     .WithDescription("edit setting")
                     .WithType(ApplicationCommandOptionType.SubCommandGroup)
                     .AddOption(new SlashCommandOptionBuilder()
-                        .WithName("pingable")
-                        .WithDescription("Activates Pings")
-                        .WithType(ApplicationCommandOptionType.SubCommand)
-                        .AddOption("enable", ApplicationCommandOptionType.Boolean, "Enables the ping", isRequired: true)
-
-                    ).AddOption(new SlashCommandOptionBuilder()
                         .WithName("name")
                         .WithDescription("Edit Name")
                         .WithType(ApplicationCommandOptionType.SubCommand)
@@ -205,7 +227,7 @@ public class Program
 
                     ).AddOption(new SlashCommandOptionBuilder()
                         .WithName("use-nickname")
-                        .WithDescription("Use your nickname instead of your username")
+                        .WithDescription("Use your nickname instead of your username in many places")
                         .WithType(ApplicationCommandOptionType.SubCommand)
                         .AddOption("enable", ApplicationCommandOptionType.Boolean, "Enables the use of the nickname", isRequired: true)
                     )

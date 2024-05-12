@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Discord;
+using Discord.WebSocket;
 using Newtonsoft.Json;
 
 namespace AradiaBot
@@ -67,6 +68,34 @@ namespace AradiaBot
             
             File.WriteAllText("db.json", jsonString);
         }
+
+        public async Task CheckPings(DiscordSocketClient client, SocketMessage message)
+        {
+            
+            string messageContent = message.Content;
+            HashSet<int> memberIndexes = new();
+            for (var i = 0; i < Members.Count; i++)
+            {
+                foreach(var ping in Members[i].Settings.PingNames) 
+                {
+                    if (messageContent.ToLower().Contains(ping.ToLower()))
+                    {
+                        memberIndexes.Add(i);
+                    }
+                }
+            }
+            foreach (var memberIndex in memberIndexes) {
+                IUser user = await message.Channel.GetUserAsync(Members[memberIndex].Id);
+                string messageLink = MessageExtensions.GetJumpUrl(message);
+                
+                if (user!= null)
+                {
+                    await UserExtensions.SendMessageAsync(user, $"> {message.Channel}: <{message.Author}> {messageContent}\n\n{messageLink}");
+                }
+                
+            }
+        }
+
         public static void LoadData()
         {
             throw new NotImplementedException();
