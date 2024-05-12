@@ -39,7 +39,6 @@ namespace AradiaBot.CommandHandlers
                 ServerMemberSettings settings = member.Settings;
                 string respondString = $"**Name**: {member.NickName}\n"+
                                        $"**Use Name**: {settings.UseNickname}\n" +
-                                       $"**Pingable**: {settings.Pingable}\n"+
                              $"**Pings**: \n- {String.Join("\n- ",settings.PingNames)}\n";
                 command.ModifyOriginalResponseAsync(x => { x.Content = respondString; });
             } 
@@ -61,10 +60,6 @@ namespace AradiaBot.CommandHandlers
 
                 switch (setting)
                 {
-                    case "pingable":
-                        member.Settings.Pingable = (bool)newSettingValue;
-                        responseString = $"Set pingable to {member.Settings.Pingable}";
-                        break;
                     case "name":
                         member.NickName = (string)newSettingValue;
                         responseString = $"Set Name to {member.NickName}";
@@ -104,8 +99,7 @@ namespace AradiaBot.CommandHandlers
             }
             else
             {
-                ServerMember serverMember = new ServerMember();
-                serverMember.Id = user.Id;
+                ServerMember serverMember = new ServerMember(user.Id);
                 database.Members.Add(serverMember);
 
                 Console.WriteLine("Added user");
