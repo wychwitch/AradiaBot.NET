@@ -86,6 +86,9 @@ public class Program
 
         }
 
+        _database.AvailableGames.Add(new AZGameData(["apple", "bag", "cabbage", "ddd", "eee", "fff"]));
+        _database.GlobalGameState =  new AZGameState(0, "apple", "fff", "ddd");
+
         await _client.LoginAsync(TokenType.Bot, config.token);
         await _client.StartAsync();
 
@@ -102,6 +105,10 @@ public class Program
     {
         if (!message.Author.IsBot)
         await _database.CheckPings(_client, message);
+
+        (bool, AZGameState) returnValue = AZGameData.CheckAnswer(message.Content, _database.GlobalGameState, _database.AvailableGames);
+        Console.WriteLine($"{returnValue.Item1} | start: {returnValue.Item2.rangeStart} end: {returnValue.Item2.rangeEnd} answer: {returnValue.Item2.answer}");
+        
 
         
     }

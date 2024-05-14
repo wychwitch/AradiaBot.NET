@@ -15,6 +15,10 @@ namespace AradiaBot
         public List<ServerMember> Members { get; set; }
         public Dictionary<string, Dictionary<ulong, int>> GameScores { get; set; }
         public List<Quote> Quotes { get; set; }
+        public List<AZGameData> AvailableGames { get; set; }
+        //The key is the guild's id
+        public Dictionary<ulong, AZGameState> UserGameStates { get; set; }
+        public AZGameState GlobalGameState { get; set; }
 
         public Database()
         {
@@ -24,6 +28,11 @@ namespace AradiaBot
             Quotes = new();
 
             Members = new List<ServerMember>();
+
+            UserGameStates = new();
+
+            AvailableGames = new();
+            
 
 
         }
