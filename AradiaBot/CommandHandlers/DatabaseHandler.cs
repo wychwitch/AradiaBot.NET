@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml.Linq;
 
 namespace AradiaBot.CommandHandlers
 {
@@ -22,14 +23,30 @@ namespace AradiaBot.CommandHandlers
                 case "join":
                     await JoinDatabase(command, database);
                     break;
-                case "settings-view":
-                    await ViewSettings(command, database);
-                    break;
-                case "settings-edit":
-                    await EditSettings(command, database);
+                case "settings":
+                    await ProcessSlashSettingsCommand(database, command);
                     break;
             }
         }
+
+        public static async Task ProcessSlashSettingsCommand(Database database, SocketSlashCommand command)
+        {
+            var commandName = command.Data.Options.First().Options.First().Name;
+            Console.WriteLine(commandName);
+
+            switch (commandName) 
+            {
+                case "edit":
+                   await EditSettings(command, database);
+                   break;
+                case "view":
+                    await ViewSettings(command, database);
+                    break;
+
+            }
+        }
+
+
         public static async Task ViewSettings(SocketSlashCommand command, Database database)
         {
             IUser user = command.User;
@@ -37,45 +54,76 @@ namespace AradiaBot.CommandHandlers
             if (database.IsUserRegistered(user)) {
                 ServerMember member = database.GetMember(user);
                 ServerMemberSettings settings = member.Settings;
-                string respondString = $"**Name**: {member.NickName}\n"+
-                                       $"**Use Name**: {settings.UseNickname}\n" +
-                             $"**Pings**: \n- {String.Join("\n- ",settings.PingNames)}\n";
-                command.ModifyOriginalResponseAsync(x => { x.Content = respondString; });
+                string respondString = $"**Name**: {member.NickName}\n" +
+                                       $"**Use Name**: {settings.UseNickname}\n";
+                respondString += (settings.PingNames.Count > 0) ? $"**Pings**: \n- {String.Join("\n- ", settings.PingNames)}\n" : "No pings set";
+                await command.ModifyOriginalResponseAsync(x => { x.Content = respondString; });
             } 
             else {
-                command.ModifyOriginalResponseAsync(x => x.Content = "You havent joined the database!"); 
+                await command.ModifyOriginalResponseAsync(x => x.Content = "You havent joined the database!"); 
             }
         }
+
         public static async Task EditSettings(SocketSlashCommand command, Database database)
         {
+            string responseString = "";
             IUser user = command.User;
             if (database.IsUserRegistered(user))
             {
                 var member = database.GetMember(user);
-                var setting = command.Data.Options.First().Options.First().Name;
-                
-                var newSettingValue = command.Data.Options.First().Options.First().Options.First().Value;
-
-                string responseString = "";
-
-                switch (setting)
+                var settingsToChange = command.Data.Options.First().Options.First().Options;
+                if (settingsToChange.Count > 0)
                 {
-                    case "name":
-                        member.NickName = (string)newSettingValue;
-                        responseString = $"Set Name to {member.NickName}";
-                        break;
-                    case "add-ping-trigger":
-                        string new_ping = (string)newSettingValue;
-                        member.Settings.PingNames.Add(new_ping);
-                        responseString = $"Added {new_ping} to list of ping triggers";
-                        break;
-                    case "use-nickname":
-                        member.Settings.UseNickname = (bool)newSettingValue;
-                        responseString = $"Set useNickname to {member.Settings.UseNickname}";
-                        break;
+                    foreach (var setting in settingsToChange)
+                    {
+                        switch (setting.Name)
+                        {
+                            case "new-nickname":
+                                member.NickName = (string)setting.Value;
+                                responseString += $"Changed nickname to {member.NickName}\n";
+                                database.SaveData();
+                                break;
+                            case "use-nickname":
+                                member.Settings.UseNickname = (bool)setting.Value;
+                                responseString += member.Settings.UseNickname ? "Enabled Nickname use\n" : "Disabled Nickname use\n";
+                                database.SaveData();
+                                break;
+                            case "add-ping":
+                                string newPing = (string)setting.Value;
+                                member.Settings.PingNames.Add(newPing);
+                                responseString += $"Added {newPing} to your list of pings\n";
+                                database.SaveData();
+                                break;
+                            case "remove-ping":
+                                string nameToRemove = (string)setting.Value;
+                                bool foundName = false;
+                                for (int i = 0; i < member.Settings.PingNames.Count; i++)
+                                {
+                                    if (member.Settings.PingNames[i].ToLower() == nameToRemove.ToLower())
+                                    {
+                                        member.Settings.PingNames.RemoveAt(i);
+                                        responseString += $"removed {nameToRemove} from your ping names \n";
+                                        foundName = true;
+                                        break;
+                                    }
+                                }
+                                if (!foundName)
+                                {
+                                    responseString += $"couldn't find the {nameToRemove} in your list of ping names\n";
+                                }
+                                database.SaveData();
+                                break;
+                            
+                        }
+                    }
                 }
-                command.ModifyOriginalResponseAsync(x => x.Content = responseString);
-                database.SaveData();
+                else
+                {
+                    responseString = "You need to add a setting to change!";
+                }
+
+                
+                await command.ModifyOriginalResponseAsync(x => x.Content = responseString);
             }
         }
 

@@ -71,10 +71,11 @@ public class Program
         {
             _database = JsonConvert.DeserializeObject<Database>(File.ReadAllText("db.json"));
         }
-        catch (FileNotFoundException exception)
+        catch (FileNotFoundException)
         {
             _database = new Database();
             _database.SaveData();
+            Console.WriteLine("Database not found, initializing new one.");
         } catch (Exception exception)
         {
            
@@ -108,7 +109,7 @@ public class Program
     {
         switch (command.CommandName) {
             case "Quote Message":
-                QuoteHandler.ProcessMessageCommand(_database, command); 
+                await QuoteHandler.ProcessMessageCommand(_database, command); 
                 break;
         }
     }
@@ -154,36 +155,49 @@ public class Program
                     .WithType(ApplicationCommandOptionType.SubCommand)
                     .AddOption("count", ApplicationCommandOptionType.Integer, "Number of quotes", isRequired: false)
                     
-                )
-            .AddOption(new SlashCommandOptionBuilder()
+            ).AddOption(new SlashCommandOptionBuilder()
                     .WithName("get")
                     .WithDescription("get random quote")
                     .WithType(ApplicationCommandOptionType.SubCommand)
                     .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The index of the quote", isRequired: true, minValue:1)
-                )
-            .AddOption(new SlashCommandOptionBuilder()
+            ).AddOption(new SlashCommandOptionBuilder()
                     .WithName("count")
                     .WithDescription("get number of quotes")
                     .WithType(ApplicationCommandOptionType.SubCommand)
                     
-                )
-            .AddOption(new SlashCommandOptionBuilder()
-            .WithName("add")
-            .WithDescription("Adds Quote")
-            .WithType(ApplicationCommandOptionType.SubCommandGroup)
-            .AddOption(new SlashCommandOptionBuilder()
-                .WithName("dynamic")
-                .WithDescription("Add using Discord User")
-                .WithType(ApplicationCommandOptionType.SubCommand)
-                .AddOption("author", ApplicationCommandOptionType.User, "The User Of The Quote Author", isRequired: true)
-                .AddOption("body", ApplicationCommandOptionType.String, "The content of it", isRequired: true)
             ).AddOption(new SlashCommandOptionBuilder()
-                .WithName("static")
-                .WithDescription("Add Quote by putting in the name directly")
+                .WithName("add")
+                .WithDescription("Adds Quote")
+                .WithType(ApplicationCommandOptionType.SubCommandGroup)
+                    .AddOption(new SlashCommandOptionBuilder()
+                        .WithName("dynamic")
+                        .WithDescription("Add using Discord User")
+                        .WithType(ApplicationCommandOptionType.SubCommand)
+                        .AddOption("author", ApplicationCommandOptionType.User, "The User Of The Quote Author", isRequired: true)
+                        .AddOption("body", ApplicationCommandOptionType.String, "The content of it", isRequired: true)
+                    ).AddOption(new SlashCommandOptionBuilder()
+                        .WithName("static")
+                        .WithDescription("Add Quote by putting in the name directly")
+                        .WithType(ApplicationCommandOptionType.SubCommand)
+                        .AddOption("author", ApplicationCommandOptionType.String, "The name Of The Quote author", isRequired: true)
+                        .AddOption("body", ApplicationCommandOptionType.String, "The content of it", isRequired: true)
+                        ))
+            .AddOption(new SlashCommandOptionBuilder()
+                .WithName("delete")
+                .WithDescription("Delete Quote")
                 .WithType(ApplicationCommandOptionType.SubCommand)
-                .AddOption("author", ApplicationCommandOptionType.String, "The name Of The Quote author", isRequired: true)
-                .AddOption("body", ApplicationCommandOptionType.String, "The content of it", isRequired: true)
-            )),
+                .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The id of the quote to delete", isRequired: true, minValue:1)
+            ).AddOption(new SlashCommandOptionBuilder()
+                .WithName("edit")
+                .WithDescription("Edit quote")
+                .WithType(ApplicationCommandOptionType.SubCommand)
+                .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The id of the quote to edit", isRequired: true, minValue:1)
+                .AddOption("author-string", ApplicationCommandOptionType.String, "The name of the author (string)", isRequired: false)
+                .AddOption("author-user", ApplicationCommandOptionType.User, "The name of the author (user)", isRequired: false)
+                .AddOption("body", ApplicationCommandOptionType.String, "the body of the quote", isRequired: false)
+                .AddOption("quoter", ApplicationCommandOptionType.User, "the person who quoted", isRequired: false)
+            
+            ),
 
             new SlashCommandBuilder()
                 .WithName("db")
@@ -195,33 +209,22 @@ public class Program
                 )
 
                 .AddOption(new SlashCommandOptionBuilder()
-                    .WithName("settings-view")
+                    .WithName("settings")
                     .WithDescription("Setting Subgroup")
-                    .WithType(ApplicationCommandOptionType.SubCommand))
-                .AddOption(new SlashCommandOptionBuilder()
-                    .WithName("settings-edit")
-                    .WithDescription("edit setting")
                     .WithType(ApplicationCommandOptionType.SubCommandGroup)
                     .AddOption(new SlashCommandOptionBuilder()
-                        .WithName("name")
-                        .WithDescription("Edit Name")
+                        .WithName("view")
+                        .WithDescription("View Settings")
+                        .WithType(ApplicationCommandOptionType.SubCommand))
+                    .AddOption(new SlashCommandOptionBuilder()
+                        .WithName("edit")
+                        .WithDescription("View Settings")
                         .WithType(ApplicationCommandOptionType.SubCommand)
-                        .AddOption("name", ApplicationCommandOptionType.String, "Name to set yours to", isRequired: true)
-                    
-                    ).AddOption(new SlashCommandOptionBuilder()
-                        .WithName("add-ping-trigger")
-                        .WithDescription("Add Ping Trigger")
-                        .WithType(ApplicationCommandOptionType.SubCommand)
-                        .AddOption("trigger", ApplicationCommandOptionType.String, "trigger to add", isRequired: true)
-
-                    ).AddOption(new SlashCommandOptionBuilder()
-                        .WithName("use-nickname")
-                        .WithDescription("Use your nickname instead of your username in many places")
-                        .WithType(ApplicationCommandOptionType.SubCommand)
-                        .AddOption("enable", ApplicationCommandOptionType.Boolean, "Enables the use of the nickname", isRequired: true)
+                        .AddOption("add-ping", ApplicationCommandOptionType.String, "Add A Ping To Your Settings", isRequired: false)
+                        .AddOption("remove-ping", ApplicationCommandOptionType.String, "Add A Ping To Your Settings", isRequired: false)
+                        .AddOption("use-nickname", ApplicationCommandOptionType.Boolean, "Enable or Disable using registered nickname", isRequired: false)
+                        .AddOption("new-nickname", ApplicationCommandOptionType.String, "change your registered name", isRequired: false)
                     )
-
-
                 )
 
         ];

@@ -25,7 +25,7 @@ namespace AradiaBot
         }
 
         public string GetName() {
-            if (Settings.UseNickname && NickName != null)
+            if (Settings.UseNickname && NickName != "")
             {
                 return NickName;
             } 

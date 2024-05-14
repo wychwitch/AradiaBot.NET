@@ -39,15 +39,50 @@ namespace AradiaBot
             Quoter = 0;
             QuoteBody = quoteBody;
         }
+        public static string QuoteFormatter(Database database, Quote quote)
+        {
+            ulong authorId;
 
+            string authorString;
+            string quoterString;
 
+            string author = quote.Author;
+            Console.WriteLine("Quote Author: " + quote.Author);
+            bool isAuthorId = ulong.TryParse(author, out authorId);
+            Console.WriteLine("isAuthor: " + isAuthorId);
+            if (isAuthorId)
+            {
+                if (database.Members.Any(m => m.Id == authorId))
+                {
+                    var member = database.GetMember(authorId);
+                    authorString = member.GetName();
+                }
+                else
+                {
+                    authorString = MentionUtils.MentionUser(authorId);
+                }
+            }
+            else
+            {
+                authorString = author;
+            }
 
-        public static Embed QuoteFormatter(Database database) {
-            //Todo
+            if (database.Members.Any(m => m.Id == quote.Quoter))
+            {
+                var member = database.GetMember(quote.Quoter);
+                quoterString = member.GetName();
+            }
+            else if (quote.Quoter == 0)
+            {
+                quoterString = "unknown";
+            }
+            else
+            {
+                quoterString = MentionUtils.MentionUser(quote.Quoter);
+            }
 
-            EmbedBuilder formattedQuote = new EmbedBuilder().WithDescription("Nothing Is Here Yet");
+            return $"<{authorString}>: {quote.QuoteBody}\n\n *quoted by {quoterString}*";
 
-            return formattedQuote.Build();
         }
     }
 }

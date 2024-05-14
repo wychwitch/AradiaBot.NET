@@ -53,26 +53,89 @@ namespace AradiaBot.CommandHandlers
             else
             {
                 Quote quote = database.Quotes[requestedId - 1];
-                string formattedQuote = $"#{requestedId} "+QuoteFormatter(database, quote);
+                string formattedQuote = $"#{requestedId} "+Quote.QuoteFormatter(database, quote);
                 await command.ModifyOriginalResponseAsync(x=> x.Content = formattedQuote);
             }
         }
 
         private static async Task DeleteQuote(Database database, SocketSlashCommand command)
         {
-            throw new NotImplementedException();
+            long quoteIdLong = (long)command.Data.Options.First().Options.First().Value;
+
+            int quoteId = Convert.ToInt32(quoteIdLong);
+
+            if (quoteId < database.Quotes.Count)
+            {
+                Quote quote = (Quote)database.Quotes[quoteId];
+                string formattedQuote = Quote.QuoteFormatter(database, quote);
+                database.Quotes.RemoveAt(quoteId);
+                database.SaveData();
+                await command.ModifyOriginalResponseAsync(x => x.Content = $"Deleted the following quote: \n\n {formattedQuote}");
+            }
+            else 
+            {
+                await command.ModifyOriginalResponseAsync(x => x.Content = "Couldn't find that quote.");
+            }
         }
 
         private static async Task EditQuote(Database database, SocketSlashCommand command)
         {
-            throw new NotImplementedException();
+            long quoteIdLong = (long)command.Data.Options.First().Options.First().Value;
+
+            int quoteId = Convert.ToInt32(quoteIdLong);
+
+            var editOptions = command.Data.Options.First().Options;
+
+            List<Quote> quotes = database.Quotes;
+
+            if (quoteId <= database.Quotes.Count)
+            {
+                if (editOptions.Count >= 1)
+                {
+                    foreach(var editOption in editOptions) 
+                    {
+                        Console.WriteLine(editOption.Name);
+                        switch(editOption.Name)
+                        {
+                            case "author-string":
+                                quotes[quoteId - 1].Author = (string)editOption.Value;
+                                Console.WriteLine("AAA");
+                                Console.WriteLine((string)editOption.Value);
+                                Console.WriteLine(quotes[quoteId - 1].Author);
+                                break;
+                            case "author-user":
+                                IUser author = (IUser)editOption.Value;
+                                quotes[quoteId - 1].Author = $"{author.Id}";
+                                break;
+                            case "body":
+                                quotes[quoteId - 1].QuoteBody = (string)editOption.Value;
+                                break;
+                            case "quoter":
+                                IUser quoter = (IUser)editOption.Value;
+                                quotes[quoteId - 1].Quoter = quoter.Id;
+                                break;
+                        }
+                    }
+                    database.SaveData();
+                    string formattedQuote = Quote.QuoteFormatter(database, quotes[quoteId - 1]);
+                    await command.ModifyOriginalResponseAsync(x => x.Content = "Edited quote #"+$"{quoteId}\n\n{formattedQuote}");
+                }
+                else
+                {
+                    await command.ModifyOriginalResponseAsync(x => x.Content = "You need to provide an edit!");
+                }
+            }
+            else
+            {
+                await command.ModifyOriginalResponseAsync(x => x.Content = $"That number is too large! There are only {quotes.Count} in the database");
+            }
         }
 
         private static async Task CountQuote(Database database, SocketSlashCommand command)
         {
             int count = database.Quotes.Count;
 
-            command.ModifyOriginalResponseAsync(x => x.Content = $"There are {count} quotes in the database!");
+            await command.ModifyOriginalResponseAsync(x => x.Content = $"There are {count} quotes in the database!");
         }
 
         public static async Task ProcessMessageCommand(Database database, SocketMessageCommand command) 
@@ -113,7 +176,7 @@ namespace AradiaBot.CommandHandlers
                 var randomNum = random.Next(quotes.Count);
 
                 var quote = quotes[randomNum];
-                quoteString += $"#{randomNum +1} "+QuoteFormatter(database, quote) + "\n\n";
+                quoteString += $"#{randomNum +1} "+Quote.QuoteFormatter(database, quote) + "\n\n";
             }
             
 
@@ -127,8 +190,9 @@ namespace AradiaBot.CommandHandlers
             var body = command.Data.Message.Content;
 
             await AddQuote(database, author, body, quoter);
+            int quoteCount = database.Quotes.Count;
 
-            await command.RespondAsync("Quo0ted!");
+            await command.RespondAsync($"Added quote #{quoteCount}!");
 
         }
 
@@ -181,60 +245,7 @@ namespace AradiaBot.CommandHandlers
             database.Quotes.Add(quote);
             database.SaveData();
         }
-
-        private static async Task AddQuoteStatic(Database database, string author, string body, IUser quoter)
-        {
-            Quote quote = new Quote(author, quoter, body);
-
-            database.Quotes.Add(quote);
-            database.SaveData();
-        }
-
-        private static string QuoteFormatter(Database database, Quote quote)
-        {
-            ulong authorId;
-
-            string authorString;
-            string quoterString;
-
-            string author = quote.Author;
-            Console.WriteLine("Quote Author: "+quote.Author);
-            bool isAuthorId = ulong.TryParse(author, out authorId);
-            Console.WriteLine("isAuthor: " +isAuthorId);
-            if (isAuthorId)
-            {
-                if (database.Members.Any(m => m.Id == authorId))
-                {
-                    var member = database.GetMember(authorId);
-                    authorString = member.GetName();
-                }
-                else
-                {
-                    authorString = MentionUtils.MentionUser(authorId);
-                }
-            }
-            else
-            {
-                authorString = author;
-            }
-
-            if (database.Members.Any(m => m.Id == quote.Quoter))
-            {
-                var member = database.GetMember(quote.Quoter);
-                quoterString = member.GetName(); 
-            }
-            else if (quote.Quoter == 0)
-            {
-                quoterString = "unknown";
-            }
-            else
-            {
-                quoterString = MentionUtils.MentionUser(quote.Quoter);
-            }
-
-            return $"<{authorString}>: {quote.QuoteBody}\n\n *quoted by {quoterString}*";
-
-        }
+       
 
     }
     
