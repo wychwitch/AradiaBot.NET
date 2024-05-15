@@ -10,16 +10,16 @@ namespace AradiaBot
 
     internal class AZGameState
     {
-        public int azGameDataID;
+        public string gameKey;
         public string rangeStart;
         public string rangeEnd;
         public string answer;
         public bool isAnswerGuessed;
         public bool isActive;
 
-        public AZGameState(int azGameDataID, string rangeStart, string rangeEnd, string answer)
+        public AZGameState(string gameKey, string rangeStart, string rangeEnd, string answer)
         {
-            this.azGameDataID = azGameDataID;
+            this.gameKey = gameKey;
             this.rangeStart = rangeStart;
             this.rangeEnd = rangeEnd;
             this.answer = answer;
@@ -27,33 +27,47 @@ namespace AradiaBot
             isActive = true;
             isAnswerGuessed = true;
         }
+
+        public AZGameState(Dictionary<string, AZGameData> availableGames, string gameKey)
+        {
+            Random random = new Random();
+            AZGameData chosenGame = availableGames[gameKey];
+
+            this.gameKey = gameKey;
+            answer = chosenGame.answerList[random.Next(chosenGame.answerList.Count)];
+            rangeStart = chosenGame.wordList.First();
+            rangeEnd = chosenGame.wordList.Last();
+            isActive = true;
+            isAnswerGuessed = false;
+
+
+        }
     }
 
 
 
     internal class AZGameData
     {
-        private List<string> wordList;
-        private List<string> answerList;
-
+        public List<string> wordList;
+        public List<string> answerList;
 
 
         [JsonConstructor]
-        public AZGameData(List<string> wordList, List<string> answerList) 
+        public AZGameData(string[] wordList, string[] answerList) 
         {
             this.wordList = [.. wordList];
             this.answerList = [.. answerList];
         }
-        public AZGameData(List<string> wordList) 
+        public AZGameData(string[] wordList) 
         {
             this.wordList = [.. wordList];
             answerList = [.. wordList];
         }
 
         // the return lets the bot know if it should process the response
-        public static (bool, AZGameState) CheckAnswer(string answer, AZGameState gameState, List<AZGameData> availableGames) {
+        public static (bool, AZGameState) CheckAnswer(string answer, AZGameState gameState, Dictionary<string, AZGameData> availableGames) {
             answer = answer.ToLower();
-            AZGameData gamedata = availableGames[gameState.azGameDataID];
+            AZGameData gamedata = availableGames[gameState.gameKey];
             int startWordCheck = String.Compare(answer, gameState.rangeStart, StringComparison.OrdinalIgnoreCase);
             int endWordCheck = String.Compare(answer, gameState.rangeEnd, StringComparison.OrdinalIgnoreCase);
 

@@ -48,6 +48,8 @@ public class Program
     private static DiscordSocketClient _client;
     private static List<ulong> _guildIDs;
     private static Database _database;
+    private static Dictionary<string, AZGameData> _availableAZGames = new Dictionary<string, AZGameData>();
+
 
     public static async Task Main()
     {
@@ -66,6 +68,54 @@ public class Program
         _guildIDs = config.guildIds;
 
         _client.Log += Log;
+
+
+        string[] englishWordListLong = File.ReadAllLines("./StaticData/WordLists/english_long.txt");
+        string[] englishWordListShort = File.ReadAllLines("./StaticData/WordLists/english_short.txt");
+        string[] pokemonMoveList = File.ReadAllLines("./StaticData/WordLists/pokemon_moves.txt");
+        string[] pokemonAbilityList = File.ReadAllLines("./StaticData/WordLists/pokemon_abilities.txt");
+        string[][] availablePokemonGens = [
+                File.ReadAllLines("./StaticData/WordLists/pokemon_gens/kanto.txt"),
+                File.ReadAllLines("./StaticData/WordLists/pokemon_gens/johto.txt"),
+                File.ReadAllLines("./StaticData/WordLists/pokemon_gens/hoenn.txt"),
+                File.ReadAllLines("./StaticData/WordLists/pokemon_gens/sinnoh.txt"),
+                File.ReadAllLines("./StaticData/WordLists/pokemon_gens/unova.txt"),
+                File.ReadAllLines("./StaticData/WordLists/pokemon_gens/kalos.txt"),
+                File.ReadAllLines("./StaticData/WordLists/pokemon_gens/alola.txt"),
+                File.ReadAllLines("./StaticData/WordLists/pokemon_gens/galar.txt"),
+                File.ReadAllLines("./StaticData/WordLists/pokemon_gens/paldea.txt"),
+            ];
+        string[] allPokemon;
+        List<string> tempPokemonList = new List<string>();
+        foreach (var gen in availablePokemonGens)
+        {
+            foreach (var pokemon in gen)
+            {
+                tempPokemonList.Add(pokemon.ToLower());
+            }
+        }
+
+        tempPokemonList.Sort();
+
+        allPokemon = [.. tempPokemonList];
+        
+
+        _availableAZGames.Add("eng-short", new AZGameData(englishWordListLong, englishWordListShort));
+        _availableAZGames.Add("eng-long", new AZGameData(englishWordListLong));
+        _availableAZGames.Add("pokemon-all", new AZGameData(allPokemon));
+        _availableAZGames.Add("pokemon-moves", new AZGameData(pokemonMoveList));
+        _availableAZGames.Add("pokemon-abilities", new AZGameData(pokemonAbilityList));
+        _availableAZGames.Add("kanto", new AZGameData(availablePokemonGens[0]));
+        _availableAZGames.Add("johto", new AZGameData(availablePokemonGens[1]));
+        _availableAZGames.Add("hoenn", new AZGameData(availablePokemonGens[2]));
+        _availableAZGames.Add("sinnoh", new AZGameData(availablePokemonGens[3]));
+        _availableAZGames.Add("unova", new AZGameData(availablePokemonGens[4]));
+        _availableAZGames.Add("kalos", new AZGameData(availablePokemonGens[5]));
+        _availableAZGames.Add("alola", new AZGameData(availablePokemonGens[6]));
+        _availableAZGames.Add("galar", new AZGameData(availablePokemonGens[7]));
+        _availableAZGames.Add("paldea", new AZGameData(availablePokemonGens[8]));
+
+
 
         try
         {
@@ -86,9 +136,6 @@ public class Program
 
         }
 
-        _database.AvailableGames.Add(new AZGameData(["apple", "bag", "cabbage", "ddd", "eee", "fff"]));
-        _database.GlobalGameState =  new AZGameState(0, "apple", "fff", "ddd");
-
         await _client.LoginAsync(TokenType.Bot, config.token);
         await _client.StartAsync();
 
@@ -98,6 +145,7 @@ public class Program
         _client.MessageCommandExecuted += MessageCommandHandler;
         _client.MessageReceived += ReadMessageHandler;
 
+        _database.GlobalGameState = new AZGameState(_availableAZGames, "pokemon-all");        
 
         await Task.Delay(-1);
     }
@@ -106,7 +154,7 @@ public class Program
         if (!message.Author.IsBot)
         await _database.CheckPings(_client, message);
 
-        (bool, AZGameState) returnValue = AZGameData.CheckAnswer(message.Content, _database.GlobalGameState, _database.AvailableGames);
+        (bool, AZGameState) returnValue = AZGameData.CheckAnswer(message.Content, _database.GlobalGameState, _availableAZGames);
         Console.WriteLine($"{returnValue.Item1} | start: {returnValue.Item2.rangeStart} end: {returnValue.Item2.rangeEnd} answer: {returnValue.Item2.answer}");
         
 
