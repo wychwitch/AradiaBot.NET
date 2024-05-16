@@ -91,7 +91,7 @@ public class Program
         {
             foreach (var pokemon in gen)
             {
-                tempPokemonList.Add(pokemon.ToLower());
+                tempPokemonList.Add(pokemon);
             }
         }
 
@@ -145,7 +145,7 @@ public class Program
         _client.MessageCommandExecuted += MessageCommandHandler;
         _client.MessageReceived += ReadMessageHandler;
 
-        _database.GlobalGameState = new AZGameState(_availableAZGames, "pokemon-all");        
+        //_database.GlobalGameState = new AZGameState(_availableAZGames, "pokemon-all");        
 
         await Task.Delay(-1);
     }
@@ -154,8 +154,67 @@ public class Program
         if (!message.Author.IsBot)
         await _database.CheckPings(_client, message);
 
-        (bool, AZGameState) returnValue = AZGameData.CheckAnswer(message.Content, _database.GlobalGameState, _availableAZGames);
-        Console.WriteLine($"{returnValue.Item1} | start: {returnValue.Item2.rangeStart} end: {returnValue.Item2.rangeEnd} answer: {returnValue.Item2.answer}");
+
+
+        if (_database.IsGLobalAZGameRunning() || _database.IsAnySinglePlayerAZGameRunning())
+        {
+            //checkfor singleplayer game first, and then check for non singleplayer game
+            if (_database.IsAnySinglePlayerAZGameRunning())
+            {
+                IUser user = message.Author;
+                ServerMember serverMember = _database.GetMember(user);
+                if (serverMember != null && serverMember.GameState != null) 
+                {
+                    (bool, AZGameState) returnValue = AZGameData.CheckAnswer(message.Content, serverMember.GameState, _availableAZGames);
+                    if (returnValue.Item1)
+                    {
+                        serverMember.GameState = returnValue.Item2;
+                        if (serverMember.GameState.rangeStart == serverMember.GameState.rangeEnd)
+                        {
+                            await message.Channel.SendMessageAsync($"You won! The answer was{serverMember.GameState.answer}");
+                            serverMember.GameState = null;
+                        }
+
+                        await message.Channel.SendMessageAsync($"Your new range is: {serverMember.GameState.rangeStart} - {serverMember.GameState.rangeEnd}");
+                        _database.SaveData();
+                    }
+
+                    Console.WriteLine($"{returnValue.Item1} | start: {returnValue.Item2.rangeStart} end: {returnValue.Item2.rangeEnd} answer: {returnValue.Item2.answer}");
+                }
+            }
+
+            //check for if it's a global gamestate or a user gamestate, and if it is a user gamestate check to see if it's the user who posted
+            if (_database.IsGLobalAZGameRunning())
+            {
+                (bool, AZGameState) returnValue = AZGameData.CheckAnswer(message.Content, _database.GlobalGameState, _availableAZGames);
+                if (returnValue.Item1)
+                {
+                    _database.GlobalGameState = returnValue.Item2;
+                    if(_database.GlobalGameState.rangeStart == _database.GlobalGameState.rangeEnd)
+                    {
+                        
+                        _database.IncreasePlayerScore(message.Author.Id, _database.GlobalGameState.gameKey);
+                        int wonCount = _database.GetPlayerScore(message.Author.Id, _database.GlobalGameState.gameKey);
+                        await message.Channel.SendMessageAsync($"You won! The answer was {_database.GlobalGameState.answer}. {MentionUtils.MentionUser(message.Author.Id)} has won {wonCount} times");
+                        _database.GlobalGameState = null;
+                    }
+                    else
+                    {
+                        await message.Channel.SendMessageAsync($"Your new range is: {_database.GlobalGameState.rangeStart} - {_database.GlobalGameState.rangeEnd}");
+                    }
+                   
+    
+                    _database.SaveData();
+                }
+                
+                Console.WriteLine($"{returnValue.Item1} | start: {returnValue.Item2.rangeStart} end: {returnValue.Item2.rangeEnd} answer: {returnValue.Item2.answer}");
+            }
+
+            
+        }
+
+        
+        
         
 
         
@@ -179,6 +238,9 @@ public class Program
                 break;
             case "db":
                 await DatabaseHandler.ProcessSlashCommand(_database, command);
+                break;
+            case "az":
+                await AZGameHandler.ProcessSlashCommand(_database, command, _availableAZGames);
                 break;
         }
 
@@ -280,7 +342,33 @@ public class Program
                         .AddOption("use-nickname", ApplicationCommandOptionType.Boolean, "Enable or Disable using registered nickname", isRequired: false)
                         .AddOption("new-nickname", ApplicationCommandOptionType.String, "change your registered name", isRequired: false)
                     )
+                ),
+
+                 new SlashCommandBuilder()
+                .WithName("az")
+                .WithDescription("AZ Game!")
+                .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("start")
+                    .WithDescription("start")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                    .AddOption(new SlashCommandOptionBuilder()
+                        .WithName("word-list")
+                        .WithDescription("The wordlist for your game")
+                        .WithRequired(true)
+                        .AddChoice("english easy", "eng-short")
+                        .AddChoice("english hard", "eng-long")
+                        .AddChoice("pokemon", "pokemon-all")
+                        .AddChoice("pokemon abilities", "pokemon-abilities")
+                        .AddChoice("pokemon-moves", "pokemon-moves")
+                        .WithType(ApplicationCommandOptionType.String)
                 )
+                    )
+                .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("quit")
+                    .WithDescription("quits ongoing game")
+                    .WithType(ApplicationCommandOptionType.SubCommand))
+
+                
 
         ];
         await CommandSetup.RegisterMessageCommands(_client, messageCommands, _guildIDs);

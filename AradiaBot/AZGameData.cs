@@ -14,18 +14,14 @@ namespace AradiaBot
         public string rangeStart;
         public string rangeEnd;
         public string answer;
-        public bool isAnswerGuessed;
-        public bool isActive;
 
+        [JsonConstructor]
         public AZGameState(string gameKey, string rangeStart, string rangeEnd, string answer)
         {
             this.gameKey = gameKey;
             this.rangeStart = rangeStart;
             this.rangeEnd = rangeEnd;
             this.answer = answer;
-
-            isActive = true;
-            isAnswerGuessed = true;
         }
 
         public AZGameState(Dictionary<string, AZGameData> availableGames, string gameKey)
@@ -37,8 +33,7 @@ namespace AradiaBot
             answer = chosenGame.answerList[random.Next(chosenGame.answerList.Count)];
             rangeStart = chosenGame.wordList.First();
             rangeEnd = chosenGame.wordList.Last();
-            isActive = true;
-            isAnswerGuessed = false;
+
 
 
         }
@@ -79,7 +74,6 @@ namespace AradiaBot
 
             if (answerCheck == 0)
             {
-                gameState.isAnswerGuessed = true;
                 gameState.rangeStart = answer;
                 gameState.rangeEnd = answer;
                 return (true, gameState);

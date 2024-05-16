@@ -16,8 +16,7 @@ namespace AradiaBot
         public Dictionary<string, Dictionary<ulong, int>> GameScores { get; set; }
         public List<Quote> Quotes { get; set; }
         //The key is the guild's id
-        public Dictionary<ulong, AZGameState> UserGameStates { get; set; }
-        public AZGameState GlobalGameState { get; set; }
+        public AZGameState? GlobalGameState { get; set; }
 
         public Database()
         {
@@ -28,10 +27,19 @@ namespace AradiaBot
 
             Members = new List<ServerMember>();
 
-            UserGameStates = new();
+            GlobalGameState = null;
             
 
 
+        }
+
+        [JsonConstructor]
+        public Database(List<ServerMember> serverMembers, Dictionary<string, Dictionary<ulong, int>> gameScores, List<Quote> quotes, AZGameState globalGameState = null)
+        {
+            Members = serverMembers;
+            GameScores = gameScores;
+            Quotes = quotes;
+            GlobalGameState = globalGameState;
         }
         public bool IsUserRegistered(IUser user)
         {
@@ -102,9 +110,51 @@ namespace AradiaBot
             }
         }
 
-        public static void LoadData()
+        public bool IsGLobalAZGameRunning()
         {
-            throw new NotImplementedException();
+            if (GlobalGameState != null)
+            {
+                return true;
+            }
+            return false;  
+
+        }
+
+        public bool IsAnySinglePlayerAZGameRunning()
+        {
+            foreach (var member in Members)
+            {
+                if (member.GameState != null)
+                {
+                    return true;
+                }
+            }
+            return false;
+
+        }
+
+        public void IncreasePlayerScore(ulong playerId, string gameKey)
+        {
+            if (!GameScores.ContainsKey(gameKey))
+            {
+                GameScores.Add(gameKey, []);
+            }
+            if (!GameScores[gameKey].ContainsKey(playerId))
+            {
+                GameScores[gameKey].Add(playerId, 0);
+            }
+                GameScores[gameKey][playerId] += 1;
+        }
+
+        public int GetPlayerScore(ulong playerId, string gameKey)
+        {
+            if (GameScores.ContainsKey(gameKey))
+            {
+                if (GameScores[gameKey].ContainsKey(playerId)){
+                    return GameScores[gameKey][playerId];
+                }
+            }
+            return 0;
         }
 
     }
