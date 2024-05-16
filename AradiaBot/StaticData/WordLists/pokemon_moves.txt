@@ -1,813 +1,813 @@
-Absorb
-Accelerock
-Acid
-Acid Armor
-Acid Spray
-Acrobatics
-Acupressure
-Aerial Ace
-Aeroblast
-After You
-Agility
-Air Cutter
-Air Slash
-Ally Switch
-Amnesia
-Anchor Shot
-Ancient Power
-Apple Acid
-Aqua Cutter
-Aqua Jet
-Aqua Ring
-Aqua Step
-Aqua Tail
-Arm Thrust
-Armor Cannon
-Aromatherapy
-Aromatic Mist
-Assist
-Assurance
-Astonish
-Astral Barrage
-Attack Order
-Attract
-Aura Sphere
-Aura Wheel
-Aurora Beam
-Aurora Veil
-Autotomize
-Avalanche
-Axe Kick
-Baby-Doll Eyes
-Baddy Bad
-Baneful Bunker
-Barb Barrage
-Barrage
-Barrier
-Baton Pass
-Beak Blast
-Beat Up
-Belch
-Belly Drum
-Bestow
-Bide
-Bind
-Bite
-Bitter Blade
-Bitter Malice
-Blast Burn
-Blaze Kick
-Bleakwind Storm
-Blizzard
-Block
-Blue Flare
-Body Press
-Body Slam
-Bolt Beak
-Bolt Strike
-Bone Club
-Bone Rush
-Bonemerang
-Boomburst
-Bounce
-Bouncy Bubble
-Branch Poke
-Brave Bird
-Breaking Swipe
-Brick Break
-Brine
-Brutal Swing
-Bubble
-Bubble Beam
-Bug Bite
-Bug Buzz
-Bulk Up
-Bulldoze
-Bullet Punch
-Bullet Seed
-Burn Up
-Burning Jealousy
-Buzzy Buzz
-Calm Mind
-Camouflage
-Captivate
-Ceaseless Edge
-Charge
-Charge Beam
-Charm
-Chatter
-Chilling Water
-Chilly Reception
-Chip Away
-Chloroblast
-Circle Throw
-Clamp
-Clanging Scales
-Clangorous Soul
-Clear Smog
-Close Combat
-Coaching
-Coil
-Collision Course
-Comet Punch
-Comeuppance
-Confide
-Confuse Ray
-Confusion
-Constrict
-Conversion
-Conversion 2
-Copycat
-Core Enforcer
-Corrosive Gas
-Cosmic Power
-Cotton Guard
-Cotton Spore
-Counter
-Court Change
-Covet
-Crabhammer
-Crafty Shield
-Cross Chop
-Cross Poison
-Crunch
-Crush Claw
-Crush Grip
-Curse
-Cut
-Dark Pulse
-Dark Void
-Darkest Lariat
-Dazzling Gleam
-Decorate
-Defend Order
-Defense Curl
-Defog
-Destiny Bond
-Detect
-Diamond Storm
-Dig
-Dire Claw
-Disable
-Disarming Voice
-Discharge
-Dive
-Dizzy Punch
-Doodle
-Doom Desire
-Double Hit
-Double Iron Bash
-Double Kick
-Double Shock
-Double Slap
-Double Team
-Double-Edge
-Draco Meteor
-Dragon Ascent
-Dragon Breath
-Dragon Claw
-Dragon Dance
-Dragon Darts
-Dragon Energy
-Dragon Hammer
-Dragon Pulse
-Dragon Rage
-Dragon Rush
-Dragon Tail
-Drain Punch
-Draining Kiss
-Dream Eater
-Drill Peck
-Drill Run
-Drum Beating
-Dual Chop
-Dual Wingbeat
-Dynamax Cannon
-Dynamic Punch
-Earth Power
-Earthquake
-Echoed Voice
-Eerie Impulse
-Eerie Spell
-Egg Bomb
-Electric Terrain
-Electrify
-Electro Ball
-Electro Drift
-Electroweb
-Embargo
-Ember
-Encore
-Endeavor
-Endure
-Energy Ball
-Entrainment
-Eruption
-Esper Wing
-Eternabeam
-Expanding Force
-Explosion
-Extrasensory
-Extreme Speed
-Facade
-Fairy Lock
-Fairy Wind
-Fake Out
-Fake Tears
-False Surrender
-False Swipe
-Feather Dance
-Feint
-Feint Attack
-Fell Stinger
-Fiery Dance
-Fiery Wrath
-Fillet Away
-Final Gambit
-Fire Blast
-Fire Fang
-Fire Lash
-Fire Pledge
-Fire Punch
-Fire Spin
-First Impression
-Fishious Rend
-Fissure
-Flail
-Flame Burst
-Flame Charge
-Flame Wheel
-Flamethrower
-Flare Blitz
-Flash
-Flash Cannon
-Flatter
-Fleur Cannon
-Fling
-Flip Turn
-Floaty Fall
-Floral Healing
-Flower Shield
-Flower Trick
-Fly
-Flying Press
-Focus Blast
-Focus Energy
-Focus Punch
-Follow Me
-Force Palm
-Foresight
-Forest’s Curse
-Foul Play
-Freeze Shock
-Freeze-Dry
-Freezing Glare
-Freezy Frost
-Frenzy Plant
-Frost Breath
-Frustration
-Fury Attack
-Fury Cutter
-Fury Swipes
-Fusion Bolt
-Fusion Flare
-Future Sight
-Gastro Acid
-Gear Grind
-Gear Up
-Geomancy
-Giga Drain
-Giga Impact
-Gigaton Hammer
-Glacial Lance
-Glaciate
-Glaive Rush
-Glare
-Glitzy Glow
-Grass Knot
-Grass Pledge
-Grass Whistle
-Grassy Glide
-Grassy Terrain
-Grav Apple
-Gravity
-Growl
-Growth
-Grudge
-Guard Split
-Guard Swap
-Guillotine
-Gunk Shot
-Gust
-Gyro Ball
-Hail
-Hammer Arm
-Harden
-Haze
-Head Charge
-Head Smash
-Headbutt
-Headlong Rush
-Heal Bell
-Heal Block
-Heal Order
-Heal Pulse
-Healing Wish
-Heart Stamp
-Heart Swap
-Heat Crash
-Heat Wave
-Heavy Slam
-Helping Hand
-Hex
-Hidden Power
-High Horsepower
-High Jump Kick
-Hone Claws
-Horn Attack
-Horn Drill
-Horn Leech
-Howl
-Hurricane
-Hydro Cannon
-Hydro Pump
-Hydro Steam
-Hyper Beam
-Hyper Drill
-Hyper Fang
-Hyper Voice
-Hyperspace Fury
-Hyperspace Hole
-Hypnosis
-Ice Ball
-Ice Beam
-Ice Burn
-Ice Fang
-Ice Hammer
-Ice Punch
-Ice Shard
-Ice Spinner
-Icicle Crash
-Icicle Spear
-Icy Wind
-Imprison
-Incinerate
-Infernal Parade
-Inferno
-Infestation
-Ingrain
-Instruct
-Ion Deluge
-Iron Defense
-Iron Head
-Iron Tail
-Jaw Lock
-Jet Punch
-Judgment
-Jump Kick
-Jungle Healing
-Karate Chop
-Kinesis
-King’s Shield
-Knock Off
-Kowtow Cleave
-Land’s Wrath
-Laser Focus
-Lash Out
-Last Resort
-Last Respects
-Lava Plume
-Leaf Blade
-Leaf Storm
-Leaf Tornado
-Leafage
-Leech Life
-Leech Seed
-Leer
-Lick
-Life Dew
-Light Screen
-Light of Ruin
-Liquidation
-Lock-On
-Lovely Kiss
-Low Kick
-Low Sweep
-Lucky Chant
-Lumina Crash
-Lunar Blessing
-Lunar Dance
-Lunge
-Luster Purge
-Mach Punch
-Magic Coat
-Magic Powder
-Magic Room
-Magical Leaf
-Magma Storm
-Magnet Bomb
-Magnet Rise
-Magnetic Flux
-Magnitude
-Make It Rain
-Mat Block
-Me First
-Mean Look
-Meditate
-Mega Drain
-Mega Kick
-Mega Punch
-Megahorn
-Memento
-Metal Burst
-Metal Claw
-Metal Sound
-Meteor Assault
-Meteor Beam
-Meteor Mash
-Metronome
-Milk Drink
-Mimic
-Mind Blown
-Mind Reader
-Minimize
-Miracle Eye
-Mirror Coat
-Mirror Move
-Mirror Shot
-Mist
-Mist Ball
-Misty Explosion
-Misty Terrain
-Moonblast
-Moongeist Beam
-Moonlight
-Morning Sun
-Mortal Spin
-Mountain Gale
-Mud Bomb
-Mud Shot
-Mud Sport
-Mud-Slap
-Muddy Water
-Multi-Attack
-Mystical Fire
-Mystical Power
-Nasty Plot
-Natural Gift
-Nature Power
-Nature’s Madness
-Needle Arm
-Night Daze
-Night Shade
-Night Slash
-Nightmare
-No Retreat
-Noble Roar
-Nuzzle
-Oblivion Wing
-Obstruct
-Octazooka
-Octolock
-Odor Sleuth
-Ominous Wind
-Order Up
-Origin Pulse
-Outrage
-Overdrive
-Overheat
-Pain Split
-Parabolic Charge
-Parting Shot
-Pay Day
-Payback
-Peck
-Perish Song
-Petal Blizzard
-Petal Dance
-Phantom Force
-Photon Geyser
-Pin Missile
-Plasma Fists
-Play Nice
-Play Rough
-Pluck
-Poison Fang
-Poison Gas
-Poison Jab
-Poison Powder
-Poison Sting
-Poison Tail
-Pollen Puff
-Poltergeist
-Population Bomb
-Pounce
-Pound
-Powder
-Powder Snow
-Power Gem
-Power Split
-Power Swap
-Power Trick
-Power Trip
-Power Whip
-Power-Up Punch
-Precipice Blades
-Present
-Prismatic Laser
-Protect
-Psybeam
-Psyblade
-Psych Up
-Psychic
-Psychic Fangs
-Psychic Terrain
-Psycho Boost
-Psycho Cut
-Psycho Shift
-Psyshield Bash
-Psyshock
-Psystrike
-Psywave
-Punishment
-Purify
-Pursuit
-Pyro Ball
-Quash
-Quick Attack
-Quick Guard
-Quiver Dance
-Rage
-Rage Fist
-Rage Powder
-Raging Bull
-Raging Fury
-Rain Dance
-Rapid Spin
-Razor Leaf
-Razor Shell
-Razor Wind
-Recover
-Recycle
-Reflect
-Reflect Type
-Refresh
-Relic Song
-Rest
-Retaliate
-Return
-Revelation Dance
-Revenge
-Reversal
-Revival Blessing
-Rising Voltage
-Roar
-Roar of Time
-Rock Blast
-Rock Climb
-Rock Polish
-Rock Slide
-Rock Smash
-Rock Throw
-Rock Tomb
-Rock Wrecker
-Role Play
-Rolling Kick
-Rollout
-Roost
-Rototiller
-Round
-Ruination
-Sacred Fire
-Sacred Sword
-Safeguard
-Salt Cure
-Sand Attack
-Sand Tomb
-Sandsear Storm
-Sandstorm
-Sappy Seed
-Scald
-Scale Shot
-Scary Face
-Scorching Sands
-Scratch
-Screech
-Searing Shot
-Secret Power
-Secret Sword
-Seed Bomb
-Seed Flare
-Seismic Toss
-Self-Destruct
-Shadow Ball
-Shadow Bone
-Shadow Claw
-Shadow Force
-Shadow Punch
-Shadow Sneak
-Sharpen
-Shed Tail
-Sheer Cold
-Shell Side Arm
-Shell Smash
-Shell Trap
-Shelter
-Shift Gear
-Shock Wave
-Shore Up
-Signal Beam
-Silk Trap
-Silver Wind
-Simple Beam
-Sing
-Sizzly Slide
-Sketch
-Skill Swap
-Skitter Smack
-Skull Bash
-Sky Attack
-Sky Drop
-Sky Uppercut
-Slack Off
-Slam
-Slash
-Sleep Powder
-Sleep Talk
-Sludge
-Sludge Bomb
-Sludge Wave
-Smack Down
-Smart Strike
-Smelling Salts
-Smog
-Smokescreen
-Snap Trap
-Snarl
-Snatch
-Snipe Shot
-Snore
-Snowscape
-Soak
-Soft-Boiled
-Solar Beam
-Solar Blade
-Sonic Boom
-Spacial Rend
-Spark
-Sparkling Aria
-Sparkly Swirl
-Spectral Thief
-Speed Swap
-Spicy Extract
-Spider Web
-Spike Cannon
-Spikes
-Spiky Shield
-Spin Out
-Spirit Break
-Spirit Shackle
-Spit Up
-Spite
-Splash
-Splishy Splash
-Spore
-Spotlight
-Springtide Storm
-Stealth Rock
-Steam Eruption
-Steamroller
-Steel Beam
-Steel Roller
-Steel Wing
-Sticky Web
-Stockpile
-Stomp
-Stomping Tantrum
-Stone Axe
-Stone Edge
-Stored Power
-Storm Throw
-Strange Steam
-Strength
-Strength Sap
-String Shot
-Struggle Bug
-Stuff Cheeks
-Stun Spore
-Submission
-Substitute
-Sucker Punch
-Sunny Day
-Sunsteel Strike
-Super Fang
-Superpower
-Supersonic
-Surf
-Surging Strikes
-Swagger
-Swallow
-Sweet Kiss
-Sweet Scent
-Swift
-Switcheroo
-Swords Dance
-Synchronoise
-Synthesis
-Tackle
-Tail Glow
-Tail Slap
-Tail Whip
-Tailwind
-Take Down
-Take Heart
-Tar Shot
-Taunt
-Tearful Look
-Teatime
-Techno Blast
-Teeter Dance
-Telekinesis
-Teleport
-Tera Blast
-Terrain Pulse
-Thief
-Thousand Arrows
-Thousand Waves
-Thrash
-Throat Chop
-Thunder
-Thunder Cage
-Thunder Fang
-Thunder Punch
-Thunder Shock
-Thunder Wave
-Thunderbolt
-Thunderous Kick
-Tickle
-Tidy Up
-Topsy-Turvy
-Torch Song
-Torment
-Toxic
-Toxic Spikes
-Toxic Thread
-Trailblaze
-Transform
-Tri Attack
-Trick
-Trick Room
-Trick-or-Treat
-Triple Arrows
-Triple Axel
-Triple Dive
-Triple Kick
-Trop Kick
-Trump Card
-Twin Beam
-Twineedle
-Twister
-U-turn
-Uproar
-V-create
-Vacuum Wave
-Venom Drench
-Venoshock
-Victory Dance
-Vine Whip
-Vise Grip
-Vital Throw
-Volt Switch
-Volt Tackle
-Wake-Up Slap
-Water Gun
-Water Pledge
-Water Pulse
-Water Shuriken
-Water Sport
-Water Spout
-Waterfall
-Wave Crash
-Weather Ball
-Whirlpool
-Whirlwind
-Wicked Blow
-Wide Guard
-Wild Charge
-Wildbolt Storm
-Will-O-Wisp
-Wing Attack
-Wish
-Withdraw
-Wonder Room
-Wood Hammer
-Work Up
-Worry Seed
-Wrap
-Wring Out
-X-Scissor
-Yawn
-Zap Cannon
-Zen Headbutt
-Zing Zap
-Zippy Zap
+absorb
+accelerock
+acid
+acid armor
+acid spray
+acrobatics
+acupressure
+aerial ace
+aeroblast
+after you
+agility
+air cutter
+air slash
+ally switch
+amnesia
+anchor shot
+ancient power
+apple acid
+aqua cutter
+aqua jet
+aqua ring
+aqua step
+aqua tail
+arm thrust
+armor cannon
+aromatherapy
+aromatic mist
+assist
+assurance
+astonish
+astral barrage
+attack order
+attract
+aura sphere
+aura wheel
+aurora beam
+aurora veil
+autotomize
+avalanche
+axe kick
+baby-doll eyes
+baddy bad
+baneful bunker
+barb barrage
+barrage
+barrier
+baton pass
+beak blast
+beat up
+belch
+belly drum
+bestow
+bide
+bind
+bite
+bitter blade
+bitter malice
+blast burn
+blaze kick
+bleakwind storm
+blizzard
+block
+blue flare
+body press
+body slam
+bolt beak
+bolt strike
+bone club
+bone rush
+bonemerang
+boomburst
+bounce
+bouncy bubble
+branch poke
+brave bird
+breaking swipe
+brick break
+brine
+brutal swing
+bubble
+bubble beam
+bug bite
+bug buzz
+bulk up
+bulldoze
+bullet punch
+bullet seed
+burn up
+burning jealousy
+buzzy buzz
+calm mind
+camouflage
+captivate
+ceaseless edge
+charge
+charge beam
+charm
+chatter
+chilling water
+chilly reception
+chip away
+chloroblast
+circle throw
+clamp
+clanging scales
+clangorous soul
+clear smog
+close combat
+coaching
+coil
+collision course
+comet punch
+comeuppance
+confide
+confuse ray
+confusion
+constrict
+conversion
+conversion 2
+copycat
+core enforcer
+corrosive gas
+cosmic power
+cotton guard
+cotton spore
+counter
+court change
+covet
+crabhammer
+crafty shield
+cross chop
+cross poison
+crunch
+crush claw
+crush grip
+curse
+cut
+dark pulse
+dark void
+darkest lariat
+dazzling gleam
+decorate
+defend order
+defense curl
+defog
+destiny bond
+detect
+diamond storm
+dig
+dire claw
+disable
+disarming voice
+discharge
+dive
+dizzy punch
+doodle
+doom desire
+double hit
+double iron bash
+double kick
+double shock
+double slap
+double team
+double-edge
+draco meteor
+dragon ascent
+dragon breath
+dragon claw
+dragon dance
+dragon darts
+dragon energy
+dragon hammer
+dragon pulse
+dragon rage
+dragon rush
+dragon tail
+drain punch
+draining kiss
+dream eater
+drill peck
+drill run
+drum beating
+dual chop
+dual wingbeat
+dynamax cannon
+dynamic punch
+earth power
+earthquake
+echoed voice
+eerie impulse
+eerie spell
+egg bomb
+electric terrain
+electrify
+electro ball
+electro drift
+electroweb
+embargo
+ember
+encore
+endeavor
+endure
+energy ball
+entrainment
+eruption
+esper wing
+eternabeam
+expanding force
+explosion
+extrasensory
+extreme speed
+facade
+fairy lock
+fairy wind
+fake out
+fake tears
+false surrender
+false swipe
+feather dance
+feint
+feint attack
+fell stinger
+fiery dance
+fiery wrath
+fillet away
+final gambit
+fire blast
+fire fang
+fire lash
+fire pledge
+fire punch
+fire spin
+first impression
+fishious rend
+fissure
+flail
+flame burst
+flame charge
+flame wheel
+flamethrower
+flare blitz
+flash
+flash cannon
+flatter
+fleur cannon
+fling
+flip turn
+floaty fall
+floral healing
+flower shield
+flower trick
+fly
+flying press
+focus blast
+focus energy
+focus punch
+follow me
+force palm
+foresight
+forest’s curse
+foul play
+freeze shock
+freeze-dry
+freezing glare
+freezy frost
+frenzy plant
+frost breath
+frustration
+fury attack
+fury cutter
+fury swipes
+fusion bolt
+fusion flare
+future sight
+gastro acid
+gear grind
+gear up
+geomancy
+giga drain
+giga impact
+gigaton hammer
+glacial lance
+glaciate
+glaive rush
+glare
+glitzy glow
+grass knot
+grass pledge
+grass whistle
+grassy glide
+grassy terrain
+grav apple
+gravity
+growl
+growth
+grudge
+guard split
+guard swap
+guillotine
+gunk shot
+gust
+gyro ball
+hail
+hammer arm
+harden
+haze
+head charge
+head smash
+headbutt
+headlong rush
+heal bell
+heal block
+heal order
+heal pulse
+healing wish
+heart stamp
+heart swap
+heat crash
+heat wave
+heavy slam
+helping hand
+hex
+hidden power
+high horsepower
+high jump kick
+hone claws
+horn attack
+horn drill
+horn leech
+howl
+hurricane
+hydro cannon
+hydro pump
+hydro steam
+hyper beam
+hyper drill
+hyper fang
+hyper voice
+hyperspace fury
+hyperspace hole
+hypnosis
+ice ball
+ice beam
+ice burn
+ice fang
+ice hammer
+ice punch
+ice shard
+ice spinner
+icicle crash
+icicle spear
+icy wind
+imprison
+incinerate
+infernal parade
+inferno
+infestation
+ingrain
+instruct
+ion deluge
+iron defense
+iron head
+iron tail
+jaw lock
+jet punch
+judgment
+jump kick
+jungle healing
+karate chop
+kinesis
+king’s shield
+knock off
+kowtow cleave
+land’s wrath
+laser focus
+lash out
+last resort
+last respects
+lava plume
+leaf blade
+leaf storm
+leaf tornado
+leafage
+leech life
+leech seed
+leer
+lick
+life dew
+light screen
+light of ruin
+liquidation
+lock-on
+lovely kiss
+low kick
+low sweep
+lucky chant
+lumina crash
+lunar blessing
+lunar dance
+lunge
+luster purge
+mach punch
+magic coat
+magic powder
+magic room
+magical leaf
+magma storm
+magnet bomb
+magnet rise
+magnetic flux
+magnitude
+make it rain
+mat block
+me first
+mean look
+meditate
+mega drain
+mega kick
+mega punch
+megahorn
+memento
+metal burst
+metal claw
+metal sound
+meteor assault
+meteor beam
+meteor mash
+metronome
+milk drink
+mimic
+mind blown
+mind reader
+minimize
+miracle eye
+mirror coat
+mirror move
+mirror shot
+mist
+mist ball
+misty explosion
+misty terrain
+moonblast
+moongeist beam
+moonlight
+morning sun
+mortal spin
+mountain gale
+mud bomb
+mud shot
+mud sport
+mud-slap
+muddy water
+multi-attack
+mystical fire
+mystical power
+nasty plot
+natural gift
+nature power
+nature’s madness
+needle arm
+night daze
+night shade
+night slash
+nightmare
+no retreat
+noble roar
+nuzzle
+oblivion wing
+obstruct
+octazooka
+octolock
+odor sleuth
+ominous wind
+order up
+origin pulse
+outrage
+overdrive
+overheat
+pain split
+parabolic charge
+parting shot
+pay day
+payback
+peck
+perish song
+petal blizzard
+petal dance
+phantom force
+photon geyser
+pin missile
+plasma fists
+play nice
+play rough
+pluck
+poison fang
+poison gas
+poison jab
+poison powder
+poison sting
+poison tail
+pollen puff
+poltergeist
+population bomb
+pounce
+pound
+powder
+powder snow
+power gem
+power split
+power swap
+power trick
+power trip
+power whip
+power-up punch
+precipice blades
+present
+prismatic laser
+protect
+psybeam
+psyblade
+psych up
+psychic
+psychic fangs
+psychic terrain
+psycho boost
+psycho cut
+psycho shift
+psyshield bash
+psyshock
+psystrike
+psywave
+punishment
+purify
+pursuit
+pyro ball
+quash
+quick attack
+quick guard
+quiver dance
+rage
+rage fist
+rage powder
+raging bull
+raging fury
+rain dance
+rapid spin
+razor leaf
+razor shell
+razor wind
+recover
+recycle
+reflect
+reflect type
+refresh
+relic song
+rest
+retaliate
+return
+revelation dance
+revenge
+reversal
+revival blessing
+rising voltage
+roar
+roar of time
+rock blast
+rock climb
+rock polish
+rock slide
+rock smash
+rock throw
+rock tomb
+rock wrecker
+role play
+rolling kick
+rollout
+roost
+rototiller
+round
+ruination
+sacred fire
+sacred sword
+safeguard
+salt cure
+sand attack
+sand tomb
+sandsear storm
+sandstorm
+sappy seed
+scald
+scale shot
+scary face
+scorching sands
+scratch
+screech
+searing shot
+secret power
+secret sword
+seed bomb
+seed flare
+seismic toss
+self-destruct
+shadow ball
+shadow bone
+shadow claw
+shadow force
+shadow punch
+shadow sneak
+sharpen
+shed tail
+sheer cold
+shell side arm
+shell smash
+shell trap
+shelter
+shift gear
+shock wave
+shore up
+signal beam
+silk trap
+silver wind
+simple beam
+sing
+sizzly slide
+sketch
+skill swap
+skitter smack
+skull bash
+sky attack
+sky drop
+sky uppercut
+slack off
+slam
+slash
+sleep powder
+sleep talk
+sludge
+sludge bomb
+sludge wave
+smack down
+smart strike
+smelling salts
+smog
+smokescreen
+snap trap
+snarl
+snatch
+snipe shot
+snore
+snowscape
+soak
+soft-boiled
+solar beam
+solar blade
+sonic boom
+spacial rend
+spark
+sparkling aria
+sparkly swirl
+spectral thief
+speed swap
+spicy extract
+spider web
+spike cannon
+spikes
+spiky shield
+spin out
+spirit break
+spirit shackle
+spit up
+spite
+splash
+splishy splash
+spore
+spotlight
+springtide storm
+stealth rock
+steam eruption
+steamroller
+steel beam
+steel roller
+steel wing
+sticky web
+stockpile
+stomp
+stomping tantrum
+stone axe
+stone edge
+stored power
+storm throw
+strange steam
+strength
+strength sap
+string shot
+struggle bug
+stuff cheeks
+stun spore
+submission
+substitute
+sucker punch
+sunny day
+sunsteel strike
+super fang
+superpower
+supersonic
+surf
+surging strikes
+swagger
+swallow
+sweet kiss
+sweet scent
+swift
+switcheroo
+swords dance
+synchronoise
+synthesis
+tackle
+tail glow
+tail slap
+tail whip
+tailwind
+take down
+take heart
+tar shot
+taunt
+tearful look
+teatime
+techno blast
+teeter dance
+telekinesis
+teleport
+tera blast
+terrain pulse
+thief
+thousand arrows
+thousand waves
+thrash
+throat chop
+thunder
+thunder cage
+thunder fang
+thunder punch
+thunder shock
+thunder wave
+thunderbolt
+thunderous kick
+tickle
+tidy up
+topsy-turvy
+torch song
+torment
+toxic
+toxic spikes
+toxic thread
+trailblaze
+transform
+tri attack
+trick
+trick room
+trick-or-treat
+triple arrows
+triple axel
+triple dive
+triple kick
+trop kick
+trump card
+twin beam
+twineedle
+twister
+u-turn
+uproar
+v-create
+vacuum wave
+venom drench
+venoshock
+victory dance
+vine whip
+vise grip
+vital throw
+volt switch
+volt tackle
+wake-up slap
+water gun
+water pledge
+water pulse
+water shuriken
+water sport
+water spout
+waterfall
+wave crash
+weather ball
+whirlpool
+whirlwind
+wicked blow
+wide guard
+wild charge
+wildbolt storm
+will-o-wisp
+wing attack
+wish
+withdraw
+wonder room
+wood hammer
+work up
+worry seed
+wrap
+wring out
+x-scissor
+yawn
+zap cannon
+zen headbutt
+zing zap
+zippy zap

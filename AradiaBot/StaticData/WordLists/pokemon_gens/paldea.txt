@@ -1,117 +1,118 @@
-Annihilape
-Arboliva
-Archaludon
-Arctibax
-Armarouge
-Baxcalibur
-Bellibolt
-Bombirdier
-Brambleghast
-Bramblin
-Brute Bonnet
-Capsakid
-Ceruledge
-Cetitan
-Cetoddle
-Charcadet
-Chi-Yu
-Chien-Pao
-Clodsire
-Crocalor
-Cyclizar
-Dachsbun
-Dipplin
-Dolliv
-Dondozo
-Dudunsparce
-Espathra
-Farigiraf
-Fezandipiti
-Fidough
-Finizen
-Flamigo
-Flittle
-Floragato
-Flutter Mane
-Frigibax
-Fuecoco
-Garganacl
-Gholdengo
-Gimmighoul
-Glimmet
-Glimmora
-Gouging Fire
-Grafaiai
-Great Tusk
-Greavard
-Houndstone
-Hydrapple
-Iron Boulder
-Iron Bundle
-Iron Crown
-Iron Hands
-Iron Jugulis
-Iron Moth
-Iron Thorns
-Iron Treads
-Iron Valiant
-Kilowattrel
-Kingambit
-Klawf
-Koraidon
-Lechonk
-Lokix
-Mabosstiff
-Maschiff
-Maushold
-Meowscarada
-Miraidon
-Munkidori
-Nacli
-Naclstack
-Nymble
-Ogerpon
-Oinkologne
-Okidogi
-Orthworm
-Palafin
-Pawmi
-Pawmo
-Pawmot
-Poltchageist
-Quaquaval
-Quaxly
-Quaxwell
-Rabsca
-Raging Bolt
-Rellor
-Revavroom
-Roaring Moon
-Sandy Shocks
-Scovillain
-Scream Tail
-Shroodle
-Sinistcha
-Skeledirge
-Slither Wing
-Smoliv
-Spidops
-Sprigatito
-Squawkabilly
-Tadbulb
-Tandemaus
-Tarountula
-Tatsugiri
-Terapagos
-Ting-Lu
-Tinkatink
-Tinkaton
-Tinkatuff
-Toedscool
-Toedscruel
-Varoom
-Veluza
-Wattrel
-Wiglett
-Wo-Chien
-Wugtrio
+annihilape
+arboliva
+archaludon
+arctibax
+armarouge
+baxcalibur
+bellibolt
+bombirdier
+brambleghast
+bramblin
+brute bonnet
+capsakid
+ceruledge
+cetitan
+cetoddle
+charcadet
+chi-yu
+chien-pao
+clodsire
+crocalor
+cyclizar
+dachsbun
+dipplin
+dolliv
+dondozo
+dudunsparce
+espathra
+farigiraf
+fezandipiti
+fidough
+finizen
+flamigo
+flittle
+floragato
+flutter mane
+frigibax
+fuecoco
+garganacl
+gholdengo
+gimmighoul
+glimmet
+glimmora
+gouging fire
+grafaiai
+great tusk
+greavard
+houndstone
+hydrapple
+iron boulder
+iron bundle
+iron crown
+iron hands
+iron jugulis
+iron moth
+iron thorns
+iron treads
+iron valiant
+kilowattrel
+kingambit
+klawf
+koraidon
+lechonk
+lokix
+mabosstiff
+maschiff
+maushold
+meowscarada
+miraidon
+munkidori
+nacli
+naclstack
+nymble
+ogerpon
+oinkologne
+okidogi
+orthworm
+palafin
+pawmi
+pawmo
+pawmot
+pecharunt
+poltchageist
+quaquaval
+quaxly
+quaxwell
+rabsca
+raging bolt
+rellor
+revavroom
+roaring moon
+sandy shocks
+scovillain
+scream tail
+shroodle
+sinistcha
+skeledirge
+slither wing
+smoliv
+spidops
+sprigatito
+squawkabilly
+tadbulb
+tandemaus
+tarountula
+tatsugiri
+terapagos
+ting-lu
+tinkatink
+tinkaton
+tinkatuff
+toedscool
+toedscruel
+varoom
+veluza
+wattrel
+wiglett
+wo-chien
+wugtrio

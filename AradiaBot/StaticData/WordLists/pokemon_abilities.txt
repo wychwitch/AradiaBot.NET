@@ -1,298 +1,298 @@
-Adaptability
-Aerilate
-Aftermath
-Air Lock
-Analytic
-Anger Point
-Anger Shell
-Anticipation
-Arena Trap
-Armor Tail
-Aroma Veil
-As One
-As One
-Aura Break
-Bad Dreams
-Ball Fetch
-Battery
-Battle Armor
-Battle Bond
-Beads of Ruin
-Beast Boost
-Berserk
-Big Pecks
-Blaze
-Bulletproof
-Cheek Pouch
-Chilling Neigh
-Chlorophyll
-Clear Body
-Cloud Nine
-Color Change
-Comatose
-Commander
-Competitive
-Compound Eyes
-Contrary
-Corrosion
-Costar
-Cotton Down
-Cud Chew
-Curious Medicine
-Cursed Body
-Cute Charm
-Damp
-Dancer
-Dark Aura
-Dauntless Shield
-Dazzling
-Defeatist
-Defiant
-Delta Stream
-Desolate Land
-Disguise
-Download
-Dragon’s Maw
-Drizzle
-Drought
-Dry Skin
-Early Bird
-Earth Eater
-Effect Spore
-Electric Surge
-Electromorphosis
-Emergency Exit
-Fairy Aura
-Filter
-Flame Body
-Flare Boost
-Flash Fire
-Flower Gift
-Flower Veil
-Fluffy
-Forecast
-Forewarn
-Friend Guard
-Frisk
-Full Metal Body
-Fur Coat
-Gale Wings
-Galvanize
-Gluttony
-Good as Gold
-Gooey
-Gorilla Tactics
-Grass Pelt
-Grassy Surge
-Grim Neigh
-Guard Dog
-Gulp Missile
-Guts
-Hadron Engine
-Harvest
-Healer
-Heatproof
-Heavy Metal
-Honey Gather
-Huge Power
-Hunger Switch
-Hustle
-Hydration
-Hyper Cutter
-Ice Body
-Ice Face
-Ice Scales
-Illuminate
-Illusion
-Immunity
-Imposter
-Infiltrator
-Innards Out
-Inner Focus
-Insomnia
-Intimidate
-Intrepid Sword
-Iron Barbs
-Iron Fist
-Justified
-Keen Eye
-Klutz
-Leaf Guard
-Levitate
-Libero
-Light Metal
-Lightning Rod
-Limber
-Lingering Aroma
-Liquid Ooze
-Liquid Voice
-Long Reach
-Magic Bounce
-Magic Guard
-Magician
-Magma Armor
-Magnet Pull
-Marvel Scale
-Mega Launcher
-Merciless
-Mimicry
-Minus
-Mirror Armor
-Misty Surge
-Mold Breaker
-Moody
-Motor Drive
-Moxie
-Multiscale
-Multitype
-Mummy
-Mycelium Might
-Natural Cure
-Neuroforce
-Neutralizing Gas
-No Guard
-Normalize
-Oblivious
-Opportunist
-Orichalcum Pulse
-Overcoat
-Overgrow
-Own Tempo
-Parental Bond
-Pastel Veil
-Perish Body
-Pickpocket
-Pickup
-Pixilate
-Plus
-Poison Heal
-Poison Point
-Poison Touch
-Power Construct
-Power Spot
-Power of Alchemy
-Prankster
-Pressure
-Primordial Sea
-Prism Armor
-Propeller Tail
-Protean
-Protosynthesis
-Psychic Surge
-Punk Rock
-Pure Power
-Purifying Salt
-Quark Drive
-Queenly Majesty
-Quick Draw
-Quick Feet
-RKS System
-Rain Dish
-Rattled
-Receiver
-Reckless
-Refrigerate
-Regenerator
-Ripen
-Rivalry
-Rock Head
-Rocky Payload
-Rough Skin
-Run Away
-Sand Force
-Sand Rush
-Sand Spit
-Sand Stream
-Sand Veil
-Sap Sipper
-Schooling
-Scrappy
-Screen Cleaner
-Seed Sower
-Serene Grace
-Shadow Shield
-Shadow Tag
-Sharpness
-Shed Skin
-Sheer Force
-Shell Armor
-Shield Dust
-Shields Down
-Simple
-Skill Link
-Slow Start
-Slush Rush
-Sniper
-Snow Cloak
-Snow Warning
-Solar Power
-Solid Rock
-Soul-Heart
-Soundproof
-Speed Boost
-Stakeout
-Stall
-Stalwart
-Stamina
-Stance Change
-Static
-Steadfast
-Steam Engine
-Steelworker
-Steely Spirit
-Stench
-Sticky Hold
-Storm Drain
-Strong Jaw
-Sturdy
-Suction Cups
-Super Luck
-Supreme Overlord
-Surge Surfer
-Swarm
-Sweet Veil
-Swift Swim
-Sword of Ruin
-Symbiosis
-Synchronize
-Tablets of Ruin
-Tangled Feet
-Tangling Hair
-Technician
-Telepathy
-Teravolt
-Thermal Exchange
-Thick Fat
-Tinted Lens
-Torrent
-Tough Claws
-Toxic Boost
-Toxic Debris
-Trace
-Transistor
-Triage
-Truant
-Turboblaze
-Unaware
-Unburden
-Unnerve
-Unseen Fist
-Vessel of Ruin
-Victory Star
-Vital Spirit
-Volt Absorb
-Wandering Spirit
-Water Absorb
-Water Bubble
-Water Compaction
-Water Veil
-Weak Armor
-Well-Baked Body
-White Smoke
-Wimp Out
-Wind Power
-Wind Rider
-Wonder Guard
-Wonder Skin
-Zen Mode
-Zero to Hero
+adaptability
+aerilate
+aftermath
+air lock
+analytic
+anger point
+anger shell
+anticipation
+arena trap
+armor tail
+aroma veil
+as one
+as one
+aura break
+bad dreams
+ball fetch
+battery
+battle armor
+battle bond
+beads of ruin
+beast boost
+berserk
+big pecks
+blaze
+bulletproof
+cheek pouch
+chilling neigh
+chlorophyll
+clear body
+cloud nine
+color change
+comatose
+commander
+competitive
+compound eyes
+contrary
+corrosion
+costar
+cotton down
+cud chew
+curious medicine
+cursed body
+cute charm
+damp
+dancer
+dark aura
+dauntless shield
+dazzling
+defeatist
+defiant
+delta stream
+desolate land
+disguise
+download
+dragon’s maw
+drizzle
+drought
+dry skin
+early bird
+earth eater
+effect spore
+electric surge
+electromorphosis
+emergency exit
+fairy aura
+filter
+flame body
+flare boost
+flash fire
+flower gift
+flower veil
+fluffy
+forecast
+forewarn
+friend guard
+frisk
+full metal body
+fur coat
+gale wings
+galvanize
+gluttony
+good as gold
+gooey
+gorilla tactics
+grass pelt
+grassy surge
+grim neigh
+guard dog
+gulp missile
+guts
+hadron engine
+harvest
+healer
+heatproof
+heavy metal
+honey gather
+huge power
+hunger switch
+hustle
+hydration
+hyper cutter
+ice body
+ice face
+ice scales
+illuminate
+illusion
+immunity
+imposter
+infiltrator
+innards out
+inner focus
+insomnia
+intimidate
+intrepid sword
+iron barbs
+iron fist
+justified
+keen eye
+klutz
+leaf guard
+levitate
+libero
+light metal
+lightning rod
+limber
+lingering aroma
+liquid ooze
+liquid voice
+long reach
+magic bounce
+magic guard
+magician
+magma armor
+magnet pull
+marvel scale
+mega launcher
+merciless
+mimicry
+minus
+mirror armor
+misty surge
+mold breaker
+moody
+motor drive
+moxie
+multiscale
+multitype
+mummy
+mycelium might
+natural cure
+neuroforce
+neutralizing gas
+no guard
+normalize
+oblivious
+opportunist
+orichalcum pulse
+overcoat
+overgrow
+own tempo
+parental bond
+pastel veil
+perish body
+pickpocket
+pickup
+pixilate
+plus
+poison heal
+poison point
+poison touch
+power construct
+power spot
+power of alchemy
+prankster
+pressure
+primordial sea
+prism armor
+propeller tail
+protean
+protosynthesis
+psychic surge
+punk rock
+pure power
+purifying salt
+quark drive
+queenly majesty
+quick draw
+quick feet
+rks system
+rain dish
+rattled
+receiver
+reckless
+refrigerate
+regenerator
+ripen
+rivalry
+rock head
+rocky payload
+rough skin
+run away
+sand force
+sand rush
+sand spit
+sand stream
+sand veil
+sap sipper
+schooling
+scrappy
+screen cleaner
+seed sower
+serene grace
+shadow shield
+shadow tag
+sharpness
+shed skin
+sheer force
+shell armor
+shield dust
+shields down
+simple
+skill link
+slow start
+slush rush
+sniper
+snow cloak
+snow warning
+solar power
+solid rock
+soul-heart
+soundproof
+speed boost
+stakeout
+stall
+stalwart
+stamina
+stance change
+static
+steadfast
+steam engine
+steelworker
+steely spirit
+stench
+sticky hold
+storm drain
+strong jaw
+sturdy
+suction cups
+super luck
+supreme overlord
+surge surfer
+swarm
+sweet veil
+swift swim
+sword of ruin
+symbiosis
+synchronize
+tablets of ruin
+tangled feet
+tangling hair
+technician
+telepathy
+teravolt
+thermal exchange
+thick fat
+tinted lens
+torrent
+tough claws
+toxic boost
+toxic debris
+trace
+transistor
+triage
+truant
+turboblaze
+unaware
+unburden
+unnerve
+unseen fist
+vessel of ruin
+victory star
+vital spirit
+volt absorb
+wandering spirit
+water absorb
+water bubble
+water compaction
+water veil
+weak armor
+well-baked body
+white smoke
+wimp out
+wind power
+wind rider
+wonder guard
+wonder skin
+zen mode
+zero to hero
