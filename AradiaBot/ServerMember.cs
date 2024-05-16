@@ -14,6 +14,7 @@ namespace AradiaBot
     {
         public ulong Id { get; set; }
         public string NickName { get; set; }
+        public AZGameState? GameState { get; set; }
         public ServerMemberSettings Settings { get; set; }
 
         [JsonConstructor]
@@ -22,6 +23,7 @@ namespace AradiaBot
             Id = id;
             NickName = "";
             Settings = new ServerMemberSettings();
+            GameState = null;
         }
 
         public string GetName() {
@@ -34,6 +36,11 @@ namespace AradiaBot
                 return MentionUtils.MentionUser(Id); 
             }
         
+        }
+
+        public void StartAZGame(AZGameState gameState)
+        {
+            GameState = gameState;
         }
 
         
