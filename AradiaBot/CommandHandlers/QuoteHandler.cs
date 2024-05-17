@@ -12,7 +12,7 @@ namespace AradiaBot.CommandHandlers
 {
     internal class QuoteHandler
     {
-        public static async Task ProcessSlashCommand(Database database,SocketSlashCommand command)
+        public static async Task ProcessSlashCommand(Database database,SocketSlashCommand command, bool nsfw = false)
         {
             var commandName = command.Data.Options.First().Name;
             Console.WriteLine(commandName);
@@ -24,53 +24,72 @@ namespace AradiaBot.CommandHandlers
                     await AddCommand(database, command);
                     break;
                 case "random":
-                    await RandomQuote(database, command);
+                    await RandomQuote(database, command, nsfw);
                     break;
                 case "get":
-                    await getQuote(database, command);
+                    await GetQuote(database, command, nsfw);
                     break;
                 case "delete":
-                    await DeleteQuote(database, command);
+                    await DeleteQuote(database, command, nsfw);
                     break;
                 case "edit":
-                    await EditQuote(database, command);
+                    await EditQuote(database, command, nsfw);
                     break;
                 case "count":
-                    await CountQuote(database, command);
+                    await CountQuote(database, command, nsfw);
+                    break;
+                case "rain":
+                    await QuoteRain(database, command, nsfw);
                     break;
             }
         }
 
-        private static async Task getQuote(Database database, SocketSlashCommand command)
+        private static async Task GetQuote(Database database, SocketSlashCommand command, bool nsfw)
         {
-            int quoteNum = database.Quotes.Count;
+            int quoteNum = nsfw? database.NSFWQuotes.Count : database.Quotes.Count;
             var value = command.Data.Options.First().Options.First().Value;
+            bool details = command.Data.Options.First().Options.Last().Name == "details"? (bool)command.Data.Options.First().Options.Last().Value : false;
+            List<Quote> quotes = nsfw? database.NSFWQuotes : database.Quotes;
             int requestedId = Convert.ToInt32(value);
+
+            
             if (requestedId > quoteNum)
             {
-                await command.ModifyOriginalResponseAsync(x => x.Content = $"There are only {quoteNum} quotes!");
+                string nsfwString = nsfw ? "nsfw " : "";
+                await command.ModifyOriginalResponseAsync(x => x.Content = $"There are only {quoteNum} {nsfwString}quotes!");
             }
             else
             {
-                Quote quote = database.Quotes[requestedId - 1];
-                string formattedQuote = $"#{requestedId} "+Quote.QuoteFormatter(database, quote);
+                Quote quote = quotes[requestedId - 1];
+                string quoteString = details? Quote.QuoteFormatter(database, quote) : Quote.MinimumQuoteFormatter(database, quote);
+                string formattedQuote = $"#{requestedId} "+quoteString;
                 await command.ModifyOriginalResponseAsync(x=> x.Content = formattedQuote);
             }
         }
 
-        private static async Task DeleteQuote(Database database, SocketSlashCommand command)
+        private static async Task DeleteQuote(Database database, SocketSlashCommand command, bool nsfw)
         {
             long quoteIdLong = (long)command.Data.Options.First().Options.First().Value;
 
             int quoteId = Convert.ToInt32(quoteIdLong);
 
-            if (quoteId < database.Quotes.Count)
+            List<Quote> quotes = nsfw? database.NSFWQuotes: database.Quotes;
+
+            if (quoteId <= quotes.Count)
             {
-                Quote quote = (Quote)database.Quotes[quoteId];
+                Quote quote = (Quote)quotes[quoteId-1];
                 string formattedQuote = Quote.QuoteFormatter(database, quote);
-                database.Quotes.RemoveAt(quoteId);
+                if (nsfw)
+                {
+                    database.NSFWQuotes.RemoveAt(quoteId-1);
+                }
+                else
+                {
+                    database.Quotes.RemoveAt(quoteId-1);
+                }
                 database.SaveData();
-                await command.ModifyOriginalResponseAsync(x => x.Content = $"Deleted the following quote: \n\n {formattedQuote}");
+                string nsfwString = nsfw ? "nsfw " : "";
+                await command.ModifyOriginalResponseAsync(x => x.Content = $"Deleted the following {nsfwString}quote: \n\n {formattedQuote}");
             }
             else 
             {
@@ -78,7 +97,7 @@ namespace AradiaBot.CommandHandlers
             }
         }
 
-        private static async Task EditQuote(Database database, SocketSlashCommand command)
+        private static async Task EditQuote(Database database, SocketSlashCommand command, bool nsfw)
         {
             long quoteIdLong = (long)command.Data.Options.First().Options.First().Value;
 
@@ -86,7 +105,7 @@ namespace AradiaBot.CommandHandlers
 
             var editOptions = command.Data.Options.First().Options;
 
-            List<Quote> quotes = database.Quotes;
+            List<Quote> quotes = nsfw? database.NSFWQuotes : database.Quotes;
 
             if (quoteId <= database.Quotes.Count)
             {
@@ -99,7 +118,6 @@ namespace AradiaBot.CommandHandlers
                         {
                             case "author-string":
                                 quotes[quoteId - 1].Author = (string)editOption.Value;
-                                Console.WriteLine("AAA");
                                 Console.WriteLine((string)editOption.Value);
                                 Console.WriteLine(quotes[quoteId - 1].Author);
                                 break;
@@ -114,11 +132,16 @@ namespace AradiaBot.CommandHandlers
                                 IUser quoter = (IUser)editOption.Value;
                                 quotes[quoteId - 1].Quoter = quoter.Id;
                                 break;
+                            case "messageLink":
+                                string messageLink = (string)editOption.Value;
+                                quotes[quoteId - 1].MessageLink = messageLink;
+                                break;
                         }
                     }
                     database.SaveData();
                     string formattedQuote = Quote.QuoteFormatter(database, quotes[quoteId - 1]);
-                    await command.ModifyOriginalResponseAsync(x => x.Content = "Edited quote #"+$"{quoteId}\n\n{formattedQuote}");
+                    string nsfwString = nsfw ? "nsfw " : "";
+                    await command.ModifyOriginalResponseAsync(x => x.Content = $"Edited {nsfw}quote #"+$"{quoteId}\n\n{formattedQuote}");
                 }
                 else
                 {
@@ -131,9 +154,9 @@ namespace AradiaBot.CommandHandlers
             }
         }
 
-        private static async Task CountQuote(Database database, SocketSlashCommand command)
+        private static async Task CountQuote(Database database, SocketSlashCommand command, bool nsfw)
         {
-            int count = database.Quotes.Count;
+            int count = nsfw ? database.NSFWQuotes.Count : database.Quotes.Count;
 
             await command.ModifyOriginalResponseAsync(x => x.Content = $"There are {count} quotes in the database!");
         }
@@ -145,16 +168,19 @@ namespace AradiaBot.CommandHandlers
             switch(commandName)
             {
                 case "Quote Message":
-                    await AddCommandMessage(database, command);
+                    await AddCommandMessage(database, command, false);
+                    break;
+                case "Quote NSFW Message":
+                    await AddCommandMessage(database, command, true);
                     break;
             }
         }
-        public static async Task RandomQuote(Database database, SocketSlashCommand command)
+        public static async Task RandomQuote(Database database, SocketSlashCommand command, bool nsfw)
         {
             int num;
             
             
-            var quotes = database.Quotes;
+            var quotes = nsfw? database.NSFWQuotes : database.Quotes;
             var random = new Random();
 
            if (command.Data.Options.First().Options.Count == 1)
@@ -167,7 +193,6 @@ namespace AradiaBot.CommandHandlers
                 num = 1;
             }
             
-            
 
             var quoteString = "";
             
@@ -176,23 +201,30 @@ namespace AradiaBot.CommandHandlers
                 var randomNum = random.Next(quotes.Count);
 
                 var quote = quotes[randomNum];
-                quoteString += $"#{randomNum +1} "+Quote.QuoteFormatter(database, quote) + "\n\n";
+                quoteString += $"#{randomNum +1} "+Quote.MinimumQuoteFormatter(database, quote) + "\n\n";
             }
             
 
             await command.ModifyOriginalResponseAsync(x => x.Content = quoteString);
 
         }
-        private static async Task AddCommandMessage(Database database, SocketMessageCommand command)
+        private static async Task AddCommandMessage(Database database, SocketMessageCommand command, bool nsfw)
         {
             var author = command.Data.Message.Author;
             var quoter = command.User;
             var body = command.Data.Message.Content;
+            var quotes = nsfw? database.NSFWQuotes : database.Quotes;
+            var messageLink = MessageExtensions.GetJumpUrl(command.Data.Message);
 
-            await AddQuote(database, author, body, quoter);
-            int quoteCount = database.Quotes.Count;
+            await AddQuote(database, author, body, quoter, nsfw, messageLink);
+            int quoteCount = nsfw? database.NSFWQuotes.Count : database.Quotes.Count;
+            string nsfwString = nsfw ? "nsfw " : "";
 
-            await command.RespondAsync($"Added quote #{quoteCount}!");
+
+
+            string quoteBody = Quote.QuoteFormatter(database, quotes[quoteCount-1]);
+
+            await command.ModifyOriginalResponseAsync(x=>x.Content = $"Added {nsfwString}quote #{quoteCount}!\n{quoteBody}");
 
         }
 
@@ -218,8 +250,31 @@ namespace AradiaBot.CommandHandlers
             IUser quoter = command.User;
 
             Quote quote = new Quote(author,quoter,body);
+            int quoteCount;
+            bool nsfw = false;
 
-            database.Quotes.Add(quote);
+            if (data.Last().Name == "is-nsfw")
+            {
+                nsfw = (bool)data.Last().Value;
+            }
+
+            if (nsfw)
+            {
+                database.NSFWQuotes.Add(quote);
+                quoteCount = database.NSFWQuotes.Count;
+            }
+            else
+            {
+                database.Quotes.Add(quote);
+                quoteCount = database.Quotes.Count;
+            }
+            string nsfwString = nsfw ? "nsfw " : "";
+            string formattedQuote = Quote.QuoteFormatter(database, quote);
+
+            await command.ModifyOriginalResponseAsync(x => x.Content = $"Added {nsfwString}quote #{quoteCount}!\n{formattedQuote}");
+
+
+
             database.SaveData();
 
         }
@@ -232,20 +287,63 @@ namespace AradiaBot.CommandHandlers
 
             Quote quote = new Quote(author, quoter, body);
 
-            database.Quotes.Add(quote);
+            int quoteCount;
+
+            bool nsfw = false;
+
+            if (data.Last().Name == "is-nsfw")
+            {
+                nsfw = (bool)data.Last().Value;
+            }
+
+            if (nsfw)
+            {
+                database.NSFWQuotes.Add(quote);
+                quoteCount = database.NSFWQuotes.Count;
+            }
+            else
+            {
+                database.Quotes.Add(quote);
+                quoteCount = database.Quotes.Count;
+            }
+            string nsfwString = nsfw ? "nsfw " : "";
+            await command.ModifyOriginalResponseAsync(x => x.Content = $"Added {nsfwString}quote #{quoteCount}!\n{body}");
+
             database.SaveData();
 
         }
 
         
-        private static async Task AddQuote(Database database, IUser author,  string body, IUser quoter)
+        private static async Task AddQuote(Database database, IUser author,  string body, IUser quoter, bool nsfw, string messageLink = "")
         {
-            Quote quote = new Quote(author, quoter, body);
+            Quote quote = new Quote(author, quoter, body, messageLink);
 
-            database.Quotes.Add(quote);
+            if (nsfw) {
+                database.NSFWQuotes.Add(quote);
+            }
+            else
+            {
+                database.Quotes.Add(quote);
+            }
+            
             database.SaveData();
         }
-       
+
+        private static async Task QuoteRain(Database database, SocketSlashCommand command, bool nsfw) 
+        {
+            string responseString = "";
+            Random random = new Random();
+            List<Quote> quotes = nsfw? database.NSFWQuotes : database.Quotes;
+
+            for (int i = 0; i < 5; i++)
+            {
+                int num = random.Next(quotes.Count);
+                responseString += $"#{num+1} {Quote.MinimumQuoteFormatter(database, quotes[num])}\n";
+            }
+            await command.ModifyOriginalResponseAsync(x =>x.Content = responseString);
+        }
+
+
 
     }
     

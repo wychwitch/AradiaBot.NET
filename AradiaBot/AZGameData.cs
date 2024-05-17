@@ -14,6 +14,7 @@ namespace AradiaBot
         public string rangeStart;
         public string rangeEnd;
         public string answer;
+        public string gameName;
 
         [JsonConstructor]
         public AZGameState(string gameKey, string rangeStart, string rangeEnd, string answer)
@@ -33,9 +34,6 @@ namespace AradiaBot
             answer = chosenGame.answerList[random.Next(chosenGame.answerList.Count)];
             rangeStart = chosenGame.wordList.First();
             rangeEnd = chosenGame.wordList.Last();
-
-
-
         }
     }
 
@@ -45,18 +43,21 @@ namespace AradiaBot
     {
         public List<string> wordList;
         public List<string> answerList;
+        public string Name;
 
 
         [JsonConstructor]
-        public AZGameData(string[] wordList, string[] answerList) 
+        public AZGameData(string[] wordList, string[] answerList, string name) 
         {
             this.wordList = [.. wordList];
             this.answerList = [.. answerList];
+            this.Name = name;
         }
-        public AZGameData(string[] wordList) 
+        public AZGameData(string[] wordList, string name) 
         {
             this.wordList = [.. wordList];
             answerList = [.. wordList];
+            this.Name = name;
         }
 
         // the return lets the bot know if it should process the response

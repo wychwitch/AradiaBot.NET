@@ -21,7 +21,13 @@ namespace AradiaBot.CommandHandlers
                     await StartAZGameHandler(database, command, availableAZGames);
                     break;
                 case "quit":
-                    await QuitAZGameHandler(database, command, availableAZGames);
+                    await QuitAZGameHandler(database, command);
+                    break;
+                case "scores":
+                    await GetScores(database, command, availableAZGames);
+                    break;
+                case "range":
+                    await GetRange(database, command);
                     break;
                 
             }
@@ -43,7 +49,7 @@ namespace AradiaBot.CommandHandlers
             }
         }
 
-        private static async Task QuitAZGameHandler(Database database, SocketSlashCommand command, Dictionary<string, AZGameData> availableAZGames)
+        private static async Task QuitAZGameHandler(Database database, SocketSlashCommand command)
         {
             if(database.GlobalGameState != null) 
             {
@@ -53,5 +59,37 @@ namespace AradiaBot.CommandHandlers
                 database.SaveData();
             }
         }
+        private static async Task GetRange(Database database, SocketSlashCommand command)
+        {
+            if (database.IsGLobalAZGameRunning())
+            {
+                await command.ModifyOriginalResponseAsync(x => x.Content = $"Range: {database.GlobalGameState.rangeStart} - {database.GlobalGameState.rangeEnd}");
+            }
+            else
+            {
+                await command.ModifyOriginalResponseAsync(x => x.Content = "No game ongoing!");
+            }
+        }
+
+        private static async Task GetScores(Database database, SocketSlashCommand command, Dictionary<string, AZGameData> availableAzGames)
+        {
+            string responseString = "";
+
+
+            foreach (var scoreKey in database.GameScores.Keys)
+            {
+                responseString += $"**{availableAzGames[scoreKey].Name}**\n";
+                List<KeyValuePair<ulong, int>> scoreList = database.GameScores[scoreKey].ToList();
+                scoreList.Sort((x, y) => y.Value.CompareTo(x.Value));
+                foreach(var scorePair in scoreList)
+                {
+                    ulong scoreId = scorePair.Key;
+                    int score = scorePair.Value;
+                    responseString += $"- {database.GetName(scoreId)}: {score}\n";
+                }
+            }
+            await command.ModifyOriginalResponseAsync(x=>x.Content = responseString);
+        }
+
     }
 }

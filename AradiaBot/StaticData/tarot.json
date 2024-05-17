@@ -23,8 +23,8 @@
                 "chaos"
             ]
         },
-        "img": "json/cards/m00.jpg",
-        "rev_img": "json/reversed_cards/m00.jpg"
+        "img": "/cards/m00.jpg",
+        "rev_img": "/reversed_cards/m00.jpg"
     },
     {
         "name": "The Magician",
@@ -52,8 +52,8 @@
                 "confusion"
             ]
         },
-        "img": "json/cards/m01.jpg",
-        "rev_img": "json/reversed_cards/m01.jpg"
+        "img": "/cards/m01.jpg",
+        "rev_img": "/reversed_cards/m01.jpg"
     },
     {
         "name": "The High Priestess",
@@ -79,8 +79,8 @@
                 "hidden agendas"
             ]
         },
-        "img": "json/cards/m02.jpg",
-        "rev_img": "json/reversed_cards/m02.jpg"
+        "img": "/cards/m02.jpg",
+        "rev_img": "/reversed_cards/m02.jpg"
     },
     {
         "name": "The Empress",
@@ -106,8 +106,8 @@
                 "creative block"
             ]
         },
-        "img": "json/cards/m03.jpg",
-        "rev_img": "json/reversed_cards/m03.jpg"
+        "img": "/cards/m03.jpg",
+        "rev_img": "/reversed_cards/m03.jpg"
     },
     {
         "name": "The Emperor",
@@ -133,8 +133,8 @@
                 "loss of control"
             ]
         },
-        "img": "json/cards/m04.jpg",
-        "rev_img": "json/reversed_cards/m04.jpg"
+        "img": "/cards/m04.jpg",
+        "rev_img": "/reversed_cards/m04.jpg"
     },
     {
         "name": "The Hierophant",
@@ -160,8 +160,8 @@
                 "freethinking"
             ]
         },
-        "img": "json/cards/m05.jpg",
-        "rev_img": "json/reversed_cards/m05.jpg"
+        "img": "/cards/m05.jpg",
+        "rev_img": "/reversed_cards/m05.jpg"
     },
     {
         "name": "The Lovers",
@@ -190,8 +190,8 @@
                 "misalignment of values"
             ]
         },
-        "img": "json/cards/m06.jpg",
-        "rev_img": "json/reversed_cards/m06.jpg"
+        "img": "/cards/m06.jpg",
+        "rev_img": "/reversed_cards/m06.jpg"
     },
     {
         "name": "The Chariot",
@@ -222,8 +222,8 @@
                 "failure"
             ]
         },
-        "img": "json/cards/m07.jpg",
-        "rev_img": "json/reversed_cards/m07.jpg"
+        "img": "/cards/m07.jpg",
+        "rev_img": "/reversed_cards/m07.jpg"
     },
     {
         "name": "Strength",
@@ -250,8 +250,8 @@
                 "dishonor"
             ]
         },
-        "img": "json/cards/m08.jpg",
-        "rev_img": "json/reversed_cards/m08.jpg"
+        "img": "/cards/m08.jpg",
+        "rev_img": "/reversed_cards/m08.jpg"
     },
     {
         "name": "The Hermit",
@@ -279,8 +279,8 @@
                 "misguidance"
             ]
         },
-        "img": "json/cards/m09.jpg",
-        "rev_img": "json/reversed_cards/m09.jpg"
+        "img": "/cards/m09.jpg",
+        "rev_img": "/reversed_cards/m09.jpg"
     },
     {
         "name": "Wheel of Fortune",
@@ -308,8 +308,8 @@
                 "disappointment"
             ]
         },
-        "img": "json/cards/m10.jpg",
-        "rev_img": "json/reversed_cards/m10.jpg"
+        "img": "/cards/m10.jpg",
+        "rev_img": "/reversed_cards/m10.jpg"
     },
     {
         "name": "Justice",
@@ -338,8 +338,8 @@
                 "bias"
             ]
         },
-        "img": "json/cards/m11.jpg",
-        "rev_img": "json/reversed_cards/m11.jpg"
+        "img": "/cards/m11.jpg",
+        "rev_img": "/reversed_cards/m11.jpg"
     },
     {
         "name": "The Hanged Man",
@@ -370,8 +370,8 @@
                 "egotism"
             ]
         },
-        "img": "json/cards/m12.jpg",
-        "rev_img": "json/reversed_cards/m12.jpg"
+        "img": "/cards/m12.jpg",
+        "rev_img": "/reversed_cards/m12.jpg"
     },
     {
         "name": "Death",
@@ -404,8 +404,8 @@
                 "depression"
             ]
         },
-        "img": "json/cards/m13.jpg",
-        "rev_img": "json/reversed_cards/m13.jpg"
+        "img": "/cards/m13.jpg",
+        "rev_img": "/reversed_cards/m13.jpg"
     },
     {
         "name": "Temperance",
@@ -437,8 +437,8 @@
                 "chaos"
             ]
         },
-        "img": "json/cards/m14.jpg",
-        "rev_img": "json/reversed_cards/m14.jpg"
+        "img": "/cards/m14.jpg",
+        "rev_img": "/reversed_cards/m14.jpg"
     },
     {
         "name": "The Devil",
@@ -472,8 +472,8 @@
                 "restoring control"
             ]
         },
-        "img": "json/cards/m15.jpg",
-        "rev_img": "json/reversed_cards/m15.jpg"
+        "img": "/cards/m15.jpg",
+        "rev_img": "/reversed_cards/m15.jpg"
     },
     {
         "name": "The Tower",
@@ -501,8 +501,8 @@
                 "illness"
             ]
         },
-        "img": "json/cards/m16.jpg",
-        "rev_img": "json/reversed_cards/m16.jpg"
+        "img": "/cards/m16.jpg",
+        "rev_img": "/reversed_cards/m16.jpg"
     },
     {
         "name": "The Star",
@@ -533,8 +533,8 @@
                 "unrealistic expectations"
             ]
         },
-        "img": "json/cards/m17.jpg",
-        "rev_img": "json/reversed_cards/m17.jpg"
+        "img": "/cards/m17.jpg",
+        "rev_img": "/reversed_cards/m17.jpg"
     },
     {
         "name": "The Moon",
@@ -565,8 +565,8 @@
                 "enlightenment"
             ]
         },
-        "img": "json/cards/m18.jpg",
-        "rev_img": "json/reversed_cards/m18.jpg"
+        "img": "/cards/m18.jpg",
+        "rev_img": "/reversed_cards/m18.jpg"
     },
     {
         "name": "The Sun",
@@ -595,8 +595,8 @@
                 "overindulgence"
             ]
         },
-        "img": "json/cards/m19.jpg",
-        "rev_img": "json/reversed_cards/m19.jpg"
+        "img": "/cards/m19.jpg",
+        "rev_img": "/reversed_cards/m19.jpg"
     },
     {
         "name": "Judgement",
@@ -624,8 +624,8 @@
                 "stunted personal growth"
             ]
         },
-        "img": "json/cards/m20.jpg",
-        "rev_img": "json/reversed_cards/m20.jpg"
+        "img": "/cards/m20.jpg",
+        "rev_img": "/reversed_cards/m20.jpg"
     },
     {
         "name": "The World",
@@ -657,8 +657,8 @@
                 "emptiness"
             ]
         },
-        "img": "json/cards/m21.jpg",
-        "rev_img": "json/reversed_cards/m21.jpg"
+        "img": "/cards/m21.jpg",
+        "rev_img": "/reversed_cards/m21.jpg"
     },
     {
         "name": "Ace of Wands",
@@ -689,8 +689,8 @@
                 "lack of creativity"
             ]
         },
-        "img": "json/cards/w01.jpg",
-        "rev_img": "json/reversed_cards/w01.jpg"
+        "img": "/cards/w01.jpg",
+        "rev_img": "/reversed_cards/w01.jpg"
     },
     {
         "name": "Two of Wands",
@@ -722,8 +722,8 @@
                 "personal goals are unclear"
             ]
         },
-        "img": "json/cards/w02.jpg",
-        "rev_img": "json/reversed_cards/w02.jpg"
+        "img": "/cards/w02.jpg",
+        "rev_img": "/reversed_cards/w02.jpg"
     },
     {
         "name": "Three of Wands",
@@ -758,8 +758,8 @@
                 "bad things to come"
             ]
         },
-        "img": "json/cards/w03.jpg",
-        "rev_img": "json/reversed_cards/w03.jpg"
+        "img": "/cards/w03.jpg",
+        "rev_img": "/reversed_cards/w03.jpg"
     },
     {
         "name": "Four of Wands",
@@ -791,8 +791,8 @@
                 "inner harmony"
             ]
         },
-        "img": "json/cards/w04.jpg",
-        "rev_img": "json/reversed_cards/w04.jpg"
+        "img": "/cards/w04.jpg",
+        "rev_img": "/reversed_cards/w04.jpg"
     },
     {
         "name": "Five of Wands",
@@ -823,8 +823,8 @@
                 "tension release"
             ]
         },
-        "img": "json/cards/w05.jpg",
-        "rev_img": "json/reversed_cards/w05.jpg"
+        "img": "/cards/w05.jpg",
+        "rev_img": "/reversed_cards/w05.jpg"
     },
     {
         "name": "Six of Wands",
@@ -856,8 +856,8 @@
                 "egotism"
             ]
         },
-        "img": "json/cards/w06.jpg",
-        "rev_img": "json/reversed_cards/w06.jpg"
+        "img": "/cards/w06.jpg",
+        "rev_img": "/reversed_cards/w06.jpg"
     },
     {
         "name": "Seven of Wands",
@@ -890,8 +890,8 @@
                 "lack of confidence"
             ]
         },
-        "img": "json/cards/w07.jpg",
-        "rev_img": "json/reversed_cards/w07.jpg"
+        "img": "/cards/w07.jpg",
+        "rev_img": "/reversed_cards/w07.jpg"
     },
     {
         "name": "Eight of Wands",
@@ -921,8 +921,8 @@
                 "resisting change"
             ]
         },
-        "img": "json/cards/w08.jpg",
-        "rev_img": "json/reversed_cards/w08.jpg"
+        "img": "/cards/w08.jpg",
+        "rev_img": "/reversed_cards/w08.jpg"
     },
     {
         "name": "Nine of Wands",
@@ -955,8 +955,8 @@
                 "paranoia"
             ]
         },
-        "img": "json/cards/w09.jpg",
-        "rev_img": "json/reversed_cards/w09.jpg"
+        "img": "/cards/w09.jpg",
+        "rev_img": "/reversed_cards/w09.jpg"
     },
     {
         "name": "Ten of Wands",
@@ -989,8 +989,8 @@
                 "release"
             ]
         },
-        "img": "json/cards/w10.jpg",
-        "rev_img": "json/reversed_cards/w10.jpg"
+        "img": "/cards/w10.jpg",
+        "rev_img": "/reversed_cards/w10.jpg"
     },
     {
         "name": "Page of Wands",
@@ -1021,8 +1021,8 @@
                 "spiritual path"
             ]
         },
-        "img": "json/cards/w11.jpg",
-        "rev_img": "json/reversed_cards/w11.jpg"
+        "img": "/cards/w11.jpg",
+        "rev_img": "/reversed_cards/w11.jpg"
     },
     {
         "name": "Knight of Wands",
@@ -1059,8 +1059,8 @@
                 "delays"
             ]
         },
-        "img": "json/cards/w12.jpg",
-        "rev_img": "json/reversed_cards/w12.jpg"
+        "img": "/cards/w12.jpg",
+        "rev_img": "/reversed_cards/w12.jpg"
     },
     {
         "name": "Queen of Wands",
@@ -1092,8 +1092,8 @@
                 "moodiness"
             ]
         },
-        "img": "json/cards/w13.jpg",
-        "rev_img": "json/reversed_cards/w13.jpg"
+        "img": "/cards/w13.jpg",
+        "rev_img": "/reversed_cards/w13.jpg"
     },
     {
         "name": "King of Wands",
@@ -1124,8 +1124,8 @@
                 "controlling"
             ]
         },
-        "img": "json/cards/w14.jpg",
-        "rev_img": "json/reversed_cards/w14.jpg"
+        "img": "/cards/w14.jpg",
+        "rev_img": "/reversed_cards/w14.jpg"
     },
     {
         "name": "Ace of Cups",
@@ -1155,8 +1155,8 @@
                 "emptiness"
             ]
         },
-        "img": "json/cards/c01.jpg",
-        "rev_img": "json/reversed_cards/c01.jpg"
+        "img": "/cards/c01.jpg",
+        "rev_img": "/reversed_cards/c01.jpg"
     },
     {
         "name": "Two of Cups",
@@ -1188,8 +1188,8 @@
                 "tension"
             ]
         },
-        "img": "json/cards/c02.jpg",
-        "rev_img": "json/reversed_cards/c02.jpg"
+        "img": "/cards/c02.jpg",
+        "rev_img": "/reversed_cards/c02.jpg"
     },
     {
         "name": "Three of Cups",
@@ -1224,8 +1224,8 @@
                 "an affair"
             ]
         },
-        "img": "json/cards/c03.jpg",
-        "rev_img": "json/reversed_cards/c03.jpg"
+        "img": "/cards/c03.jpg",
+        "rev_img": "/reversed_cards/c03.jpg"
     },
     {
         "name": "Four of Cups",
@@ -1256,8 +1256,8 @@
                 "moving on"
             ]
         },
-        "img": "json/cards/c04.jpg",
-        "rev_img": "json/reversed_cards/c04.jpg"
+        "img": "/cards/c04.jpg",
+        "rev_img": "/reversed_cards/c04.jpg"
     },
     {
         "name": "Five of Cups",
@@ -1290,8 +1290,8 @@
                 "healing"
             ]
         },
-        "img": "json/cards/c05.jpg",
-        "rev_img": "json/reversed_cards/c05.jpg"
+        "img": "/cards/c05.jpg",
+        "rev_img": "/reversed_cards/c05.jpg"
     },
     {
         "name": "Six of Cups",
@@ -1320,8 +1320,8 @@
                 "leaving home"
             ]
         },
-        "img": "json/cards/c06.jpg",
-        "rev_img": "json/reversed_cards/c06.jpg"
+        "img": "/cards/c06.jpg",
+        "rev_img": "/reversed_cards/c06.jpg"
     },
     {
         "name": "Seven of Cups",
@@ -1352,8 +1352,8 @@
                 "overwhelmed by choice"
             ]
         },
-        "img": "json/cards/c07.jpg",
-        "rev_img": "json/reversed_cards/c07.jpg"
+        "img": "/cards/c07.jpg",
+        "rev_img": "/reversed_cards/c07.jpg"
     },
     {
         "name": "Eight of Cups",
@@ -1383,8 +1383,8 @@
                 "stagnation"
             ]
         },
-        "img": "json/cards/c08.jpg",
-        "rev_img": "json/reversed_cards/c08.jpg"
+        "img": "/cards/c08.jpg",
+        "rev_img": "/reversed_cards/c08.jpg"
     },
     {
         "name": "Nine of Cups",
@@ -1418,8 +1418,8 @@
                 "materialism"
             ]
         },
-        "img": "json/cards/c09.jpg",
-        "rev_img": "json/reversed_cards/c09.jpg"
+        "img": "/cards/c09.jpg",
+        "rev_img": "/reversed_cards/c09.jpg"
     },
     {
         "name": "Ten of Cups",
@@ -1449,8 +1449,8 @@
                 "misalignment of values"
             ]
         },
-        "img": "json/cards/c10.jpg",
-        "rev_img": "json/reversed_cards/c10.jpg"
+        "img": "/cards/c10.jpg",
+        "rev_img": "/reversed_cards/c10.jpg"
     },
     {
         "name": "Page of Cups",
@@ -1478,8 +1478,8 @@
                 "creative block"
             ]
         },
-        "img": "json/cards/c11.jpg",
-        "rev_img": "json/reversed_cards/c11.jpg"
+        "img": "/cards/c11.jpg",
+        "rev_img": "/reversed_cards/c11.jpg"
     },
     {
         "name": "Knight of Cups",
@@ -1507,8 +1507,8 @@
                 "sadness"
             ]
         },
-        "img": "json/cards/c12.jpg",
-        "rev_img": "json/reversed_cards/c12.jpg"
+        "img": "/cards/c12.jpg",
+        "rev_img": "/reversed_cards/c12.jpg"
     },
     {
         "name": "Queen of Cups",
@@ -1540,8 +1540,8 @@
                 "dependency"
             ]
         },
-        "img": "json/cards/c13.jpg",
-        "rev_img": "json/reversed_cards/c13.jpg"
+        "img": "/cards/c13.jpg",
+        "rev_img": "/reversed_cards/c13.jpg"
     },
     {
         "name": "King of Cups",
@@ -1572,8 +1572,8 @@
                 "manipulative"
             ]
         },
-        "img": "json/cards/c14.jpg",
-        "rev_img": "json/reversed_cards/c14.jpg"
+        "img": "/cards/c14.jpg",
+        "rev_img": "/reversed_cards/c14.jpg"
     },
     {
         "name": "Ace of Swords",
@@ -1602,8 +1602,8 @@
                 "clouded judgement"
             ]
         },
-        "img": "json/cards/s01.jpg",
-        "rev_img": "json/reversed_cards/s01.jpg"
+        "img": "/cards/s01.jpg",
+        "rev_img": "/reversed_cards/s01.jpg"
     },
     {
         "name": "Two of Swords",
@@ -1631,8 +1631,8 @@
                 "tension"
             ]
         },
-        "img": "json/cards/s02.jpg",
-        "rev_img": "json/reversed_cards/s02.jpg"
+        "img": "/cards/s02.jpg",
+        "rev_img": "/reversed_cards/s02.jpg"
     },
     {
         "name": "Three of Swords",
@@ -1662,8 +1662,8 @@
                 "legging go of pain"
             ]
         },
-        "img": "json/cards/s03.jpg",
-        "rev_img": "json/reversed_cards/s03.jpg"
+        "img": "/cards/s03.jpg",
+        "rev_img": "/reversed_cards/s03.jpg"
     },
     {
         "name": "Four of Swords",
@@ -1694,8 +1694,8 @@
                 "repeating mistakes"
             ]
         },
-        "img": "json/cards/s04.jpg",
-        "rev_img": "json/reversed_cards/s04.jpg"
+        "img": "/cards/s04.jpg",
+        "rev_img": "/reversed_cards/s04.jpg"
     },
     {
         "name": "Five of Swords",
@@ -1725,8 +1725,8 @@
                 "releasing baggage"
             ]
         },
-        "img": "json/cards/s05.jpg",
-        "rev_img": "json/reversed_cards/s05.jpg"
+        "img": "/cards/s05.jpg",
+        "rev_img": "/reversed_cards/s05.jpg"
     },
     {
         "name": "Six of Swords",
@@ -1754,8 +1754,8 @@
                 "difficulty moving on"
             ]
         },
-        "img": "json/cards/s06.jpg",
-        "rev_img": "json/reversed_cards/s06.jpg"
+        "img": "/cards/s06.jpg",
+        "rev_img": "/reversed_cards/s06.jpg"
     },
     {
         "name": "Seven of Swords",
@@ -1786,8 +1786,8 @@
                 "confrontation"
             ]
         },
-        "img": "json/cards/s07.jpg",
-        "rev_img": "json/reversed_cards/s07.jpg"
+        "img": "/cards/s07.jpg",
+        "rev_img": "/reversed_cards/s07.jpg"
     },
     {
         "name": "Eight of Swords",
@@ -1814,8 +1814,8 @@
                 "freedom"
             ]
         },
-        "img": "json/cards/s08.jpg",
-        "rev_img": "json/reversed_cards/s08.jpg"
+        "img": "/cards/s08.jpg",
+        "rev_img": "/reversed_cards/s08.jpg"
     },
     {
         "name": "Nine of Swords",
@@ -1845,8 +1845,8 @@
                 "inner turmoil"
             ]
         },
-        "img": "json/cards/s09.jpg",
-        "rev_img": "json/reversed_cards/s09.jpg"
+        "img": "/cards/s09.jpg",
+        "rev_img": "/reversed_cards/s09.jpg"
     },
     {
         "name": "Ten of Swords",
@@ -1875,8 +1875,8 @@
                 "restoration"
             ]
         },
-        "img": "json/cards/s10.jpg",
-        "rev_img": "json/reversed_cards/s10.jpg"
+        "img": "/cards/s10.jpg",
+        "rev_img": "/reversed_cards/s10.jpg"
     },
     {
         "name": "Page of Swords",
@@ -1903,8 +1903,8 @@
                 "haphazard action"
             ]
         },
-        "img": "json/cards/s11.jpg",
-        "rev_img": "json/reversed_cards/s11.jpg"
+        "img": "/cards/s11.jpg",
+        "rev_img": "/reversed_cards/s11.jpg"
     },
     {
         "name": "Knight of Swords",
@@ -1931,8 +1931,8 @@
                 "impulsive"
             ]
         },
-        "img": "json/cards/s12.jpg",
-        "rev_img": "json/reversed_cards/s12.jpg"
+        "img": "/cards/s12.jpg",
+        "rev_img": "/reversed_cards/s12.jpg"
     },
     {
         "name": "Queen of Swords",
@@ -1962,8 +1962,8 @@
                 "isolation"
             ]
         },
-        "img": "json/cards/s13.jpg",
-        "rev_img": "json/reversed_cards/s13.jpg"
+        "img": "/cards/s13.jpg",
+        "rev_img": "/reversed_cards/s13.jpg"
     },
     {
         "name": "King of Swords",
@@ -1993,8 +1993,8 @@
                 "abuse of power"
             ]
         },
-        "img": "json/cards/s14.jpg",
-        "rev_img": "json/reversed_cards/s14.jpg"
+        "img": "/cards/s14.jpg",
+        "rev_img": "/reversed_cards/s14.jpg"
     },
     {
         "name": "Ace of Coins",
@@ -2023,8 +2023,8 @@
                 "lack of foresight"
             ]
         },
-        "img": "json/cards/p01.jpg",
-        "rev_img": "json/reversed_cards/p01.jpg"
+        "img": "/cards/p01.jpg",
+        "rev_img": "/reversed_cards/p01.jpg"
     },
     {
         "name": "Two of Coins",
@@ -2052,8 +2052,8 @@
                 "over-committed"
             ]
         },
-        "img": "json/cards/p02.jpg",
-        "rev_img": "json/reversed_cards/p02.jpg"
+        "img": "/cards/p02.jpg",
+        "rev_img": "/reversed_cards/p02.jpg"
     },
     {
         "name": "Three of Coins",
@@ -2080,8 +2080,8 @@
                 "working alone"
             ]
         },
-        "img": "json/cards/p03.jpg",
-        "rev_img": "json/reversed_cards/p03.jpg"
+        "img": "/cards/p03.jpg",
+        "rev_img": "/reversed_cards/p03.jpg"
     },
     {
         "name": "Four of Coins",
@@ -2112,8 +2112,8 @@
                 "unstable"
             ]
         },
-        "img": "json/cards/p04.jpg",
-        "rev_img": "json/reversed_cards/p04.jpg"
+        "img": "/cards/p04.jpg",
+        "rev_img": "/reversed_cards/p04.jpg"
     },
     {
         "name": "Five of Coins",
@@ -2141,8 +2141,8 @@
                 "spiritual poverty"
             ]
         },
-        "img": "json/cards/p05.jpg",
-        "rev_img": "json/reversed_cards/p05.jpg"
+        "img": "/cards/p05.jpg",
+        "rev_img": "/reversed_cards/p05.jpg"
     },
     {
         "name": "Six of Coins",
@@ -2171,8 +2171,8 @@
                 "self-care"
             ]
         },
-        "img": "json/cards/p06.jpg",
-        "rev_img": "json/reversed_cards/p06.jpg"
+        "img": "/cards/p06.jpg",
+        "rev_img": "/reversed_cards/p06.jpg"
     },
     {
         "name": "Seven of Coins",
@@ -2201,8 +2201,8 @@
                 "questioned investments"
             ]
         },
-        "img": "json/cards/p07.jpg",
-        "rev_img": "json/reversed_cards/p07.jpg"
+        "img": "/cards/p07.jpg",
+        "rev_img": "/reversed_cards/p07.jpg"
     },
     {
         "name": "Eight of Coins",
@@ -2230,8 +2230,8 @@
                 "no motivation"
             ]
         },
-        "img": "json/cards/p08.jpg",
-        "rev_img": "json/reversed_cards/p08.jpg"
+        "img": "/cards/p08.jpg",
+        "rev_img": "/reversed_cards/p08.jpg"
     },
     {
         "name": "Nine of Coins",
@@ -2260,8 +2260,8 @@
                 "termination"
             ]
         },
-        "img": "json/cards/p09.jpg",
-        "rev_img": "json/reversed_cards/p09.jpg"
+        "img": "/cards/p09.jpg",
+        "rev_img": "/reversed_cards/p09.jpg"
     },
     {
         "name": "Ten of Coins",
@@ -2289,8 +2289,8 @@
                 "lack of resources"
             ]
         },
-        "img": "json/cards/p10.jpg",
-        "rev_img": "json/reversed_cards/p10.jpg"
+        "img": "/cards/p10.jpg",
+        "rev_img": "/reversed_cards/p10.jpg"
 
     },
     {
@@ -2318,8 +2318,8 @@
                 "laziness"
             ]
         },
-        "img": "json/cards/p11.jpg",
-        "rev_img": "json/reversed_cards/p11.jpg"
+        "img": "/cards/p11.jpg",
+        "rev_img": "/reversed_cards/p11.jpg"
 
     },
     {
@@ -2351,8 +2351,8 @@
                 "feeling overwhelmed"
             ]
         },
-        "img": "json/cards/p12.jpg",
-        "rev_img": "json/reversed_cards/p12.jpg"
+        "img": "/cards/p12.jpg",
+        "rev_img": "/reversed_cards/p12.jpg"
 
     },
     {
@@ -2381,8 +2381,8 @@
                 "financially dependent"
             ]
         },
-        "img": "json/cards/p13.jpg",
-        "rev_img": "json/reversed_cards/p13.jpg"
+        "img": "/cards/p13.jpg",
+        "rev_img": "/reversed_cards/p13.jpg"
 
     },
     {
@@ -2412,8 +2412,8 @@
                 "indulgence"
             ]
         },
-        "img": "json/cards/p14.jpg",
-        "rev_img": "json/reversed_cards/p14.jpg"
+        "img": "/cards/p14.jpg",
+        "rev_img": "/reversed_cards/p14.jpg"
 
     }
 ]

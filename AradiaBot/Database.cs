@@ -15,6 +15,7 @@ namespace AradiaBot
         public List<ServerMember> Members { get; set; }
         public Dictionary<string, Dictionary<ulong, int>> GameScores { get; set; }
         public List<Quote> Quotes { get; set; }
+        public List<Quote> NSFWQuotes { get; set; }
         //The key is the guild's id
         public AZGameState? GlobalGameState { get; set; }
 
@@ -24,6 +25,7 @@ namespace AradiaBot
             GameScores["az"] = new Dictionary<ulong, int>();
 
             Quotes = new();
+            NSFWQuotes = new();
 
             Members = new List<ServerMember>();
 
@@ -102,7 +104,7 @@ namespace AradiaBot
                 IUser user = await message.Channel.GetUserAsync(Members[memberIndex].Id);
                 string messageLink = MessageExtensions.GetJumpUrl(message);
                 
-                if (user!= null)
+                if (user != null)
                 {
                     await UserExtensions.SendMessageAsync(user, $"> {message.Channel}: <{message.Author}> {messageContent}\n\n{messageLink}");
                 }
@@ -155,6 +157,34 @@ namespace AradiaBot
                 }
             }
             return 0;
+        }
+
+        public string GetName(ulong userId)
+        {
+
+            if (Members.Any(m => m.Id == userId))
+            {
+                var member = GetMember(userId);
+                return member.GetName();
+            }
+            else
+            {
+                return MentionUtils.MentionUser(userId);
+            }
+        }
+
+        public string GetName(IUser user)
+        {
+
+            if (Members.Any(m => m.Id == user.Id))
+            {
+                var member = GetMember(user.Id);
+                return member.GetName();
+            }
+            else
+            {
+                return MentionUtils.MentionUser(user.Id);
+            }
         }
 
     }

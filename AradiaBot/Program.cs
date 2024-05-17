@@ -49,11 +49,14 @@ public class Program
     private static List<ulong> _guildIDs;
     private static Database _database;
     private static Dictionary<string, AZGameData> _availableAZGames = new Dictionary<string, AZGameData>();
+    private static List<Tarot> _tarotDeck;
 
 
     public static async Task Main()
     {
         Config config = JsonConvert.DeserializeObject<Config>(File.ReadAllText("config.json"));
+
+        _tarotDeck = JsonConvert.DeserializeObject<List<Tarot>>(File.ReadAllText("StaticData/tarot.json"));
 
         var socket_config = new DiscordSocketConfig()
         {
@@ -100,20 +103,20 @@ public class Program
         allPokemon = [.. tempPokemonList];
         
 
-        _availableAZGames.Add("eng-short", new AZGameData(englishWordListLong, englishWordListShort));
-        _availableAZGames.Add("eng-long", new AZGameData(englishWordListLong));
-        _availableAZGames.Add("pokemon-all", new AZGameData(allPokemon));
-        _availableAZGames.Add("pokemon-moves", new AZGameData(pokemonMoveList));
-        _availableAZGames.Add("pokemon-abilities", new AZGameData(pokemonAbilityList));
-        _availableAZGames.Add("kanto", new AZGameData(availablePokemonGens[0]));
-        _availableAZGames.Add("johto", new AZGameData(availablePokemonGens[1]));
-        _availableAZGames.Add("hoenn", new AZGameData(availablePokemonGens[2]));
-        _availableAZGames.Add("sinnoh", new AZGameData(availablePokemonGens[3]));
-        _availableAZGames.Add("unova", new AZGameData(availablePokemonGens[4]));
-        _availableAZGames.Add("kalos", new AZGameData(availablePokemonGens[5]));
-        _availableAZGames.Add("alola", new AZGameData(availablePokemonGens[6]));
-        _availableAZGames.Add("galar", new AZGameData(availablePokemonGens[7]));
-        _availableAZGames.Add("paldea", new AZGameData(availablePokemonGens[8]));
+        _availableAZGames.Add("eng-short", new AZGameData(englishWordListLong, englishWordListShort, "English Easy"));
+        _availableAZGames.Add("eng-long", new AZGameData(englishWordListLong, "English Hard"));
+        _availableAZGames.Add("pokemon-all", new AZGameData(allPokemon, "All Pokemon"));
+        _availableAZGames.Add("pokemon-moves", new AZGameData(pokemonMoveList, "Pokemon Moves"));
+        _availableAZGames.Add("pokemon-abilities", new AZGameData(pokemonAbilityList, "Pokemon Abilities"));
+        _availableAZGames.Add("kanto", new AZGameData(availablePokemonGens[0], "Kanto Pokemon"));
+        _availableAZGames.Add("johto", new AZGameData(availablePokemonGens[1], "Johto Pokemon"));
+        _availableAZGames.Add("hoenn", new AZGameData(availablePokemonGens[2], "Hoenn Pokemon"));
+        _availableAZGames.Add("sinnoh", new AZGameData(availablePokemonGens[3], "Sinnoh Pokemon"));
+        _availableAZGames.Add("unova", new AZGameData(availablePokemonGens[4], "Unova Pokemon"));
+        _availableAZGames.Add("kalos", new AZGameData(availablePokemonGens[5], "Kalos Pokemon"));
+        _availableAZGames.Add("alola", new AZGameData(availablePokemonGens[6], "Alola Pokemon"));
+        _availableAZGames.Add("galar", new AZGameData(availablePokemonGens[7], "Galar Pokemon"));
+        _availableAZGames.Add("paldea", new AZGameData(availablePokemonGens[8], "Paldea Pokemon"));
 
 
 
@@ -159,29 +162,7 @@ public class Program
         if (_database.IsGLobalAZGameRunning() || _database.IsAnySinglePlayerAZGameRunning())
         {
             //checkfor singleplayer game first, and then check for non singleplayer game
-            if (_database.IsAnySinglePlayerAZGameRunning())
-            {
-                IUser user = message.Author;
-                ServerMember serverMember = _database.GetMember(user);
-                if (serverMember != null && serverMember.GameState != null) 
-                {
-                    (bool, AZGameState) returnValue = AZGameData.CheckAnswer(message.Content, serverMember.GameState, _availableAZGames);
-                    if (returnValue.Item1)
-                    {
-                        serverMember.GameState = returnValue.Item2;
-                        if (serverMember.GameState.rangeStart == serverMember.GameState.rangeEnd)
-                        {
-                            await message.Channel.SendMessageAsync($"You won! The answer was{serverMember.GameState.answer}");
-                            serverMember.GameState = null;
-                        }
-
-                        await message.Channel.SendMessageAsync($"Your new range is: {serverMember.GameState.rangeStart} - {serverMember.GameState.rangeEnd}");
-                        _database.SaveData();
-                    }
-
-                    Console.WriteLine($"{returnValue.Item1} | start: {returnValue.Item2.rangeStart} end: {returnValue.Item2.rangeEnd} answer: {returnValue.Item2.answer}");
-                }
-            }
+            
 
             //check for if it's a global gamestate or a user gamestate, and if it is a user gamestate check to see if it's the user who posted
             if (_database.IsGLobalAZGameRunning())
@@ -195,15 +176,15 @@ public class Program
                         
                         _database.IncreasePlayerScore(message.Author.Id, _database.GlobalGameState.gameKey);
                         int wonCount = _database.GetPlayerScore(message.Author.Id, _database.GlobalGameState.gameKey);
-                        await message.Channel.SendMessageAsync($"You won! The answer was {_database.GlobalGameState.answer}. {MentionUtils.MentionUser(message.Author.Id)} has won {wonCount} times");
+                        
+                        await message.Channel.SendMessageAsync($"You won! The answer was {_database.GlobalGameState.answer}. {_database.GetName(message.Author.Id)} has won {wonCount} times at the {_availableAZGames[_database.GlobalGameState.gameKey].Name} AZ Game");
                         _database.GlobalGameState = null;
                     }
                     else
                     {
-                        await message.Channel.SendMessageAsync($"Your new range is: {_database.GlobalGameState.rangeStart} - {_database.GlobalGameState.rangeEnd}");
+                        MessageReference messageReferenceVar = new MessageReference(message.Id);
+                        await message.Channel.SendMessageAsync($"Range: {_database.GlobalGameState.rangeStart} - {_database.GlobalGameState.rangeEnd}", messageReference: messageReferenceVar);
                     }
-                   
-    
                     _database.SaveData();
                 }
                 
@@ -221,26 +202,39 @@ public class Program
     }
     private static async Task MessageCommandHandler(SocketMessageCommand command)
     {
+        await command.DeferAsync();
         switch (command.CommandName) {
             case "Quote Message":
                 await QuoteHandler.ProcessMessageCommand(_database, command); 
+                break;
+            case "Quote NSFW Message":
+                await QuoteHandler.ProcessMessageCommand(_database, command);
                 break;
         }
     }
 
     private static async Task SlashCommandHandler(SocketSlashCommand command)
     {
-        await command.DeferAsync();
         switch (command.Data.Name)
         {
             case "quote":
+                await command.DeferAsync();
                 await QuoteHandler.ProcessSlashCommand(_database, command);
                 break;
+            case "nsfw-quote":
+                await command.DeferAsync();
+                await QuoteHandler.ProcessSlashCommand(_database, command, true);
+                break;
             case "db":
+                await command.DeferAsync();
                 await DatabaseHandler.ProcessSlashCommand(_database, command);
                 break;
             case "az":
+                await command.DeferAsync();
                 await AZGameHandler.ProcessSlashCommand(_database, command, _availableAZGames);
+                break;
+            case "tarot":
+                await TarotHandler.ProcessSlashCommand(_tarotDeck, command);
                 break;
         }
 
@@ -254,15 +248,12 @@ public class Program
 
 
         List<MessageCommandBuilder> messageCommands = [
-             new MessageCommandBuilder().WithName("Quote Message")
+             new MessageCommandBuilder().WithName("Quote Message"),
+             new MessageCommandBuilder().WithName("Quote NSFW Message")
         ];
 
         // Next, lets create our slash command builder. This is like the embed builder but for slash commands.
         List<SlashCommandBuilder> slashCommandBuilders = [
-            new SlashCommandBuilder()
-            .WithName("list-roles")
-            .WithDescription("Lists all roles of a user.")
-            .AddOption("user", ApplicationCommandOptionType.User, "The users whos roles you want to be listed", isRequired: true),
             new SlashCommandBuilder()
             .WithName("quote")
             .WithDescription("Quotes!!")
@@ -271,17 +262,20 @@ public class Program
                     .WithDescription("get random quote")
                     .WithType(ApplicationCommandOptionType.SubCommand)
                     .AddOption("count", ApplicationCommandOptionType.Integer, "Number of quotes", isRequired: false)
-                    
             ).AddOption(new SlashCommandOptionBuilder()
                     .WithName("get")
                     .WithDescription("get random quote")
                     .WithType(ApplicationCommandOptionType.SubCommand)
                     .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The index of the quote", isRequired: true, minValue:1)
+                    .AddOption("details", ApplicationCommandOptionType.Boolean, "Provide extra details", isRequired: false)
             ).AddOption(new SlashCommandOptionBuilder()
                     .WithName("count")
                     .WithDescription("get number of quotes")
                     .WithType(ApplicationCommandOptionType.SubCommand)
-                    
+            ).AddOption(new SlashCommandOptionBuilder()
+                    .WithName("rain")
+                    .WithDescription("a rain of quotes")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
             ).AddOption(new SlashCommandOptionBuilder()
                 .WithName("add")
                 .WithDescription("Adds Quote")
@@ -292,14 +286,17 @@ public class Program
                         .WithType(ApplicationCommandOptionType.SubCommand)
                         .AddOption("author", ApplicationCommandOptionType.User, "The User Of The Quote Author", isRequired: true)
                         .AddOption("body", ApplicationCommandOptionType.String, "The content of it", isRequired: true)
+                        .AddOption("is-nsfw", ApplicationCommandOptionType.Boolean, "if it is nsfw", isRequired: false)
                     ).AddOption(new SlashCommandOptionBuilder()
                         .WithName("static")
                         .WithDescription("Add Quote by putting in the name directly")
                         .WithType(ApplicationCommandOptionType.SubCommand)
                         .AddOption("author", ApplicationCommandOptionType.String, "The name Of The Quote author", isRequired: true)
                         .AddOption("body", ApplicationCommandOptionType.String, "The content of it", isRequired: true)
-                        ))
-            .AddOption(new SlashCommandOptionBuilder()
+                        .AddOption("is-nsfw", ApplicationCommandOptionType.Boolean, "if it is nsfw", isRequired: false)
+                        )
+                    
+            ).AddOption(new SlashCommandOptionBuilder()
                 .WithName("delete")
                 .WithDescription("Delete Quote")
                 .WithType(ApplicationCommandOptionType.SubCommand)
@@ -313,7 +310,49 @@ public class Program
                 .AddOption("author-user", ApplicationCommandOptionType.User, "The name of the author (user)", isRequired: false)
                 .AddOption("body", ApplicationCommandOptionType.String, "the body of the quote", isRequired: false)
                 .AddOption("quoter", ApplicationCommandOptionType.User, "the person who quoted", isRequired: false)
-            
+                .AddOption("message-link", ApplicationCommandOptionType.String, "the mesage of the quote", isRequired: false)
+
+            ),
+
+                        new SlashCommandBuilder()
+            .WithName("nsfw-quote")
+            .WithDescription("NSFW Quotes!!")
+            .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("random")
+                    .WithDescription("get random quote")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                    .AddOption("count", ApplicationCommandOptionType.Integer, "Number of quotes", isRequired: false)
+            ).AddOption(new SlashCommandOptionBuilder()
+                    .WithName("get")
+                    .WithDescription("get random quote")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                    .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The index of the quote", isRequired: true, minValue:1)
+                    .AddOption("details", ApplicationCommandOptionType.Boolean, "Provide extra details", isRequired: false)
+            ).AddOption(new SlashCommandOptionBuilder()
+                    .WithName("count")
+                    .WithDescription("get number of quotes")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+            ).AddOption(new SlashCommandOptionBuilder()
+                    .WithName("rain")
+                    .WithDescription("a rain of quotes")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+           
+            ).AddOption(new SlashCommandOptionBuilder()
+                .WithName("delete")
+                .WithDescription("Delete Quote")
+                .WithType(ApplicationCommandOptionType.SubCommand)
+                .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The id of the quote to delete", isRequired: true, minValue:1)
+            ).AddOption(new SlashCommandOptionBuilder()
+                .WithName("edit")
+                .WithDescription("Edit quote")
+                .WithType(ApplicationCommandOptionType.SubCommand)
+                .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The id of the quote to edit", isRequired: true, minValue:1)
+                .AddOption("author-string", ApplicationCommandOptionType.String, "The name of the author (string)", isRequired: false)
+                .AddOption("author-user", ApplicationCommandOptionType.User, "The name of the author (user)", isRequired: false)
+                .AddOption("body", ApplicationCommandOptionType.String, "the body of the quote", isRequired: false)
+                .AddOption("quoter", ApplicationCommandOptionType.User, "the person who quoted", isRequired: false)
+                .AddOption("message-link", ApplicationCommandOptionType.String, "the mesage of the quote", isRequired: false)
+
             ),
 
             new SlashCommandBuilder()
@@ -355,22 +394,44 @@ public class Program
                         .WithName("word-list")
                         .WithDescription("The wordlist for your game")
                         .WithRequired(true)
-                        .AddChoice("english easy", "eng-short")
-                        .AddChoice("english hard", "eng-long")
-                        .AddChoice("pokemon", "pokemon-all")
-                        .AddChoice("pokemon abilities", "pokemon-abilities")
-                        .AddChoice("pokemon-moves", "pokemon-moves")
-                        .WithType(ApplicationCommandOptionType.String)
-                )
+                        .AddChoice("English Easy", "eng-short")
+                        .AddChoice("English Hard", "eng-long")
+                        .AddChoice("All Pokemon", "pokemon-all")
+                        .AddChoice("Pokemon Abilities", "pokemon-abilities")
+                        .AddChoice("Pokemon Moves", "pokemon-moves")
+                        .WithType(ApplicationCommandOptionType.String))
+                  )
+                .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("scores")
+                    .WithDescription("get the scores")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                    
                     )
+
                 .AddOption(new SlashCommandOptionBuilder()
                     .WithName("quit")
-                    .WithDescription("quits ongoing game")
-                    .WithType(ApplicationCommandOptionType.SubCommand))
+                    .WithDescription("quits AZ ongoing game")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                 ).AddOption(new SlashCommandOptionBuilder()
+                    .WithName("range")
+                    .WithDescription("get the range")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                    ),
 
-                
+                new SlashCommandBuilder()
+                .WithName("tarot")
+                .WithDescription("Tarot Cards")
+                .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("draw")
+                    .WithDescription("draw some cards")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                    .AddOption("cards", ApplicationCommandOptionType.Integer, "The amount of cards to draw", minValue: 1, isRequired: false)
+                    .AddOption("reversed", ApplicationCommandOptionType.Boolean, "enable or disable reverse cards", isRequired: false)
+                )
+
 
         ];
+       
         await CommandSetup.RegisterMessageCommands(_client, messageCommands, _guildIDs);
         await CommandSetup.RegisterSlashCommandsAsync(_client, slashCommandBuilders, _guildIDs);
 

@@ -14,7 +14,7 @@ namespace AradiaBot
         public ServerMemberSettings() 
         {
             PingNames = new List<string>();
-            UseNickname = false;
+            UseNickname = true;
         }
     }
 }

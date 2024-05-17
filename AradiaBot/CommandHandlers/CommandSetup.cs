@@ -43,13 +43,13 @@ namespace AradiaBot.CommandHandlers
             {
                 var guild = client.GetGuild(guildId);
 
-                foreach (var messageCommand in messageCommandBuilders)
-                {
+
                     try
                     {
                         await guild.BulkOverwriteApplicationCommandAsync(
                                [
-                                    messageCommand.Build(),
+                                    messageCommandBuilders[0].Build(),
+                                    messageCommandBuilders[1].Build(),
                                ]);
 
 
@@ -62,7 +62,7 @@ namespace AradiaBot.CommandHandlers
                         // You can send this error somewhere or just print it to the console, for this example we're just going to print it.
                         Console.WriteLine(json);
                     }
-                }
+                
             }
         }
     }

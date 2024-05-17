@@ -13,6 +13,8 @@ namespace AradiaBot
         public string Author { get; set; }
         public ulong Quoter { get; set; }
         public string QuoteBody { get; set; }
+        public DateTime? Timestamp { get; set; }
+        public string MessageLink { get; set; }
 
         [JsonConstructor]
         public Quote(string author, ulong quoter, string quoteBody)
@@ -20,24 +22,39 @@ namespace AradiaBot
             Author = author;
             Quoter = quoter;
             QuoteBody = quoteBody;
+            Timestamp = DateTime.Now;
+            MessageLink = "";
         }
         public Quote(string author, IUser quoter, string quoteBody)
         {
             Author = author;
             Quoter = quoter.Id;
             QuoteBody = quoteBody;
+            Timestamp = DateTime.Now;
+            MessageLink = "";
         }
         public Quote(IUser author, IUser quoter, string quoteBody)
         {
             Author = $"{author.Id}";
             Quoter = quoter.Id;
             QuoteBody = quoteBody;
+            Timestamp = DateTime.Now;
+            MessageLink = "";
+        }
+        public Quote(IUser author, IUser quoter, string quoteBody, string messageLink)
+        {
+            Author = $"{author.Id}";
+            Quoter = quoter.Id;
+            QuoteBody = quoteBody;
+            Timestamp = DateTime.Now;
+            MessageLink = messageLink;
         }
         public Quote(string author, string quoteBody)
         {
             Author = author;
             Quoter = 0;
             QuoteBody = quoteBody;
+            MessageLink = "";
         }
         public static string QuoteFormatter(Database database, Quote quote)
         {
@@ -46,21 +63,17 @@ namespace AradiaBot
             string authorString;
             string quoterString;
 
+            string quoteTime = "";
+
+            string messageLink = "";
+
             string author = quote.Author;
             Console.WriteLine("Quote Author: " + quote.Author);
             bool isAuthorId = ulong.TryParse(author, out authorId);
             Console.WriteLine("isAuthor: " + isAuthorId);
             if (isAuthorId)
             {
-                if (database.Members.Any(m => m.Id == authorId))
-                {
-                    var member = database.GetMember(authorId);
-                    authorString = member.GetName();
-                }
-                else
-                {
-                    authorString = MentionUtils.MentionUser(authorId);
-                }
+                authorString = database.GetName(authorId);
             }
             else
             {
@@ -81,8 +94,42 @@ namespace AradiaBot
                 quoterString = MentionUtils.MentionUser(quote.Quoter);
             }
 
-            return $"<{authorString}>: {quote.QuoteBody}\n\n *quoted by {quoterString}*";
+            quoteTime = quote.Timestamp.HasValue ? "on "+quote.Timestamp.Value.ToString("yyyy/MM/dd") : "";
 
+            messageLink = quote.MessageLink != "" ? $" [(message link)](<{quote.MessageLink}>)" : "";
+
+            return $"**{authorString}**: {quote.QuoteBody}\n> *quoted by {quoterString} {quoteTime}{messageLink}*";
+
+        }
+
+        public static string MinimumQuoteFormatter(Database database, Quote quote)
+        {
+            ulong authorId;
+
+            string authorString;
+
+            string author = quote.Author;
+
+            bool isAuthorId = ulong.TryParse(author, out authorId);
+            Console.WriteLine("isAuthor: " + isAuthorId);
+            if (isAuthorId)
+            {
+                if (database.Members.Any(m => m.Id == authorId))
+                {
+                    var member = database.GetMember(authorId);
+                    authorString = member.GetName();
+                }
+                else
+                {
+                    authorString = MentionUtils.MentionUser(authorId);
+                }
+            }
+            else
+            {
+                authorString = author;
+            }
+
+            return $"**{authorString}**: {quote.QuoteBody}";
         }
     }
 }
