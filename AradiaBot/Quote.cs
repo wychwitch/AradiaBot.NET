@@ -11,12 +11,12 @@ namespace AradiaBot
     internal class Quote
     {
         public string Author { get; set; }
-        public ulong Quoter { get; set; }
+        public ulong? Quoter { get; set; }
         public string QuoteBody { get; set; }
         public DateTime? Timestamp { get; set; }
-        public string MessageLink { get; set; }
+        public string? MessageLink { get; set; }
 
-        [JsonConstructor]
+        
         public Quote(string author, ulong quoter, string quoteBody)
         {
             Author = author;
@@ -25,7 +25,17 @@ namespace AradiaBot
             Timestamp = DateTime.Now;
             MessageLink = "";
         }
-        public Quote(string author, IUser quoter, string quoteBody)
+        [JsonConstructor]
+        public Quote(string author, ulong? quoter, string quoteBody, DateTime? timestamp, string? messageLink)
+        {
+            Author = author;
+            Quoter = quoter;
+            QuoteBody = quoteBody;
+            Timestamp = timestamp;
+            MessageLink = messageLink;
+        }
+
+         public Quote(string author, IUser quoter, string quoteBody)
         {
             Author = author;
             Quoter = quoter.Id;
@@ -52,9 +62,9 @@ namespace AradiaBot
         public Quote(string author, string quoteBody)
         {
             Author = author;
-            Quoter = 0;
+            Quoter = null;
             QuoteBody = quoteBody;
-            MessageLink = "";
+            MessageLink = null;
         }
         public static string QuoteFormatter(Database database, Quote quote)
         {
@@ -82,16 +92,16 @@ namespace AradiaBot
 
             if (database.Members.Any(m => m.Id == quote.Quoter))
             {
-                var member = database.GetMember(quote.Quoter);
+                var member = database.GetMember((ulong)quote.Quoter);
                 quoterString = member.GetName();
             }
-            else if (quote.Quoter == 0)
+            else if (quote.Quoter == null)
             {
                 quoterString = "unknown";
             }
             else
             {
-                quoterString = MentionUtils.MentionUser(quote.Quoter);
+                quoterString = MentionUtils.MentionUser((ulong)quote.Quoter);
             }
 
             quoteTime = quote.Timestamp.HasValue ? "on "+quote.Timestamp.Value.ToString("yyyy/MM/dd") : "";
