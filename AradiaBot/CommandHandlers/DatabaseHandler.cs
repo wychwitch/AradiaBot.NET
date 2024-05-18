@@ -57,10 +57,10 @@ namespace AradiaBot.CommandHandlers
                 string respondString = $"**Name**: {member.NickName}\n" +
                                        $"**Use Name**: {settings.UseNickname}\n";
                 respondString += (settings.PingNames.Count > 0) ? $"**Pings**: \n- {String.Join("\n- ", settings.PingNames)}\n" : "No pings set";
-                await command.ModifyOriginalResponseAsync(x => { x.Content = respondString; });
+                await command.RespondAsync(respondString, ephemeral: true);
             } 
             else {
-                await command.ModifyOriginalResponseAsync(x => x.Content = "You havent joined the database!"); 
+                await command.RespondAsync("You havent joined the database!", ephemeral: true); 
             }
         }
 
@@ -123,7 +123,7 @@ namespace AradiaBot.CommandHandlers
                 }
 
                 
-                await command.ModifyOriginalResponseAsync(x => x.Content = responseString);
+                await command.RespondAsync(responseString, ephemeral: true);
             }
         }
 
@@ -143,7 +143,7 @@ namespace AradiaBot.CommandHandlers
             if (userInDatabase) {
 
                 Console.WriteLine("User alrerady in database");
-                await command.ModifyOriginalResponseAsync(x => x.Content = $"Youre already in the database");
+                await command.RespondAsync($"Youre already in the database", ephemeral: true);
             }
             else
             {
@@ -151,7 +151,7 @@ namespace AradiaBot.CommandHandlers
                 database.Members.Add(serverMember);
 
                 Console.WriteLine("Added user");
-                await command.ModifyOriginalResponseAsync(x => x.Content = $"Added!");
+                await command.RespondAsync($"Added  you to the DB!", ephemeral: true);
 
                 database.SaveData();
             }
