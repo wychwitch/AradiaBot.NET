@@ -27,7 +27,7 @@ public class Program
     private static Database _database;
     private static Dictionary<string, AZGameData> _availableAZGames = new Dictionary<string, AZGameData>();
     private static List<Tarot> _tarotDeck;
-    public static string _version = "0.3";
+    public static string _version = "0.3.2";
 
 
     public static async Task Main()
@@ -161,8 +161,8 @@ public class Program
                     }
                     else
                     {
-                        MessageReference messageReferenceVar = new MessageReference(message.Id);
-                        await message.Channel.SendMessageAsync($"Range: {_database.GlobalGameState.rangeStart} - {_database.GlobalGameState.rangeEnd}", messageReference: messageReferenceVar);
+                        
+                        await message.Channel.SendMessageAsync($"Range: {_database.GlobalGameState.rangeStart} - {_database.GlobalGameState.rangeEnd}");
                     }
                     _database.SaveData();
                 }
