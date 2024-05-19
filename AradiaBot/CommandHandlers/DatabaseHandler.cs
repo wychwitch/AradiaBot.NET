@@ -113,7 +113,13 @@ namespace AradiaBot.CommandHandlers
                                 }
                                 database.SaveData();
                                 break;
-                            
+                            case "consolidate-az-scores":
+                                member.Settings.ConsolidateAZScores = (bool)setting.Value;
+                                responseString += (bool)member.Settings.ConsolidateAZScores ? "Consolidating AZ scores\n" : "Tracking\n";
+                                database.SaveData();
+                                break;
+
+
                         }
                     }
                 }
@@ -121,10 +127,13 @@ namespace AradiaBot.CommandHandlers
                 {
                     responseString = "You need to add a setting to change!";
                 }
-
                 
-                await command.RespondAsync(responseString, ephemeral: true);
             }
+            else
+            {
+                responseString = "You need join the db to change your settings! Run `/db join` to get started";
+            }
+            await command.RespondAsync(responseString, ephemeral: true);
         }
 
         public static async Task JoinDatabase(SocketSlashCommand command, Database database)

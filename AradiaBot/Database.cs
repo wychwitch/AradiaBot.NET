@@ -55,6 +55,18 @@ namespace AradiaBot
             return false;
         }
 
+        public bool IsUserRegistered(ulong userId)
+        {
+            foreach (var member in Members)
+            {
+                if (userId == member.Id)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public ServerMember GetMember(IUser user) { 
             foreach(var member in Members)
             {
@@ -185,6 +197,30 @@ namespace AradiaBot
             {
                 return MentionUtils.MentionUser(user.Id);
             }
+        }
+
+        public (int, string) UpdateScore(ulong playerId, AZGameState gameState, Dictionary<string, AZGameData> allAzGameData)
+        {
+
+            ServerMember member = GetMember(playerId);
+            IncreasePlayerScore(playerId, gameState.gameKey);
+
+            if (member.Settings.ConsolidateAZScores == null || member.Settings.ConsolidateAZScores == true)
+            {
+
+                int totalScore = 0;
+                foreach (var gameKey in GameScores.Keys)
+                {
+                    totalScore += GameScores[gameKey][playerId];
+                }
+
+                return (totalScore, "across all AZ games");
+            } else
+            {
+                
+                return (GetPlayerScore(playerId, gameState.gameKey), $"at the {allAzGameData[gameState.gameKey].Name} AZ Game");
+            }
+            
         }
 
     }

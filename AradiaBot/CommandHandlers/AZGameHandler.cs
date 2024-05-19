@@ -41,7 +41,7 @@ namespace AradiaBot.CommandHandlers
             {
                 database.GlobalGameState = new AZGameState(availableAZGames, commandName);
                 database.SaveData();
-                await command.ModifyOriginalResponseAsync(x => x.Content = $"**Starting new game**\n Range: {database.GlobalGameState.rangeStart} - {database.GlobalGameState.rangeEnd}");
+                await command.ModifyOriginalResponseAsync(x => x.Content = $"**Starting new AZ {availableAZGames[commandName]} game**\n Range: {database.GlobalGameState.rangeStart} - {database.GlobalGameState.rangeEnd}");
             }
             else
             {
@@ -75,6 +75,8 @@ namespace AradiaBot.CommandHandlers
         {
             string responseString = "";
 
+            Dictionary<ulong, int> totals = new Dictionary<ulong, int>();
+
 
             foreach (var scoreKey in database.GameScores.Keys)
             {
@@ -85,8 +87,24 @@ namespace AradiaBot.CommandHandlers
                 {
                     ulong scoreId = scorePair.Key;
                     int score = scorePair.Value;
+                    if (totals.ContainsKey(scoreId))
+                    {
+                        totals[scoreId] += score;
+                    }
+                    else
+                    {
+                        totals.Add(scoreId, score);
+                    }
+
                     responseString += $"- {database.GetName(scoreId)}: {score}\n";
                 }
+                responseString += "\n";
+                
+            }
+            responseString += "**Totals:**\n";
+            foreach (var memberId in totals.Keys)
+            {
+                responseString += $"- {database.GetName(memberId)} has the total score of **{totals[memberId]}**!\n";
             }
             await command.ModifyOriginalResponseAsync(x=>x.Content = responseString);
         }

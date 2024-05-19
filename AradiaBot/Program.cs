@@ -27,7 +27,7 @@ public class Program
     private static Database _database;
     private static Dictionary<string, AZGameData> _availableAZGames = new Dictionary<string, AZGameData>();
     private static List<Tarot> _tarotDeck;
-    public static string _version = "0.3.2";
+    public static string _version = "0.3.5";
 
 
     public static async Task Main()
@@ -152,17 +152,16 @@ public class Program
                     _database.GlobalGameState = returnValue.Item2;
                     if(_database.GlobalGameState.rangeStart == _database.GlobalGameState.rangeEnd)
                     {
+
+                        var wonResults = _database.UpdateScore(message.Author.Id, _database.GlobalGameState, _availableAZGames);
                         
-                        _database.IncreasePlayerScore(message.Author.Id, _database.GlobalGameState.gameKey);
-                        int wonCount = _database.GetPlayerScore(message.Author.Id, _database.GlobalGameState.gameKey);
-                        
-                        await message.Channel.SendMessageAsync($"You won! The answer was {_database.GlobalGameState.answer}. {_database.GetName(message.Author.Id)} has won {wonCount} times at the {_availableAZGames[_database.GlobalGameState.gameKey].Name} AZ Game");
+                        await message.Channel.SendMessageAsync($"You won! The answer was {_database.GlobalGameState.answer}. {_database.GetName(message.Author.Id)} has won {wonResults.Item1} times {wonResults.Item2}");
                         _database.GlobalGameState = null;
                     }
                     else
                     {
                         
-                        await message.Channel.SendMessageAsync($"Range: {_database.GlobalGameState.rangeStart} - {_database.GlobalGameState.rangeEnd}");
+                        await message.Channel.SendMessageAsync($"{_database.GlobalGameState.rangeStart} - {_database.GlobalGameState.rangeEnd}");
                     }
                     _database.SaveData();
                 }
@@ -172,13 +171,9 @@ public class Program
 
             
         }
-
-        
-        
-        
-
-        
     }
+
+
     private static async Task MessageCommandHandler(SocketMessageCommand command)
     {
         await command.DeferAsync();
@@ -221,205 +216,204 @@ public class Program
    
 
     public static async Task Client_Ready()
-{
-        // Let's build a guild command! We're going to need a guild so lets just put that in a variable.
+    {
+     
 
-
+        //Creating the Message Commands
         List<MessageCommandBuilder> messageCommands = [
              new MessageCommandBuilder().WithName("Quote Message"),
              new MessageCommandBuilder().WithName("Quote NSFW Message")
         ];
 
-        // Next, lets create our slash command builder. This is like the embed builder but for slash commands.
+       
+        //All of the slask commands
         List<SlashCommandBuilder> slashCommandBuilders = [
+
+
+            //The Quote Slash Command
             new SlashCommandBuilder()
-            .WithName("quote")
-            .WithDescription("Quotes!!")
-            .AddOption(new SlashCommandOptionBuilder()
+                .WithName("quote")
+                .WithDescription("Quotes!!")
+                .AddOption(new SlashCommandOptionBuilder()
                     .WithName("random")
                     .WithDescription("get random quote")
                     .WithType(ApplicationCommandOptionType.SubCommand)
                     .AddOption("count", ApplicationCommandOptionType.Integer, "Number of quotes", isRequired: false)
-            ).AddOption(new SlashCommandOptionBuilder()
+                ).AddOption(new SlashCommandOptionBuilder()
                     .WithName("get")
                     .WithDescription("get random quote")
                     .WithType(ApplicationCommandOptionType.SubCommand)
                     .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The index of the quote", isRequired: true, minValue:1)
                     .AddOption("details", ApplicationCommandOptionType.Boolean, "Provide extra details", isRequired: false)
-            ).AddOption(new SlashCommandOptionBuilder()
+                ).AddOption(new SlashCommandOptionBuilder()
                     .WithName("count")
                     .WithDescription("get number of quotes")
                     .WithType(ApplicationCommandOptionType.SubCommand)
-            ).AddOption(new SlashCommandOptionBuilder()
+                ).AddOption(new SlashCommandOptionBuilder()
                     .WithName("rain")
                     .WithDescription("a rain of quotes")
                     .WithType(ApplicationCommandOptionType.SubCommand)
-            ).AddOption(new SlashCommandOptionBuilder()
-                .WithName("add")
-                .WithDescription("Adds Quote")
-                .WithType(ApplicationCommandOptionType.SubCommandGroup)
-                    .AddOption(new SlashCommandOptionBuilder()
-                        .WithName("dynamic")
-                        .WithDescription("Add using Discord User")
-                        .WithType(ApplicationCommandOptionType.SubCommand)
-                        .AddOption("author", ApplicationCommandOptionType.User, "The User Of The Quote Author", isRequired: true)
-                        .AddOption("body", ApplicationCommandOptionType.String, "The content of it", isRequired: true)
-                        .AddOption("is-nsfw", ApplicationCommandOptionType.Boolean, "if it is nsfw", isRequired: false)
-                    ).AddOption(new SlashCommandOptionBuilder()
-                        .WithName("static")
-                        .WithDescription("Add Quote by putting in the name directly")
-                        .WithType(ApplicationCommandOptionType.SubCommand)
-                        .AddOption("author", ApplicationCommandOptionType.String, "The name Of The Quote author", isRequired: true)
-                        .AddOption("body", ApplicationCommandOptionType.String, "The content of it", isRequired: true)
-                        .AddOption("is-nsfw", ApplicationCommandOptionType.Boolean, "if it is nsfw", isRequired: false)
-                        )
-                    
-            ).AddOption(new SlashCommandOptionBuilder()
-                .WithName("delete")
-                .WithDescription("Delete Quote")
-                .WithType(ApplicationCommandOptionType.SubCommand)
-                .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The id of the quote to delete", isRequired: true, minValue:1)
-            ).AddOption(new SlashCommandOptionBuilder()
-                .WithName("edit")
-                .WithDescription("Edit quote")
-                .WithType(ApplicationCommandOptionType.SubCommand)
-                .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The id of the quote to edit", isRequired: true, minValue:1)
-                .AddOption("author-string", ApplicationCommandOptionType.String, "The name of the author (string)", isRequired: false)
-                .AddOption("author-user", ApplicationCommandOptionType.User, "The name of the author (user)", isRequired: false)
-                .AddOption("body", ApplicationCommandOptionType.String, "the body of the quote", isRequired: false)
-                .AddOption("quoter", ApplicationCommandOptionType.User, "the person who quoted", isRequired: false)
-                .AddOption("message-link", ApplicationCommandOptionType.String, "the mesage of the quote", isRequired: false)
-
-            ),
-
-                        new SlashCommandBuilder()
-            .WithName("nsfw-quote")
-            .WithDescription("NSFW Quotes!!")
-            .AddOption(new SlashCommandOptionBuilder()
-                    .WithName("random")
-                    .WithDescription("get random quote")
-                    .WithType(ApplicationCommandOptionType.SubCommand)
-                    .AddOption("count", ApplicationCommandOptionType.Integer, "Number of quotes", isRequired: false)
-            ).AddOption(new SlashCommandOptionBuilder()
-                    .WithName("get")
-                    .WithDescription("get random quote")
-                    .WithType(ApplicationCommandOptionType.SubCommand)
-                    .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The index of the quote", isRequired: true, minValue:1)
-                    .AddOption("details", ApplicationCommandOptionType.Boolean, "Provide extra details", isRequired: false)
-            ).AddOption(new SlashCommandOptionBuilder()
-                    .WithName("count")
-                    .WithDescription("get number of quotes")
-                    .WithType(ApplicationCommandOptionType.SubCommand)
-            ).AddOption(new SlashCommandOptionBuilder()
-                    .WithName("rain")
-                    .WithDescription("a rain of quotes")
-                    .WithType(ApplicationCommandOptionType.SubCommand)
-           
-            ).AddOption(new SlashCommandOptionBuilder()
-                .WithName("delete")
-                .WithDescription("Delete Quote")
-                .WithType(ApplicationCommandOptionType.SubCommand)
-                .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The id of the quote to delete", isRequired: true, minValue:1)
-            ).AddOption(new SlashCommandOptionBuilder()
-                .WithName("edit")
-                .WithDescription("Edit quote")
-                .WithType(ApplicationCommandOptionType.SubCommand)
-                .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The id of the quote to edit", isRequired: true, minValue:1)
-                .AddOption("author-string", ApplicationCommandOptionType.String, "The name of the author (string)", isRequired: false)
-                .AddOption("author-user", ApplicationCommandOptionType.User, "The name of the author (user)", isRequired: false)
-                .AddOption("body", ApplicationCommandOptionType.String, "the body of the quote", isRequired: false)
-                .AddOption("quoter", ApplicationCommandOptionType.User, "the person who quoted", isRequired: false)
-                .AddOption("message-link", ApplicationCommandOptionType.String, "the mesage of the quote", isRequired: false)
-
-            ),
-
-            new SlashCommandBuilder()
-                .WithName("db")
-                .WithDescription("Database!!")
-                .AddOption(new SlashCommandOptionBuilder()
-                    .WithName("join")
-                    .WithDescription("Join Database")
-                    .WithType(ApplicationCommandOptionType.SubCommand)
-                )
-
-                .AddOption(new SlashCommandOptionBuilder()
-                    .WithName("settings")
-                    .WithDescription("Setting Subgroup")
+                ).AddOption(new SlashCommandOptionBuilder()
+                    .WithName("add")
+                    .WithDescription("Adds Quote")
                     .WithType(ApplicationCommandOptionType.SubCommandGroup)
-                    .AddOption(new SlashCommandOptionBuilder()
-                        .WithName("view")
-                        .WithDescription("View Settings")
-                        .WithType(ApplicationCommandOptionType.SubCommand))
-                    .AddOption(new SlashCommandOptionBuilder()
-                        .WithName("edit")
-                        .WithDescription("View Settings")
-                        .WithType(ApplicationCommandOptionType.SubCommand)
-                        .AddOption("add-ping", ApplicationCommandOptionType.String, "Add A Ping To Your Settings", isRequired: false)
-                        .AddOption("remove-ping", ApplicationCommandOptionType.String, "Add A Ping To Your Settings", isRequired: false)
-                        .AddOption("use-nickname", ApplicationCommandOptionType.Boolean, "Enable or Disable using registered nickname", isRequired: false)
-                        .AddOption("new-nickname", ApplicationCommandOptionType.String, "change your registered name", isRequired: false)
-                    )
+                        .AddOption(new SlashCommandOptionBuilder()
+                            .WithName("dynamic")
+                            .WithDescription("Add using Discord User")
+                            .WithType(ApplicationCommandOptionType.SubCommand)
+                            .AddOption("author", ApplicationCommandOptionType.User, "The User Of The Quote Author", isRequired: true)
+                            .AddOption("body", ApplicationCommandOptionType.String, "The content of it", isRequired: true)
+                            .AddOption("is-nsfw", ApplicationCommandOptionType.Boolean, "if it is nsfw", isRequired: false)
+                        ).AddOption(new SlashCommandOptionBuilder()
+                            .WithName("static")
+                            .WithDescription("Add Quote by putting in the name directly")
+                            .WithType(ApplicationCommandOptionType.SubCommand)
+                            .AddOption("author", ApplicationCommandOptionType.String, "The name Of The Quote author", isRequired: true)
+                            .AddOption("body", ApplicationCommandOptionType.String, "The content of it", isRequired: true)
+                            .AddOption("is-nsfw", ApplicationCommandOptionType.Boolean, "if it is nsfw", isRequired: false)
+                        ) 
+                ).AddOption(new SlashCommandOptionBuilder()
+                    .WithName("delete")
+                    .WithDescription("Delete Quote")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                    .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The id of the quote to delete", isRequired: true, minValue:1)
+                ).AddOption(new SlashCommandOptionBuilder()
+                    .WithName("edit")
+                    .WithDescription("Edit quote")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                    .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The id of the quote to edit", isRequired: true, minValue:1)
+                    .AddOption("author-string", ApplicationCommandOptionType.String, "The name of the author (string)", isRequired: false)
+                    .AddOption("author-user", ApplicationCommandOptionType.User, "The name of the author (user)", isRequired: false)
+                    .AddOption("body", ApplicationCommandOptionType.String, "the body of the quote", isRequired: false)
+                    .AddOption("quoter", ApplicationCommandOptionType.User, "the person who quoted", isRequired: false)
+                    .AddOption("message-link", ApplicationCommandOptionType.String, "the mesage of the quote", isRequired: false)
                 ),
 
-                 new SlashCommandBuilder()
-                .WithName("az")
-                .WithDescription("AZ Game!")
-                .AddOption(new SlashCommandOptionBuilder()
-                    .WithName("start")
-                    .WithDescription("start")
-                    .WithType(ApplicationCommandOptionType.SubCommand)
-                    .AddOption(new SlashCommandOptionBuilder()
-                        .WithName("word-list")
-                        .WithDescription("The wordlist for your game")
-                        .WithRequired(true)
-                        .AddChoice("English Easy", "eng-short")
-                        .AddChoice("English Hard", "eng-long")
-                        .AddChoice("All Pokemon", "pokemon-all")
-                        .AddChoice("Pokemon Abilities", "pokemon-abilities")
-                        .AddChoice("Pokemon Moves", "pokemon-moves")
-                        .WithType(ApplicationCommandOptionType.String))
-                  )
-                .AddOption(new SlashCommandOptionBuilder()
-                    .WithName("scores")
-                    .WithDescription("get the scores")
-                    .WithType(ApplicationCommandOptionType.SubCommand)
-                    
-                    )
 
+            //NSFW Quotes
+            new SlashCommandBuilder()
+                .WithName("nsfw-quote")
+                .WithDescription("NSFW Quotes!!")
                 .AddOption(new SlashCommandOptionBuilder()
-                    .WithName("quit")
-                    .WithDescription("quits AZ ongoing game")
+                        .WithName("random")
+                        .WithDescription("get random quote")
+                        .WithType(ApplicationCommandOptionType.SubCommand)
+                        .AddOption("count", ApplicationCommandOptionType.Integer, "Number of quotes", isRequired: false)
+                ).AddOption(new SlashCommandOptionBuilder()
+                        .WithName("get")
+                        .WithDescription("get random quote")
+                        .WithType(ApplicationCommandOptionType.SubCommand)
+                        .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The index of the quote", isRequired: true, minValue:1)
+                        .AddOption("details", ApplicationCommandOptionType.Boolean, "Provide extra details", isRequired: false)
+                ).AddOption(new SlashCommandOptionBuilder()
+                        .WithName("count")
+                        .WithDescription("get number of quotes")
+                        .WithType(ApplicationCommandOptionType.SubCommand)
+                ).AddOption(new SlashCommandOptionBuilder()
+                        .WithName("rain")
+                        .WithDescription("a rain of quotes")
+                        .WithType(ApplicationCommandOptionType.SubCommand)
+           
+                ).AddOption(new SlashCommandOptionBuilder()
+                    .WithName("delete")
+                    .WithDescription("Delete Quote")
                     .WithType(ApplicationCommandOptionType.SubCommand)
-                 ).AddOption(new SlashCommandOptionBuilder()
-                    .WithName("range")
-                    .WithDescription("get the range")
+                    .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The id of the quote to delete", isRequired: true, minValue:1)
+                ).AddOption(new SlashCommandOptionBuilder()
+                    .WithName("edit")
+                    .WithDescription("Edit quote")
                     .WithType(ApplicationCommandOptionType.SubCommand)
+                    .AddOption("quote-id", ApplicationCommandOptionType.Integer, "The id of the quote to edit", isRequired: true, minValue:1)
+                    .AddOption("author-string", ApplicationCommandOptionType.String, "The name of the author (string)", isRequired: false)
+                    .AddOption("author-user", ApplicationCommandOptionType.User, "The name of the author (user)", isRequired: false)
+                    .AddOption("body", ApplicationCommandOptionType.String, "the body of the quote", isRequired: false)
+                    .AddOption("quoter", ApplicationCommandOptionType.User, "the person who quoted", isRequired: false)
+                    .AddOption("message-link", ApplicationCommandOptionType.String, "the mesage of the quote", isRequired: false)
+
+                ),
+
+
+                //Database Slash Commands
+                new SlashCommandBuilder()
+                    .WithName("db")
+                    .WithDescription("Database!!")
+                    .AddOption(new SlashCommandOptionBuilder()
+                        .WithName("join")
+                        .WithDescription("Join Database")
+                        .WithType(ApplicationCommandOptionType.SubCommand)
+                    ).AddOption(new SlashCommandOptionBuilder()
+                        .WithName("settings")
+                        .WithDescription("Setting Subgroup")
+                        .WithType(ApplicationCommandOptionType.SubCommandGroup)
+                        .AddOption(new SlashCommandOptionBuilder()
+                            .WithName("view")
+                            .WithDescription("View Settings")
+                            .WithType(ApplicationCommandOptionType.SubCommand)
+                        ).AddOption(new SlashCommandOptionBuilder()
+                            .WithName("edit")
+                            .WithDescription("View Settings")
+                            .WithType(ApplicationCommandOptionType.SubCommand)
+                            .AddOption("add-ping", ApplicationCommandOptionType.String, "Add A Ping To Your Settings", isRequired: false)
+                            .AddOption("remove-ping", ApplicationCommandOptionType.String, "Add A Ping To Your Settings", isRequired: false)
+                            .AddOption("use-nickname", ApplicationCommandOptionType.Boolean, "Enable or Disable using registered nickname", isRequired: false)
+                            .AddOption("consolidate-az-scores", ApplicationCommandOptionType.Boolean, "Consolidate all your AZ scores", isRequired: false)
+                            .AddOption("new-nickname", ApplicationCommandOptionType.String, "change your registered name", isRequired: false)
+                    )),
+                
+
+
+                 //AZ game
+                 new SlashCommandBuilder()
+                    .WithName("az")
+                    .WithDescription("AZ Game!")
+                    .AddOption(new SlashCommandOptionBuilder()
+                        .WithName("start")
+                        .WithDescription("start")
+                        .WithType(ApplicationCommandOptionType.SubCommand)
+                        .AddOption(new SlashCommandOptionBuilder()
+                            .WithName("word-list")
+                            .WithDescription("The wordlist for your game")
+                            .WithRequired(true)
+                            .AddChoice("English Easy", "eng-short")
+                            .AddChoice("English Hard", "eng-long")
+                            .AddChoice("All Pokemon", "pokemon-all")
+                            .AddChoice("Pokemon Abilities", "pokemon-abilities")
+                            .AddChoice("Pokemon Moves", "pokemon-moves")
+                            .WithType(ApplicationCommandOptionType.String))
+                    ).AddOption(new SlashCommandOptionBuilder()
+                        .WithName("scores")
+                        .WithDescription("get the scores")
+                        .WithType(ApplicationCommandOptionType.SubCommand)
+                    
+                    ).AddOption(new SlashCommandOptionBuilder()
+                        .WithName("quit")
+                        .WithDescription("quits AZ ongoing game")
+                        .WithType(ApplicationCommandOptionType.SubCommand)
+                    ).AddOption(new SlashCommandOptionBuilder()
+                        .WithName("range")
+                        .WithDescription("get the range")
+                        .WithType(ApplicationCommandOptionType.SubCommand)
                     ),
 
-                new SlashCommandBuilder()
-                .WithName("tarot")
-                .WithDescription("Tarot Cards")
-                .AddOption(new SlashCommandOptionBuilder()
-                    .WithName("draw")
-                    .WithDescription("draw some cards")
-                    .WithType(ApplicationCommandOptionType.SubCommand)
-                    .AddOption("cards", ApplicationCommandOptionType.Integer, "The amount of cards to draw", minValue: 1, isRequired: false)
-                    .AddOption("reversed", ApplicationCommandOptionType.Boolean, "enable or disable reverse cards", isRequired: false)
-                )
 
-
+                    //Tarot
+                    new SlashCommandBuilder()
+                    .WithName("tarot")
+                    .WithDescription("Tarot Cards")
+                    .AddOption(new SlashCommandOptionBuilder()
+                        .WithName("draw")
+                        .WithDescription("draw some cards")
+                        .WithType(ApplicationCommandOptionType.SubCommand)
+                        .AddOption("cards", ApplicationCommandOptionType.Integer, "The amount of cards to draw", minValue: 1, isRequired: false)
+                        .AddOption("reversed", ApplicationCommandOptionType.Boolean, "enable or disable reverse cards", isRequired: false)
+                    ),
         ];
        
         await CommandSetup.RegisterMessageCommands(_client, messageCommands, _guildIDs);
         await CommandSetup.RegisterSlashCommandsAsync(_client, slashCommandBuilders, _guildIDs);
 
-        
 
-
-
-
-
-}
+    }
 
     private static Task Log(LogMessage msg)
     {
