@@ -10,21 +10,13 @@ using Discord;
 
 namespace AradiaBot
 {
-    internal class ServerMember
+    [method: JsonConstructor]
+    internal class ServerMember(ulong id)
     {
-        public ulong Id { get; set; }
-        public string NickName { get; set; }
-        public AZGameState? GameState { get; set; }
-        public ServerMemberSettings Settings { get; set; }
-
-        [JsonConstructor]
-        public ServerMember(ulong id)
-        {
-            Id = id;
-            NickName = "";
-            Settings = new ServerMemberSettings();
-            GameState = null;
-        }
+        public ulong Id { get; set; } = id;
+        public string NickName { get; set; } = "";
+        public AZGameState? GameState { get; set; } = null;
+        public ServerMemberSettings Settings { get; set; } = new ServerMemberSettings();
 
         public string GetName() {
             if (Settings.UseNickname && NickName != "")
