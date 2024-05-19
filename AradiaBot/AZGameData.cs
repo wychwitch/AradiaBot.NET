@@ -14,7 +14,6 @@ namespace AradiaBot
         public string rangeStart;
         public string rangeEnd;
         public string answer;
-        public string gameName;
 
         [JsonConstructor]
         public AZGameState(string gameKey, string rangeStart, string rangeEnd, string answer)
