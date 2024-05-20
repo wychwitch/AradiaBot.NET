@@ -36,6 +36,8 @@ public class Program
 
         _tarotDeck = JsonConvert.DeserializeObject<List<Tarot>>(File.ReadAllText("StaticData/tarot.json"));
 
+
+        //Requesting all the intents, which is needed to read channels' messages for AZ game and check the channel's members
         var socket_config = new DiscordSocketConfig()
         {
             GatewayIntents = GatewayIntents.All
@@ -66,8 +68,11 @@ public class Program
                 File.ReadAllLines("./StaticData/WordLists/pokemon_gens/galar.txt"),
                 File.ReadAllLines("./StaticData/WordLists/pokemon_gens/paldea.txt"),
             ];
-        string[] allPokemon;
+
+
         List<string> tempPokemonList = new List<string>();
+        
+        //Merging all the seperate pokemon lists into one list
         foreach (var gen in availablePokemonGens)
         {
             foreach (var pokemon in gen)
@@ -78,9 +83,10 @@ public class Program
 
         tempPokemonList.Sort();
 
-        allPokemon = [.. tempPokemonList];
+        string[] allPokemon = [.. tempPokemonList];
         
 
+        //Building the available AZ games
         _availableAZGames.Add("eng-short", new AZGameData(englishWordListLong, englishWordListShort, "English Easy"));
         _availableAZGames.Add("eng-long", new AZGameData(englishWordListLong, "English Hard"));
         _availableAZGames.Add("pokemon-all", new AZGameData(allPokemon, "All Pokemon"));
@@ -97,27 +103,28 @@ public class Program
         _availableAZGames.Add("paldea", new AZGameData(availablePokemonGens[8], "Paldea Pokemon"));
 
 
-
+        //Trying to load the database
         try
         {
             _database = JsonConvert.DeserializeObject<Database>(File.ReadAllText("db.json"));
         }
         catch (FileNotFoundException)
         {
+            //If the file isn't found, make it
             _database = new Database();
             _database.SaveData();
             Console.WriteLine("Database not found, initializing new one.");
             
         } catch (Exception exception)
         {
-           
-            var json = JsonConvert.SerializeObject(exception, Formatting.Indented);
 
-           //Somethign went wrong, needs to be sent out to the terminal
-            Console.WriteLine(json);
+           //Something went terribly wrong, send it out to the Terminal
+            Console.WriteLine(exception);
 
         }
-        Console.WriteLine($"AAbot Version {_version}");
+
+        
+        Console.WriteLine($"Aradiabot Version {_version}");
         await _client.LoginAsync(TokenType.Bot, config.token);
         await _client.StartAsync();
 
@@ -131,12 +138,12 @@ public class Program
 
         await Task.Delay(-1);
     }
+
+    //Handler that gets fired every time the bot sees a message in a channel
     private static async Task ReadMessageHandler(SocketMessage message)
     {
         if (!message.Author.IsBot)
         await _database.CheckPings(_client, message);
-
-
 
         if (_database.IsGLobalAZGameRunning() || _database.IsAnySinglePlayerAZGameRunning())
         {
@@ -150,9 +157,10 @@ public class Program
                 if (returnValue.Item1)
                 {
                     _database.GlobalGameState = returnValue.Item2;
+
+                    //If the range start is the same as the end, the word was guessed correctly
                     if(_database.GlobalGameState.rangeStart == _database.GlobalGameState.rangeEnd)
                     {
-
                         var wonResults = _database.UpdateScore(message.Author.Id, _database.GlobalGameState, _availableAZGames);
                         
                         await message.Channel.SendMessageAsync($"You won! The answer was {_database.GlobalGameState.answer}. {_database.GetName(message.Author.Id)} has won {wonResults.Item1} times {wonResults.Item2}");
@@ -160,19 +168,16 @@ public class Program
                     }
                     else
                     {
-                        
                         await message.Channel.SendMessageAsync($"{_database.GlobalGameState.rangeStart} - {_database.GlobalGameState.rangeEnd}");
                     }
                     _database.SaveData();
                 }
-                
-                Console.WriteLine($"{returnValue.Item1} | start: {returnValue.Item2.rangeStart} end: {returnValue.Item2.rangeEnd} answer: {returnValue.Item2.answer}");
-            }
 
-            
+                //Piping this out to the console, in case something goes wrong and this needs to be debugged
+                Console.WriteLine($"start: {returnValue.Item2.rangeStart} end: {returnValue.Item2.rangeEnd} answer: {returnValue.Item2.answer}");
+            }
         }
     }
-
 
     private static async Task MessageCommandHandler(SocketMessageCommand command)
     {
@@ -210,23 +215,18 @@ public class Program
                 await TarotHandler.ProcessSlashCommand(_tarotDeck, command);
                 break;
         }
-
     }
-
-   
 
     public static async Task Client_Ready()
     {
-     
-
-        //Creating the Message Commands
+        //Building up the Message Commands
         List<MessageCommandBuilder> messageCommands = [
              new MessageCommandBuilder().WithName("Quote Message"),
              new MessageCommandBuilder().WithName("Quote NSFW Message")
         ];
 
        
-        //All of the slask commands
+        //Building up the slask commands
         List<SlashCommandBuilder> slashCommandBuilders = [
 
 
@@ -313,7 +313,6 @@ public class Program
                         .WithName("rain")
                         .WithDescription("a rain of quotes")
                         .WithType(ApplicationCommandOptionType.SubCommand)
-           
                 ).AddOption(new SlashCommandOptionBuilder()
                     .WithName("delete")
                     .WithDescription("Delete Quote")
@@ -329,86 +328,86 @@ public class Program
                     .AddOption("body", ApplicationCommandOptionType.String, "the body of the quote", isRequired: false)
                     .AddOption("quoter", ApplicationCommandOptionType.User, "the person who quoted", isRequired: false)
                     .AddOption("message-link", ApplicationCommandOptionType.String, "the mesage of the quote", isRequired: false)
-
                 ),
 
 
-                //Database Slash Commands
-                new SlashCommandBuilder()
-                    .WithName("db")
-                    .WithDescription("Database!!")
+            //Database Slash Commands
+            new SlashCommandBuilder()
+                .WithName("db")
+                .WithDescription("Database!!")
+                .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("join")
+                    .WithDescription("Join Database")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                ).AddOption(new SlashCommandOptionBuilder()
+                    .WithName("settings")
+                    .WithDescription("Setting Subgroup")
+                    .WithType(ApplicationCommandOptionType.SubCommandGroup)
                     .AddOption(new SlashCommandOptionBuilder()
-                        .WithName("join")
-                        .WithDescription("Join Database")
+                        .WithName("view")
+                        .WithDescription("View Settings")
                         .WithType(ApplicationCommandOptionType.SubCommand)
                     ).AddOption(new SlashCommandOptionBuilder()
-                        .WithName("settings")
-                        .WithDescription("Setting Subgroup")
-                        .WithType(ApplicationCommandOptionType.SubCommandGroup)
-                        .AddOption(new SlashCommandOptionBuilder()
-                            .WithName("view")
-                            .WithDescription("View Settings")
-                            .WithType(ApplicationCommandOptionType.SubCommand)
-                        ).AddOption(new SlashCommandOptionBuilder()
-                            .WithName("edit")
-                            .WithDescription("View Settings")
-                            .WithType(ApplicationCommandOptionType.SubCommand)
-                            .AddOption("add-ping", ApplicationCommandOptionType.String, "Add A Ping To Your Settings", isRequired: false)
-                            .AddOption("remove-ping", ApplicationCommandOptionType.String, "Add A Ping To Your Settings", isRequired: false)
-                            .AddOption("use-nickname", ApplicationCommandOptionType.Boolean, "Enable or Disable using registered nickname", isRequired: false)
-                            .AddOption("consolidate-az-scores", ApplicationCommandOptionType.Boolean, "Consolidate all your AZ scores", isRequired: false)
-                            .AddOption("new-nickname", ApplicationCommandOptionType.String, "change your registered name", isRequired: false)
-                    )),
+                        .WithName("edit")
+                        .WithDescription("View Settings")
+                        .WithType(ApplicationCommandOptionType.SubCommand)
+                        .AddOption("add-ping", ApplicationCommandOptionType.String, "Add A Ping To Your Settings", isRequired: false)
+                        .AddOption("remove-ping", ApplicationCommandOptionType.String, "Add A Ping To Your Settings", isRequired: false)
+                        .AddOption("use-nickname", ApplicationCommandOptionType.Boolean, "Enable or Disable using registered nickname", isRequired: false)
+                        .AddOption("consolidate-az-scores", ApplicationCommandOptionType.Boolean, "Consolidate all your AZ scores", isRequired: false)
+                        .AddOption("new-nickname", ApplicationCommandOptionType.String, "change your registered name", isRequired: false)
+                )),
                 
 
 
-                 //AZ game
-                 new SlashCommandBuilder()
-                    .WithName("az")
-                    .WithDescription("AZ Game!")
-                    .AddOption(new SlashCommandOptionBuilder()
-                        .WithName("start")
-                        .WithDescription("start")
-                        .WithType(ApplicationCommandOptionType.SubCommand)
-                        .AddOption(new SlashCommandOptionBuilder()
-                            .WithName("word-list")
-                            .WithDescription("The wordlist for your game")
-                            .WithRequired(true)
-                            .AddChoice("English Easy", "eng-short")
-                            .AddChoice("English Hard", "eng-long")
-                            .AddChoice("All Pokemon", "pokemon-all")
-                            .AddChoice("Pokemon Abilities", "pokemon-abilities")
-                            .AddChoice("Pokemon Moves", "pokemon-moves")
-                            .WithType(ApplicationCommandOptionType.String))
-                    ).AddOption(new SlashCommandOptionBuilder()
-                        .WithName("scores")
-                        .WithDescription("get the scores")
-                        .WithType(ApplicationCommandOptionType.SubCommand)
+            //AZ game
+            new SlashCommandBuilder()
+            .WithName("az")
+            .WithDescription("AZ Game!")
+            .AddOption(new SlashCommandOptionBuilder()
+                .WithName("start")
+                .WithDescription("start")
+                .WithType(ApplicationCommandOptionType.SubCommand)
+                .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("word-list")
+                    .WithDescription("The wordlist for your game")
+                    .WithRequired(true)
+                    .AddChoice("English Easy", "eng-short")
+                    .AddChoice("English Hard", "eng-long")
+                    .AddChoice("All Pokemon", "pokemon-all")
+                    .AddChoice("Pokemon Abilities", "pokemon-abilities")
+                    .AddChoice("Pokemon Moves", "pokemon-moves")
+                    .WithType(ApplicationCommandOptionType.String))
+            ).AddOption(new SlashCommandOptionBuilder()
+                .WithName("scores")
+                .WithDescription("get the scores")
+                .WithType(ApplicationCommandOptionType.SubCommand)
                     
-                    ).AddOption(new SlashCommandOptionBuilder()
-                        .WithName("quit")
-                        .WithDescription("quits AZ ongoing game")
-                        .WithType(ApplicationCommandOptionType.SubCommand)
-                    ).AddOption(new SlashCommandOptionBuilder()
-                        .WithName("range")
-                        .WithDescription("get the range")
-                        .WithType(ApplicationCommandOptionType.SubCommand)
-                    ),
+            ).AddOption(new SlashCommandOptionBuilder()
+                .WithName("quit")
+                .WithDescription("quits AZ ongoing game")
+                .WithType(ApplicationCommandOptionType.SubCommand)
+            ).AddOption(new SlashCommandOptionBuilder()
+                .WithName("range")
+                .WithDescription("get the range")
+                .WithType(ApplicationCommandOptionType.SubCommand)
+            ),
 
 
-                    //Tarot
-                    new SlashCommandBuilder()
-                    .WithName("tarot")
-                    .WithDescription("Tarot Cards")
-                    .AddOption(new SlashCommandOptionBuilder()
-                        .WithName("draw")
-                        .WithDescription("draw some cards")
-                        .WithType(ApplicationCommandOptionType.SubCommand)
-                        .AddOption("cards", ApplicationCommandOptionType.Integer, "The amount of cards to draw", minValue: 1, isRequired: false)
-                        .AddOption("reversed", ApplicationCommandOptionType.Boolean, "enable or disable reverse cards", isRequired: false)
-                    ),
+            //Tarot
+            new SlashCommandBuilder()
+                .WithName("tarot")
+                .WithDescription("Tarot Cards")
+                .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("draw")
+                    .WithDescription("draw some cards")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                    .AddOption("cards", ApplicationCommandOptionType.Integer, "The amount of cards to draw", minValue: 1, isRequired: false)
+                    .AddOption("reversed", ApplicationCommandOptionType.Boolean, "enable or disable reverse cards", isRequired: false)
+                ),
         ];
        
+        //Registering the commands to the client
         await CommandSetup.RegisterMessageCommands(_client, messageCommands, _guildIDs);
         await CommandSetup.RegisterSlashCommandsAsync(_client, slashCommandBuilders, _guildIDs);
 

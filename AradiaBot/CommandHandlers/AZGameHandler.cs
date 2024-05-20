@@ -29,7 +29,6 @@ namespace AradiaBot.CommandHandlers
                 case "range":
                     await GetRange(database, command);
                     break;
-                
             }
         }
 
@@ -41,7 +40,7 @@ namespace AradiaBot.CommandHandlers
             {
                 database.GlobalGameState = new AZGameState(availableAZGames, commandName);
                 database.SaveData();
-                await command.ModifyOriginalResponseAsync(x => x.Content = $"**Starting new AZ {availableAZGames[commandName]} game**\n Range: {database.GlobalGameState.rangeStart} - {database.GlobalGameState.rangeEnd}");
+                await command.ModifyOriginalResponseAsync(x => x.Content = $"**Starting new AZ {availableAZGames[commandName].Name} game**\n Range: {database.GlobalGameState.rangeStart} - {database.GlobalGameState.rangeEnd}");
             }
             else
             {

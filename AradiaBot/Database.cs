@@ -16,7 +16,6 @@ namespace AradiaBot
         public Dictionary<string, Dictionary<ulong, int>> GameScores { get; set; }
         public List<Quote> Quotes { get; set; }
         public List<Quote> NSFWQuotes { get; set; }
-        //The key is the guild's id
         public AZGameState? GlobalGameState { get; set; }
 
         public Database()

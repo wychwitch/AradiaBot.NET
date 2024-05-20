@@ -78,9 +78,9 @@ namespace AradiaBot
             string messageLink = "";
 
             string author = quote.Author;
-            Console.WriteLine("Quote Author: " + quote.Author);
             bool isAuthorId = ulong.TryParse(author, out authorId);
-            Console.WriteLine("isAuthor: " + isAuthorId);
+            
+            
             if (isAuthorId)
             {
                 authorString = database.GetName(authorId);
@@ -112,16 +112,16 @@ namespace AradiaBot
 
         }
 
+        //A small inline
         public static string MinimumQuoteFormatter(Database database, Quote quote)
         {
-            ulong authorId;
 
             string authorString;
 
             string author = quote.Author;
 
-            bool isAuthorId = ulong.TryParse(author, out authorId);
-            Console.WriteLine("isAuthor: " + isAuthorId);
+            bool isAuthorId = ulong.TryParse(author, out ulong authorId);
+
             if (isAuthorId)
             {
                 if (database.Members.Any(m => m.Id == authorId))

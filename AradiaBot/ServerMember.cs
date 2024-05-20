@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-
 using Discord;
 
 namespace AradiaBot
@@ -18,6 +17,7 @@ namespace AradiaBot
         public AZGameState? GameState { get; set; } = null;
         public ServerMemberSettings Settings { get; set; } = new ServerMemberSettings();
 
+        //Returns other settings nickname or username depending on their settings
         public string GetName() {
             if (Settings.UseNickname && NickName != "")
             {
@@ -27,15 +27,12 @@ namespace AradiaBot
             { 
                 return MentionUtils.MentionUser(Id); 
             }
-        
         }
 
+        //Start a singleplayer AZ game, currently not implemented
         public void StartAZGame(AZGameState gameState)
         {
             GameState = gameState;
         }
-
-        
-
     }
 }

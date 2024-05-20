@@ -42,7 +42,6 @@ namespace AradiaBot.CommandHandlers
                 case "view":
                     await ViewSettings(command, database);
                     break;
-
             }
         }
 
@@ -118,8 +117,6 @@ namespace AradiaBot.CommandHandlers
                                 responseString += (bool)member.Settings.ConsolidateAZScores ? "Consolidating AZ scores\n" : "Tracking\n";
                                 database.SaveData();
                                 break;
-
-
                         }
                     }
                 }
@@ -127,7 +124,6 @@ namespace AradiaBot.CommandHandlers
                 {
                     responseString = "You need to add a setting to change!";
                 }
-                
             }
             else
             {
@@ -150,8 +146,6 @@ namespace AradiaBot.CommandHandlers
                 }
             }
             if (userInDatabase) {
-
-                Console.WriteLine("User alrerady in database");
                 await command.RespondAsync($"Youre already in the database", ephemeral: true);
             }
             else

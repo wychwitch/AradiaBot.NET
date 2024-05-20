@@ -8,15 +8,8 @@ namespace AradiaBot
 {
     internal class ServerMemberSettings
     {
-        public List<string> PingNames { get; set; }
-        public bool UseNickname { get; set; }
+        public List<string> PingNames { get; set; } = [];
+        public bool UseNickname { get; set; } = true;
         public bool? ConsolidateAZScores { get; set; } = false;
-
-        public ServerMemberSettings() 
-        {
-            PingNames = new List<string>();
-            UseNickname = true;
-            ConsolidateAZScores = false;
-        }
     }
 }
