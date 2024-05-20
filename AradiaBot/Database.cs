@@ -201,25 +201,35 @@ namespace AradiaBot
         public (int, string) UpdateScore(ulong playerId, AZGameState gameState, Dictionary<string, AZGameData> allAzGameData)
         {
 
-            ServerMember member = GetMember(playerId);
+
             IncreasePlayerScore(playerId, gameState.gameKey);
 
-            if (member.Settings.ConsolidateAZScores == null || member.Settings.ConsolidateAZScores == true)
+            if (IsUserRegistered(playerId))
             {
+                ServerMember member = GetMember(playerId);
 
-                int totalScore = 0;
-                foreach (var gameKey in GameScores.Keys)
+                if (member.Settings.ConsolidateAZScores == null || member.Settings.ConsolidateAZScores == true)
                 {
-                    totalScore += GameScores[gameKey][playerId];
+
+                    int totalScore = 0;
+                    foreach (var gameKey in GameScores.Keys)
+                    {
+                        totalScore += GameScores[gameKey][playerId];
+                    }
+
+                    return (totalScore, "across all AZ games");
+                }
+                else
+                {
+
+                    return (GetPlayerScore(playerId, gameState.gameKey), $"at the {allAzGameData[gameState.gameKey].Name} AZ Game");
                 }
 
-                return (totalScore, "across all AZ games");
-            } else
+            }
+            else
             {
-                
                 return (GetPlayerScore(playerId, gameState.gameKey), $"at the {allAzGameData[gameState.gameKey].Name} AZ Game");
             }
-            
         }
 
     }

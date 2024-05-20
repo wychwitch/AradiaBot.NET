@@ -143,38 +143,40 @@ public class Program
     private static async Task ReadMessageHandler(SocketMessage message)
     {
         if (!message.Author.IsBot)
-        await _database.CheckPings(_client, message);
-
-        if (_database.IsGLobalAZGameRunning() || _database.IsAnySinglePlayerAZGameRunning())
         {
-            //checkfor singleplayer game first, and then check for non singleplayer game
-            
+            await _database.CheckPings(_client, message);
 
-            //check for if it's a global gamestate or a user gamestate, and if it is a user gamestate check to see if it's the user who posted
-            if (_database.IsGLobalAZGameRunning())
+            if (_database.IsGLobalAZGameRunning() || _database.IsAnySinglePlayerAZGameRunning())
             {
-                (bool, AZGameState) returnValue = AZGameData.CheckAnswer(message.Content, _database.GlobalGameState, _availableAZGames);
-                if (returnValue.Item1)
+                //checkfor singleplayer game first, and then check for non singleplayer game
+
+
+                //check for if it's a global gamestate or a user gamestate, and if it is a user gamestate check to see if it's the user who posted
+                if (_database.IsGLobalAZGameRunning())
                 {
-                    _database.GlobalGameState = returnValue.Item2;
+                    (bool, AZGameState) returnValue = AZGameData.CheckAnswer(message.Content, _database.GlobalGameState, _availableAZGames);
+                    if (returnValue.Item1)
+                    {
+                        _database.GlobalGameState = returnValue.Item2;
 
-                    //If the range start is the same as the end, the word was guessed correctly
-                    if(_database.GlobalGameState.rangeStart == _database.GlobalGameState.rangeEnd)
-                    {
-                        var wonResults = _database.UpdateScore(message.Author.Id, _database.GlobalGameState, _availableAZGames);
-                        
-                        await message.Channel.SendMessageAsync($"You won! The answer was {_database.GlobalGameState.answer}. {_database.GetName(message.Author.Id)} has won {wonResults.Item1} times {wonResults.Item2}");
-                        _database.GlobalGameState = null;
+                        //If the range start is the same as the end, the word was guessed correctly
+                        if (_database.GlobalGameState.rangeStart == _database.GlobalGameState.rangeEnd)
+                        {
+                            var wonResults = _database.UpdateScore(message.Author.Id, _database.GlobalGameState, _availableAZGames);
+
+                            await message.Channel.SendMessageAsync($"You won! The answer was {_database.GlobalGameState.answer}. {_database.GetName(message.Author.Id)} has won {wonResults.Item1} times {wonResults.Item2}");
+                            _database.GlobalGameState = null;
+                        }
+                        else
+                        {
+                            await message.Channel.SendMessageAsync($"{_database.GlobalGameState.rangeStart} - {_database.GlobalGameState.rangeEnd}");
+                        }
+                        _database.SaveData();
                     }
-                    else
-                    {
-                        await message.Channel.SendMessageAsync($"{_database.GlobalGameState.rangeStart} - {_database.GlobalGameState.rangeEnd}");
-                    }
-                    _database.SaveData();
+
+                    //Piping this out to the console, in case something goes wrong and this needs to be debugged
+                    Console.WriteLine($"start: {returnValue.Item2.rangeStart} end: {returnValue.Item2.rangeEnd} answer: {returnValue.Item2.answer}");
                 }
-
-                //Piping this out to the console, in case something goes wrong and this needs to be debugged
-                Console.WriteLine($"start: {returnValue.Item2.rangeStart} end: {returnValue.Item2.rangeEnd} answer: {returnValue.Item2.answer}");
             }
         }
     }
