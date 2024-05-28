@@ -48,10 +48,9 @@ namespace AradiaBot.CommandHandlers
         {
             int quoteNum = nsfw? database.NSFWQuotes.Count : database.Quotes.Count;
             var value = command.Data.Options.First().Options.First().Value;
-            bool details = command.Data.Options.First().Options.Last().Name == "details"? (bool)command.Data.Options.First().Options.Last().Value : false;
+            bool details = command.Data.Options.First().Options.Last().Name == "details" && (bool)command.Data.Options.First().Options.Last().Value;
             List<Quote> quotes = nsfw? database.NSFWQuotes : database.Quotes;
             int requestedId = Convert.ToInt32(value);
-
             
             if (requestedId > quoteNum)
             {
@@ -175,6 +174,7 @@ namespace AradiaBot.CommandHandlers
                     break;
             }
         }
+
         public static async Task RandomQuote(Database database, SocketSlashCommand command, bool nsfw)
         {
             int num;
@@ -192,7 +192,6 @@ namespace AradiaBot.CommandHandlers
             {
                 num = 1;
             }
-            
 
             var quoteString = "";
             
@@ -208,6 +207,7 @@ namespace AradiaBot.CommandHandlers
             await command.ModifyOriginalResponseAsync(x => x.Content = quoteString);
 
         }
+
         private static async Task AddCommandMessage(Database database, SocketMessageCommand command, bool nsfw)
         {
             var author = command.Data.Message.Author;
@@ -243,6 +243,7 @@ namespace AradiaBot.CommandHandlers
             }
 
         }
+
         private static async Task AddDynamicQuote(Database database, SocketSlashCommand command) {
             var data = command.Data.Options.First().Options.First().Options;
             IUser author = (IUser)data.ElementAt(0).Value;
@@ -272,8 +273,6 @@ namespace AradiaBot.CommandHandlers
             string formattedQuote = Quote.QuoteFormatter(database, quote);
 
             await command.ModifyOriginalResponseAsync(x => x.Content = $"Added {nsfwString}quote #{quoteCount}!\n{formattedQuote}");
-
-
 
             database.SaveData();
 
