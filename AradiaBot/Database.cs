@@ -21,7 +21,6 @@ namespace AradiaBot
         public Database()
         {
             GameScores = new Dictionary<string, Dictionary<ulong, int>>();
-            GameScores["az"] = new Dictionary<ulong, int>();
 
             Quotes = new();
             NSFWQuotes = new();
