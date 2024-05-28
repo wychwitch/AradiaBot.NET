@@ -228,11 +228,11 @@ public class Program
         ];
 
        
-        //Building up the slask commands
+        //Building up the slash commands
         List<SlashCommandBuilder> slashCommandBuilders = [
 
 
-            //The Quote Slash Command
+            //Quotes
             new SlashCommandBuilder()
                 .WithName("quote")
                 .WithDescription("Quotes!!")
@@ -362,7 +362,7 @@ public class Program
                 
 
 
-            //AZ game
+            //AZ game 
             new SlashCommandBuilder()
             .WithName("az")
             .WithDescription("AZ Game!")

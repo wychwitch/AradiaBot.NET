@@ -59,7 +59,7 @@ namespace AradiaBot
             this.Name = name;
         }
 
-        // the return lets the bot know if it should process the response
+        // The bool in the tuple indicates if the gamestate changed
         public static (bool, AZGameState) CheckAnswer(string answer, AZGameState gameState, Dictionary<string, AZGameData> availableGames) {
             answer = answer.ToLower();
             AZGameData gamedata = availableGames[gameState.gameKey];
