@@ -23,8 +23,9 @@ namespace AradiaBot
             Quoter = quoter;
             QuoteBody = quoteBody;
             Timestamp = DateTime.Now;
-            MessageLink = "";
+            MessageLink = null;
         }
+
         [JsonConstructor]
         public Quote(string author, ulong? quoter, string quoteBody, DateTime? timestamp, string? messageLink)
         {
@@ -41,16 +42,18 @@ namespace AradiaBot
             Quoter = quoter.Id;
             QuoteBody = quoteBody;
             Timestamp = DateTime.Now;
-            MessageLink = "";
+            MessageLink = null;
         }
+
         public Quote(IUser author, IUser quoter, string quoteBody)
         {
             Author = $"{author.Id}";
             Quoter = quoter.Id;
             QuoteBody = quoteBody;
             Timestamp = DateTime.Now;
-            MessageLink = "";
+            MessageLink = null;
         }
+
         public Quote(IUser author, IUser quoter, string quoteBody, string messageLink)
         {
             Author = $"{author.Id}";
@@ -66,6 +69,8 @@ namespace AradiaBot
             QuoteBody = quoteBody;
             MessageLink = null;
         }
+
+        //Formats the quote with all information
         public static string QuoteFormatter(Database database, Quote quote)
         {
             ulong authorId;
@@ -112,7 +117,7 @@ namespace AradiaBot
 
         }
 
-        //A small inline
+        //A small inline version of the quote
         public static string MinimumQuoteFormatter(Database database, Quote quote)
         {
 
