@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
@@ -104,17 +105,19 @@ namespace AradiaBot
             {
                 foreach(var ping in Members[i].Settings.PingNames) 
                 {
-                    if (messageContent.ToLower().Contains(ping.ToLower()))
+                    Regex regexPing = new Regex(@$"(?i)(?<!\w){ping}(?!\w)");
+                    if (regexPing.IsMatch(messageContent))
                     {
                         memberIndexes.Add(i);
                     }
                 }
             }
+
             foreach (var memberIndex in memberIndexes) {
                 IUser user = await message.Channel.GetUserAsync(Members[memberIndex].Id);
                 string messageLink = MessageExtensions.GetJumpUrl(message);
                 
-                if (user != null)
+                if (user != null && user != message.Author)
                 {
                     await UserExtensions.SendMessageAsync(user, $"> {message.Channel}: <{message.Author}> {messageContent}\n\n{messageLink}");
                 }

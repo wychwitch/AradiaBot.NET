@@ -27,7 +27,7 @@ public class Program
     private static Database _database;
     private static Dictionary<string, AZGameData> _availableAZGames = new Dictionary<string, AZGameData>();
     private static List<Tarot> _tarotDeck;
-    public static string _version = "0.3.5";
+    public static string _version = "0.3.6";
 
 
     public static async Task Main()

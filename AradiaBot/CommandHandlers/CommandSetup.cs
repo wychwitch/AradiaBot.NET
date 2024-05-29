@@ -14,6 +14,7 @@ namespace AradiaBot.CommandHandlers
     internal class CommandSetup
     {
         public async static Task RegisterSlashCommandsAsync(DiscordSocketClient client, List<SlashCommandBuilder> slashCommandBuilders, List<ulong> guildIds) {
+
             foreach (ulong guildId in guildIds)
             {
                 var guild = client.GetGuild(guildId);
