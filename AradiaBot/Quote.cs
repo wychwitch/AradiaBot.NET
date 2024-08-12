@@ -113,7 +113,7 @@ namespace AradiaBot
 
             messageLink = quote.MessageLink != "" ? $" [(message link)](<{quote.MessageLink}>)" : "";
 
-            return $"**{authorString}**: {quote.QuoteBody}\n> *quoted by {quoterString} {quoteTime}{messageLink}*";
+            return $"**{authorString}**: {quote.QuoteBody}\n-# *quoted by {quoterString} {quoteTime}{messageLink}*";
 
         }
 
