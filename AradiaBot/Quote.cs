@@ -111,7 +111,7 @@ namespace AradiaBot
 
             quoteTime = quote.Timestamp.HasValue ? "on "+quote.Timestamp.Value.ToString("yyyy/MM/dd") : "";
 
-            messageLink = quote.MessageLink != "" ? $" [(message link)](<{quote.MessageLink}>)" : "";
+            messageLink = quote.MessageLink != null || quote.MessageLink != "" ? $" [(message link)](<{quote.MessageLink}>)" : "";
 
             return $"**{authorString}**: {quote.QuoteBody}\n-# *quoted by {quoterString} {quoteTime}{messageLink}*";
 
