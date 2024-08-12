@@ -34,7 +34,7 @@ electabuzz
 electrode
 exeggcute
 exeggutor
-farfetch’d
+farfetch'd
 fearow
 flareon
 gastly
