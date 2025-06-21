@@ -414,6 +414,11 @@ public class Program
                     .WithType(ApplicationCommandOptionType.SubCommand)
                     .AddOption("file", ApplicationCommandOptionType.Attachment, "File to Upload", isRequired: true)
                     .AddOption("id", ApplicationCommandOptionType.String, "id to retrieve the reaction later", isRequired: true)
+            ).AddOption(new SlashCommandOptionBuilder()
+                    .WithName("get")
+                    .WithDescription("draw some cards")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                    .AddOption("id", ApplicationCommandOptionType.String, "id to retrieve the reaction later", isRequired: true)
 
              ),
 

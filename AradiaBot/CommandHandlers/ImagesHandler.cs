@@ -22,6 +22,11 @@ namespace AradiaBot.CommandHandlers
                 case "add":
                     await Add(database, imageServer, command);
                     break;
+                case "get":
+                    await Get(database, imageServer, command);
+                    break;
+
+
 
             }
         }
