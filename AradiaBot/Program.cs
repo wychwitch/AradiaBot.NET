@@ -28,7 +28,7 @@ public class Program
     private static Dictionary<string, AZGameData> _availableAZGames = new Dictionary<string, AZGameData>();
     private static List<Tarot> _tarotDeck;
     private static ImageServer _imageServer;
-    public static string _version = "0.3.7";
+    public static string _version = "0.4.0";
 
 
     public static async Task Main()
@@ -229,16 +229,15 @@ public class Program
 
     public static async Task Client_Ready()
     {
-        //Building up the Message Commands
-        List<MessageCommandBuilder> messageCommands = [
-             new MessageCommandBuilder().WithName("Quote Message"),
-             new MessageCommandBuilder().WithName("Quote NSFW Message")
-        ];
 
        
         //Building up the slash commands
-        List<SlashCommandBuilder> slashCommandBuilders = [
+        List<ApplicationCommandProperties> CommandBuilders = [
 
+
+            //Building up the Message Commands
+             new MessageCommandBuilder().WithName("Quote Message").Build(),
+             new MessageCommandBuilder().WithName("Quote NSFW Message").Build(),
 
             //Quotes
             new SlashCommandBuilder()
@@ -297,7 +296,7 @@ public class Program
                     .AddOption("body", ApplicationCommandOptionType.String, "the body of the quote", isRequired: false)
                     .AddOption("quoter", ApplicationCommandOptionType.User, "the person who quoted", isRequired: false)
                     .AddOption("message-link", ApplicationCommandOptionType.String, "the mesage of the quote", isRequired: false)
-                ),
+                ).Build(),
 
 
             //NSFW Quotes
@@ -338,7 +337,7 @@ public class Program
                     .AddOption("body", ApplicationCommandOptionType.String, "the body of the quote", isRequired: false)
                     .AddOption("quoter", ApplicationCommandOptionType.User, "the person who quoted", isRequired: false)
                     .AddOption("message-link", ApplicationCommandOptionType.String, "the mesage of the quote", isRequired: false)
-                ),
+                ).Build(),
 
 
             //Database Slash Commands
@@ -366,7 +365,7 @@ public class Program
                         .AddOption("use-nickname", ApplicationCommandOptionType.Boolean, "Enable or Disable using registered nickname", isRequired: false)
                         .AddOption("consolidate-az-scores", ApplicationCommandOptionType.Boolean, "Consolidate all your AZ scores", isRequired: false)
                         .AddOption("new-nickname", ApplicationCommandOptionType.String, "change your registered name", isRequired: false)
-                )),
+                )).Build(),
                 
 
 
@@ -401,7 +400,7 @@ public class Program
                 .WithName("range")
                 .WithDescription("get the range")
                 .WithType(ApplicationCommandOptionType.SubCommand)
-            ),
+            ).Build(),
 
 
             //React
@@ -420,7 +419,7 @@ public class Program
                     .WithType(ApplicationCommandOptionType.SubCommand)
                     .AddOption("id", ApplicationCommandOptionType.String, "id to retrieve the reaction later", isRequired: true)
 
-             ),
+             ).Build(),
 
 
             //Tarot
@@ -433,12 +432,11 @@ public class Program
                     .WithType(ApplicationCommandOptionType.SubCommand)
                     .AddOption("cards", ApplicationCommandOptionType.Integer, "The amount of cards to draw", minValue: 1, isRequired: false)
                     .AddOption("reversed", ApplicationCommandOptionType.Boolean, "enable or disable reverse cards", isRequired: false)
-                )
+                ).Build()
         ];
-       
+
         //Registering the commands to the client
-        await CommandSetup.RegisterMessageCommands(_client, messageCommands, _guildIDs);
-        await CommandSetup.RegisterSlashCommandsAsync(_client, slashCommandBuilders, _guildIDs);
+        await CommandSetup.BulkOverwriteCommands(_client, CommandBuilders);
 
 
     }

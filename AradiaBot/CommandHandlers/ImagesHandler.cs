@@ -23,7 +23,7 @@ namespace AradiaBot.CommandHandlers
                     await Add(database, imageServer, command);
                     break;
                 case "get":
-                    await Get(database, imageServer, command);
+                    await Get(database, command);
                     break;
 
 
@@ -34,29 +34,44 @@ namespace AradiaBot.CommandHandlers
         public static async Task Add(Database database, ImageServer imageServer, SocketSlashCommand command)
         {
             Console.WriteLine("Upload Entered");
-            EmbedBuilder embed = new EmbedBuilder();
+            
 
-            EmbedFieldBuilder embedField = new EmbedFieldBuilder()
-                .WithIsInline(true)
-                .WithName($"a")
-                .WithValue($"aaaa");
-
-            embed.AddField(embedField);
-
-
-
-            embed.Title = "a";
             var data = command.Data.Options.First().Options.First().Options;
             IUser uploader = command.User;
 
 
+            EmbedBuilder embed;
+
             var attachment = (IAttachment)command.Data.Options.First().Options.First().Value;
             var id = (string)command.Data.Options.First().Options.Last().Value;
             string? url = await imageServer.Upload(attachment);
-            Image image = new Image(url);
-            React reaction = new React(uploader.Id, image);
-            database.ReactionImages.Add(id, reaction);
-            database.SaveData();
+            if (url != null)
+            {
+
+                Image image = new Image(url);
+                React reaction = new React(uploader.Id, image);
+                database.ReactionImages.Add(id, reaction);
+                database.SaveData();
+                
+                embed = new EmbedBuilder();
+                EmbedFieldBuilder embedField = new EmbedFieldBuilder()
+                    .WithIsInline(true)
+                    .WithValue($"Added Reaction!");
+                embed.AddField(embedField);
+                embedField = new EmbedFieldBuilder()
+                    .WithValue(url);
+                embed.AddField(embedField);
+
+
+            }
+            else
+            {
+                embed = new EmbedBuilder();
+                EmbedFieldBuilder embedField = new EmbedFieldBuilder()
+                    .WithIsInline(true)
+                    .WithValue($"Oop! Something went wrong!");
+                embed.AddField(embedField);
+            }
 
             await command.ModifyOriginalResponseAsync(x => x.Embed = embed.Build());
 
