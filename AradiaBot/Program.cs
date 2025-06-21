@@ -27,6 +27,7 @@ public class Program
     private static Database _database;
     private static Dictionary<string, AZGameData> _availableAZGames = new Dictionary<string, AZGameData>();
     private static List<Tarot> _tarotDeck;
+    private static ImageServer _imageServer;
     public static string _version = "0.3.7";
 
 
@@ -52,6 +53,9 @@ public class Program
 
         _client.Log += Log;
 
+        //_imageServer = new ImageServer(config.palmrUrl, config.palmrUsername, config.palmrPassword);
+        _imageServer = new ImageServer(config.ImageServerUrl, config.ImageServerToken);
+
 
         string[] englishWordListLong = File.ReadAllLines("./StaticData/WordLists/english_long.txt");
         string[] englishWordListShort = File.ReadAllLines("./StaticData/WordLists/english_short.txt");
@@ -66,7 +70,7 @@ public class Program
                 File.ReadAllLines("./StaticData/WordLists/pokemon_gens/kalos.txt"),
                 File.ReadAllLines("./StaticData/WordLists/pokemon_gens/alola.txt"),
                 File.ReadAllLines("./StaticData/WordLists/pokemon_gens/galar.txt"),
-                File.ReadAllLines("./StaticData/WordLists/pokemon_gens/paldea.txt"),
+                File.ReadAllLines("./StaticData/WordLists/pokemon_gens/paldea.txt")
             ];
 
 
@@ -215,6 +219,10 @@ public class Program
                 break;
             case "tarot":
                 await TarotHandler.ProcessSlashCommand(_tarotDeck, command);
+                break;
+            case "react":
+                await command.DeferAsync();
+                await ImagesHandler.ProcessSlashCommand(_imageServer, command, _database);
                 break;
         }
     }
@@ -396,6 +404,20 @@ public class Program
             ),
 
 
+            //React
+             new SlashCommandBuilder()
+            .WithName("react")
+            .WithDescription("reaction")
+            .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("add")
+                    .WithDescription("draw some cards")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                    .AddOption("file", ApplicationCommandOptionType.Attachment, "File to Upload", isRequired: true)
+                    .AddOption("id", ApplicationCommandOptionType.String, "id to retrieve the reaction later", isRequired: true)
+
+             ),
+
+
             //Tarot
             new SlashCommandBuilder()
                 .WithName("tarot")
@@ -406,7 +428,7 @@ public class Program
                     .WithType(ApplicationCommandOptionType.SubCommand)
                     .AddOption("cards", ApplicationCommandOptionType.Integer, "The amount of cards to draw", minValue: 1, isRequired: false)
                     .AddOption("reversed", ApplicationCommandOptionType.Boolean, "enable or disable reverse cards", isRequired: false)
-                ),
+                )
         ];
        
         //Registering the commands to the client

@@ -11,6 +11,11 @@ namespace AradiaBot
     {
         public string token {  get; set; }
         public List<ulong> guildIds { get; set; }
+        public string palmrUrl { get; set; }
+        public string palmrUsername { get; set; }
+        public string palmrPassword{ get; set; }
+        public string ImageServerUrl { get; set; }
+        public string ImageServerToken { get; set; }
 
         
     }

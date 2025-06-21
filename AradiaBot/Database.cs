@@ -17,6 +17,7 @@ namespace AradiaBot
         public Dictionary<string, Dictionary<ulong, int>> GameScores { get; set; }
         public List<Quote> Quotes { get; set; }
         public List<Quote> NSFWQuotes { get; set; }
+        public Dictionary<string, React> ReactionImages { get; set; }
         public AZGameState? GlobalGameState { get; set; }
 
         public Database()
@@ -29,18 +30,20 @@ namespace AradiaBot
             Members = new List<ServerMember>();
 
             GlobalGameState = null;
+            ReactionImages = new Dictionary<string, React>();
             
 
 
         }
 
         [JsonConstructor]
-        public Database(List<ServerMember> serverMembers, Dictionary<string, Dictionary<ulong, int>> gameScores, List<Quote> quotes, AZGameState globalGameState = null)
+        public Database(List<ServerMember> serverMembers, Dictionary<string, Dictionary<ulong, int>> gameScores, List<Quote> quotes, Dictionary<string, React> reactionImages , AZGameState globalGameState = null)
         {
             Members = serverMembers;
             GameScores = gameScores;
             Quotes = quotes;
             GlobalGameState = globalGameState;
+            ReactionImages = reactionImages;
         }
         public bool IsUserRegistered(IUser user)
         {
