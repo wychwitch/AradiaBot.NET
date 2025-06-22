@@ -25,68 +25,112 @@ namespace AradiaBot.CommandHandlers
                 case "get":
                     await Get(database, command);
                     break;
-
+                case "list":
+                    await List(database, command);
+                    break;
+                case "delete":
+                    await DeleteReact(database, command);
+                    break;
 
 
             }
         }
 
+        public static async Task List(Database database, SocketSlashCommand command)
+        {
+            var content = "";
+            var keys = database.ReactionImages.Keys.ToArray();
+            var reacts = database.ReactionImages;
+            for (var i = 0; i < keys.Length; i++)
+            {
+                var key = keys[i];
+                content += $"[{key}](<{reacts[key].GetLink()}>)";
+                if (i < keys.Length - 1)
+                {
+                    content += ", ";
+                }
+            }
+
+            await command.RespondAsync(content, ephemeral: true);
+        }
         public static async Task Add(Database database, ImageServer imageServer, SocketSlashCommand command)
         {
+
+            await command.DeferAsync();
             Console.WriteLine("Upload Entered");
             
 
             var data = command.Data.Options.First().Options.First().Options;
             IUser uploader = command.User;
 
-
-            EmbedBuilder embed;
+            string content;
 
             var attachment = (IAttachment)command.Data.Options.First().Options.First().Value;
-            var id = (string)command.Data.Options.First().Options.Last().Value;
+            string id = (string)command.Data.Options.First().Options.Last().Value;
+            id = id.ToLower();
             string? url = await imageServer.Upload(attachment);
             if (url != null)
             {
-
-                Image image = new Image(url);
-                React reaction = new React(uploader.Id, image);
-                database.ReactionImages.Add(id, reaction);
-                database.SaveData();
-                
-                embed = new EmbedBuilder();
-                EmbedFieldBuilder embedField = new EmbedFieldBuilder()
-                    .WithIsInline(true)
-                    .WithValue($"Added Reaction!");
-                embed.AddField(embedField);
-                embedField = new EmbedFieldBuilder()
-                    .WithValue(url);
-                embed.AddField(embedField);
-
-
+                if (database.ReactionImages.ContainsKey(id))
+                {
+                    content = $"id {id} already in use!";
+                }
+                else
+                {
+                    Image image = new Image(url);
+                    React reaction = new React(uploader.Id, image);
+                    database.ReactionImages.Add(id, reaction);
+                    database.SaveData();
+                    content = $"React [{id}]({reaction.GetLink()}) added to database!";
+                }
             }
             else
             {
-                embed = new EmbedBuilder();
-                EmbedFieldBuilder embedField = new EmbedFieldBuilder()
-                    .WithIsInline(true)
-                    .WithValue($"Oop! Something went wrong!");
-                embed.AddField(embedField);
+                content = "React adding failed!!";
             }
 
-            await command.ModifyOriginalResponseAsync(x => x.Embed = embed.Build());
+            await command.ModifyOriginalResponseAsync(x => x.Content = content); 
 
         }
         public static async Task Get(Database database, SocketSlashCommand command)
         {
             var id = (string)command.Data.Options.First().Options.First().Value;
+            id = id.ToLower();
+            string content;
             if (database.ReactionImages.ContainsKey(id))
             {
                 React reaction = database.ReactionImages[id];
-                
-                await command.ModifyOriginalResponseAsync(x =>x.Content = reaction.GetLink());
-            }
-            
-        }
 
+                content = $"**{id}**\n-# [media link]({reaction.GetLink()})";
+                
+            }
+            else
+            {
+                content = $"{id} couldn't be found!";
+            }
+
+            await command.RespondAsync(content);
+        }
+        public static async Task DeleteReact(Database database, SocketSlashCommand command)
+        {
+            var id = (string)command.Data.Options.First().Options.First().Value;
+            id = id.ToLower();
+            string content;
+            if (database.ReactionImages.ContainsKey(id))
+            {
+                database.ReactionImages.Remove(id);
+
+                database.SaveData();
+                content = $"React {id} added to database!";
+                
+            }
+            else
+            {
+                content = $"{id} couldn't be found!";
+            }
+
+            await command.RespondAsync(content);
+
+        }
     }
 }

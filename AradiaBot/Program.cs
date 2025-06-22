@@ -221,7 +221,6 @@ public class Program
                 await TarotHandler.ProcessSlashCommand(_tarotDeck, command);
                 break;
             case "react":
-                await command.DeferAsync();
                 await ImagesHandler.ProcessSlashCommand(_imageServer, command, _database);
                 break;
         }
@@ -230,14 +229,17 @@ public class Program
     public static async Task Client_Ready()
     {
 
+       List<MessageCommandBuilder> messageCommandBuilders = [
+           
+            //Building up the Message Commands
+             new MessageCommandBuilder().WithName("Quote Message"),
+             new MessageCommandBuilder().WithName("Quote NSFW Message"),
+           ];
        
         //Building up the slash commands
-        List<ApplicationCommandProperties> CommandBuilders = [
+        List<SlashCommandBuilder> slashCommandBuilders = [
 
 
-            //Building up the Message Commands
-             new MessageCommandBuilder().WithName("Quote Message").Build(),
-             new MessageCommandBuilder().WithName("Quote NSFW Message").Build(),
 
             //Quotes
             new SlashCommandBuilder()
@@ -296,7 +298,7 @@ public class Program
                     .AddOption("body", ApplicationCommandOptionType.String, "the body of the quote", isRequired: false)
                     .AddOption("quoter", ApplicationCommandOptionType.User, "the person who quoted", isRequired: false)
                     .AddOption("message-link", ApplicationCommandOptionType.String, "the mesage of the quote", isRequired: false)
-                ).Build(),
+                ),
 
 
             //NSFW Quotes
@@ -337,7 +339,7 @@ public class Program
                     .AddOption("body", ApplicationCommandOptionType.String, "the body of the quote", isRequired: false)
                     .AddOption("quoter", ApplicationCommandOptionType.User, "the person who quoted", isRequired: false)
                     .AddOption("message-link", ApplicationCommandOptionType.String, "the mesage of the quote", isRequired: false)
-                ).Build(),
+                ),
 
 
             //Database Slash Commands
@@ -365,7 +367,7 @@ public class Program
                         .AddOption("use-nickname", ApplicationCommandOptionType.Boolean, "Enable or Disable using registered nickname", isRequired: false)
                         .AddOption("consolidate-az-scores", ApplicationCommandOptionType.Boolean, "Consolidate all your AZ scores", isRequired: false)
                         .AddOption("new-nickname", ApplicationCommandOptionType.String, "change your registered name", isRequired: false)
-                )).Build(),
+                )),
                 
 
 
@@ -400,7 +402,7 @@ public class Program
                 .WithName("range")
                 .WithDescription("get the range")
                 .WithType(ApplicationCommandOptionType.SubCommand)
-            ).Build(),
+            ),
 
 
             //React
@@ -409,17 +411,21 @@ public class Program
             .WithDescription("reaction")
             .AddOption(new SlashCommandOptionBuilder()
                     .WithName("add")
-                    .WithDescription("draw some cards")
+                    .WithDescription("Add a new react!")
                     .WithType(ApplicationCommandOptionType.SubCommand)
-                    .AddOption("file", ApplicationCommandOptionType.Attachment, "File to Upload", isRequired: true)
-                    .AddOption("id", ApplicationCommandOptionType.String, "id to retrieve the reaction later", isRequired: true)
+                    .AddOption("media-file", ApplicationCommandOptionType.Attachment, "File to Upload", isRequired: true)
+                    .AddOption("id", ApplicationCommandOptionType.String, "React Id", isRequired: true)
             ).AddOption(new SlashCommandOptionBuilder()
                     .WithName("get")
-                    .WithDescription("draw some cards")
+                    .WithDescription("Send a react")
                     .WithType(ApplicationCommandOptionType.SubCommand)
-                    .AddOption("id", ApplicationCommandOptionType.String, "id to retrieve the reaction later", isRequired: true)
+                    .AddOption("id", ApplicationCommandOptionType.String, "React Id", isRequired: true)
 
-             ).Build(),
+             ).AddOption(new SlashCommandOptionBuilder()
+                    .WithName("list")
+                    .WithDescription("Get List of all reacts!")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+             ),
 
 
             //Tarot
@@ -432,11 +438,12 @@ public class Program
                     .WithType(ApplicationCommandOptionType.SubCommand)
                     .AddOption("cards", ApplicationCommandOptionType.Integer, "The amount of cards to draw", minValue: 1, isRequired: false)
                     .AddOption("reversed", ApplicationCommandOptionType.Boolean, "enable or disable reverse cards", isRequired: false)
-                ).Build()
+                )
         ];
 
         //Registering the commands to the client
-        await CommandSetup.BulkOverwriteCommands(_client, CommandBuilders);
+        await CommandSetup.RegisterSlashCommandsAsync(_client, slashCommandBuilders, _guildIDs);
+        await CommandSetup.RegisterMessageCommands(_client, messageCommandBuilders, _guildIDs);
 
 
     }

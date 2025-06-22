@@ -58,7 +58,8 @@ namespace AradiaBot
                 responseString = await response.Content.ReadAsStringAsync();
                 ResultObj? obj = JsonConvert.DeserializeObject<ResultObj>(responseString);
                 Console.WriteLine(responseString);
-                if (response.IsSuccessStatusCode)
+                File.Delete(output);
+                if (response.IsSuccessStatusCode && obj != null)
                 {
                     Console.WriteLine(obj.Url);
                     Console.WriteLine("Uploaded!");
@@ -95,19 +96,26 @@ namespace AradiaBot
     internal class Image
     {
         public string? Link { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTime? Timestamp { get; set; }
 
         public Image()
         {
             Timestamp = DateTime.Now;
         }
-       
-
-        [JsonConstructor]
+        
         public Image(string link)
         {
             Link = link;
             Timestamp = DateTime.Now;
+        }
+
+       
+
+        [JsonConstructor]
+        public Image(string link, DateTime timestamp)
+        {
+            Link = link;
+            Timestamp = timestamp;
         }
     }
 }
