@@ -28,7 +28,7 @@ public class Program
     private static Dictionary<string, AZGameData> _availableAZGames = new Dictionary<string, AZGameData>();
     private static List<Tarot> _tarotDeck;
     private static ImageServer _imageServer;
-    public static string _version = "0.4.0";
+    public static string _version = "0.4.2";
 
 
     public static async Task Main()
@@ -448,8 +448,8 @@ public class Program
         ];
 
         //Registering the commands to the client
+        //await CommandSetup.RegisterMessageCommands(_client, messageCommandBuilders, _guildIDs);
         await CommandSetup.RegisterSlashCommandsAsync(_client, slashCommandBuilders, _guildIDs);
-        await CommandSetup.RegisterMessageCommands(_client, messageCommandBuilders, _guildIDs);
 
 
     }

@@ -40,6 +40,7 @@ namespace AradiaBot.CommandHandlers
         {
             var content = "";
             var keys = database.ReactionImages.Keys.ToArray();
+            Array.Sort(keys);
             var reacts = database.ReactionImages;
             for (var i = 0; i < keys.Length; i++)
             {
@@ -121,7 +122,7 @@ namespace AradiaBot.CommandHandlers
                 database.ReactionImages.Remove(id);
 
                 database.SaveData();
-                content = $"React {id} added to database!";
+                content = $"React {id} deleted from the database!";
                 
             }
             else
