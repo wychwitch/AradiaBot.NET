@@ -417,7 +417,13 @@ public class Program
                     .AddOption("id", ApplicationCommandOptionType.String, "React Id", isRequired: true)
             ).AddOption(new SlashCommandOptionBuilder()
                     .WithName("get")
-                    .WithDescription("Send a react")
+                    .WithDescription("Send a react!")
+                    .WithType(ApplicationCommandOptionType.SubCommand)
+                    .AddOption("id", ApplicationCommandOptionType.String, "React Id", isRequired: true)
+
+             ).AddOption(new SlashCommandOptionBuilder()
+                    .WithName("delete")
+                    .WithDescription("Delete a react!")
                     .WithType(ApplicationCommandOptionType.SubCommand)
                     .AddOption("id", ApplicationCommandOptionType.String, "React Id", isRequired: true)
 
