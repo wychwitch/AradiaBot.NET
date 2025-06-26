@@ -137,6 +137,7 @@ public class Program
         _client.SlashCommandExecuted += SlashCommandHandler;
         _client.MessageCommandExecuted += MessageCommandHandler;
         _client.MessageReceived += ReadMessageHandler;
+        _client.ButtonExecuted += ButtonHandler;
 
         //_database.GlobalGameState = new AZGameState(_availableAZGames, "pokemon-all");        
 
@@ -195,6 +196,15 @@ public class Program
             case "Quote NSFW Message":
                 await QuoteHandler.ProcessMessageCommand(_database, command);
                 break;
+        }
+    }
+
+    private static async Task ButtonHandler(SocketMessageComponent component)
+    {
+        string id = component.Data.CustomId;
+        if (id.Contains("reactListNext"))
+        {
+            await ImagesHandler.ListPageMove(_database, component);
         }
     }
 

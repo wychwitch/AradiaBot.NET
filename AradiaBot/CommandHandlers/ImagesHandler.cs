@@ -1,7 +1,9 @@
 ﻿using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
@@ -34,25 +36,69 @@ namespace AradiaBot.CommandHandlers
 
 
             }
+        
         }
 
-        public static async Task List(Database database, SocketSlashCommand command)
+        public static async Task ListPageMove(Database database, SocketMessageComponent messageComponent)
         {
-            var content = "";
+            var buttonId = messageComponent.Data.CustomId;
+            Console.WriteLine(buttonId);
+            int pageNum = int.Parse(buttonId.Split("-")[1]);
+            var contentArray = ListPaginate(database);
+            string content = contentArray[pageNum];
+
+            MessageComponent component = null;
+            if (pageNum-1 >= 0)
+            {
+                component = new ComponentBuilder().WithButton($"<- {pageNum}", $"reactListNext-{pageNum-1}").Build();
+            }
+            if(pageNum+1 < contentArray.Count )
+            {
+                component = new ComponentBuilder().WithButton($"{pageNum+2} ->", $"reactListNext-{pageNum+1}").Build();
+            }
+            await messageComponent.RespondAsync(contentArray[pageNum], ephemeral: true, components: component);
+
+            
+        }
+
+        private static List<string> ListPaginate(Database database)
+        {
+            List<string> contentArray = [];
             var keys = database.ReactionImages.Keys.ToArray();
             Array.Sort(keys);
             var reacts = database.ReactionImages;
+            int contentArrayIndex = 0;
+            contentArray.Add("");
             for (var i = 0; i < keys.Length; i++)
             {
                 var key = keys[i];
-                content += $"[{key}](<{reacts[key].GetLink()}>)";
+                var formattedLink = $"[{key}](<{reacts[key].GetLink()}>)";
+                var newContent = contentArray[contentArrayIndex] + formattedLink;
+                if (newContent.Length + 2 > 2000)
+                {
+                    contentArrayIndex++;
+                    contentArray.Add("");
+                    newContent = formattedLink;
+                }
                 if (i < keys.Length - 1)
                 {
-                    content += ", ";
+                    newContent += ", ";
                 }
+                contentArray[contentArrayIndex] = newContent;
             }
+            return contentArray;
 
-            await command.RespondAsync(content, ephemeral: true);
+        }
+        public static async Task List(Database database, SocketSlashCommand command)
+        {
+            List<string> contentArray = ListPaginate(database);
+           
+            MessageComponent component = null;
+            if (contentArray.Count > 1)
+            {
+                component = new ComponentBuilder().WithButton("2->", "reactListNext-1").Build();
+            }
+            await command.RespondAsync(contentArray[0], ephemeral: true, components: component);
         }
         public static async Task Add(Database database, ImageServer imageServer, SocketSlashCommand command)
         {
