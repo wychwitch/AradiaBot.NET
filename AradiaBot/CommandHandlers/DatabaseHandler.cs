@@ -7,94 +7,82 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Linq;
+using Discord.Interactions;
 
 namespace AradiaBot.CommandHandlers
 {
-    internal class DatabaseHandler
+    [Discord.Interactions.Group("db", "Database Management")]
+    internal class DatabaseHandler : InteractionModuleBase<SocketInteractionContext>
     {
-        public static async Task ProcessSlashCommand(Database database, SocketSlashCommand command)
-        {
-            var commandName = command.Data.Options.First().Name;
-            Console.WriteLine(commandName);
+        private Database _Database { get; set; }
 
-
-            switch (commandName)
-            {
-                case "join":
-                    await JoinDatabase(command, database);
-                    break;
-                case "settings":
-                    await ProcessSlashSettingsCommand(database, command);
-                    break;
-            }
+        public DatabaseHandler(ref Database database)         {
+            _Database = database;
         }
 
-        public static async Task ProcessSlashSettingsCommand(Database database, SocketSlashCommand command)
+        
+        [SlashCommand("view-settings", "View your settings")]
+        public async Task ViewSettings()
         {
-            var commandName = command.Data.Options.First().Options.First().Name;
-            Console.WriteLine(commandName);
+            IUser user = Context.Interaction.User;
 
-            switch (commandName) 
-            {
-                case "edit":
-                   await EditSettings(command, database);
-                   break;
-                case "view":
-                    await ViewSettings(command, database);
-                    break;
-            }
-        }
-
-
-        public static async Task ViewSettings(SocketSlashCommand command, Database database)
-        {
-            IUser user = command.User;
-
-            if (database.IsUserRegistered(user)) {
-                ServerMember member = database.GetMember(user);
+            if (_Database.IsUserRegistered(user)) {
+                ServerMember member = _Database.GetMember(user);
                 ServerMemberSettings settings = member.Settings;
                 string respondString = $"**Name**: {member.NickName}\n" +
                                        $"**Use Name**: {settings.UseNickname}\n";
                 respondString += (settings.PingNames.Count > 0) ? $"**Pings**: \n- {String.Join("\n- ", settings.PingNames)}\n" : "No pings set";
-                await command.RespondAsync(respondString, ephemeral: true);
+                await RespondAsync(respondString, ephemeral: true);
             } 
             else {
-                await command.RespondAsync("You havent joined the database!", ephemeral: true); 
+                await RespondAsync("You havent joined the database!", ephemeral: true); 
             }
         }
 
-        public static async Task EditSettings(SocketSlashCommand command, Database database)
+        [SlashCommand("edit-settings", "View your settings")]
+        public async Task EditSettings(string? add_ping, string? remove_ping, bool? use_nickname, [Summary(description: "consolidate az scores")] bool? consolidate_az_scores, string? new_nickname)
         {
             string responseString = "";
-            IUser user = command.User;
-            if (database.IsUserRegistered(user))
+            IUser user = Context.User;
+            if (_Database.IsUserRegistered(user))
             {
-                var member = database.GetMember(user);
-                var settingsToChange = command.Data.Options.First().Options.First().Options;
-                if (settingsToChange.Count > 0)
+                var member = _Database.GetMember(user);
+                if (add_ping == null 
+                    && remove_ping == null
+                    && use_nickname == null
+                    && consolidate_az_scores == null
+                    && new_nickname == null
+                    ) 
                 {
-                    foreach (var setting in settingsToChange)
+                    responseString = "You need to add a setting to change!";
+                }
+                else
+                {
+                    if (new_nickname != null)
                     {
-                        switch (setting.Name)
-                        {
-                            case "new-nickname":
-                                member.NickName = (string)setting.Value;
-                                responseString += $"Changed nickname to {member.NickName}\n";
-                                database.SaveData();
-                                break;
-                            case "use-nickname":
-                                member.Settings.UseNickname = (bool)setting.Value;
-                                responseString += member.Settings.UseNickname ? "Enabled Nickname use\n" : "Disabled Nickname use\n";
-                                database.SaveData();
-                                break;
-                            case "add-ping":
-                                string newPing = (string)setting.Value;
-                                member.Settings.PingNames.Add(newPing);
-                                responseString += $"Added {newPing} to your list of pings\n";
-                                database.SaveData();
-                                break;
-                            case "remove-ping":
-                                string nameToRemove = (string)setting.Value;
+                        member.NickName = new_nickname;
+                        responseString += $"Changed nickname to {member.NickName}\n";
+                        _Database.SaveData();
+                    }
+
+                    if (use_nickname != null)
+                    {
+                       member.Settings.UseNickname = (bool)use_nickname;
+                       responseString += member.Settings.UseNickname ? "Enabled Nickname use\n" : "Disabled Nickname use\n";
+                       _Database.SaveData();
+                    }
+
+                    if(add_ping != null)
+                    { 
+                        string newPing = add_ping;
+                        member.Settings.PingNames.Add(newPing);
+                        responseString += $"Added {newPing} to your list of pings\n";
+                        _Database.SaveData();
+                    }
+
+                    if(remove_ping != null)
+                    {
+                                string nameToRemove = remove_ping;
                                 bool foundName = false;
                                 for (int i = 0; i < member.Settings.PingNames.Count; i++)
                                 {
@@ -110,34 +98,33 @@ namespace AradiaBot.CommandHandlers
                                 {
                                     responseString += $"couldn't find the {nameToRemove} in your list of ping names\n";
                                 }
-                                database.SaveData();
-                                break;
-                            case "consolidate-az-scores":
-                                member.Settings.ConsolidateAZScores = (bool)setting.Value;
-                                responseString += (bool)member.Settings.ConsolidateAZScores ? "Consolidating AZ scores\n" : "Tracking\n";
-                                database.SaveData();
-                                break;
-                        }
+                                _Database.SaveData();
+
                     }
-                }
-                else
-                {
-                    responseString = "You need to add a setting to change!";
-                }
+
+                    if(consolidate_az_scores != null)
+                    {
+
+                                member.Settings.ConsolidateAZScores = (bool)consolidate_az_scores;
+                                responseString += (bool)member.Settings.ConsolidateAZScores ? "Consolidating AZ scores\n" : "Tracking\n";
+                                _Database.SaveData();
+                    }
+                }                    
             }
             else
             {
                 responseString = "You need join the db to change your settings! Run `/db join` to get started";
             }
-            await command.RespondAsync(responseString, ephemeral: true);
+            await RespondAsync(responseString, ephemeral: true);
         }
 
-        public static async Task JoinDatabase(SocketSlashCommand command, Database database)
+        [SlashCommand("join", "join db")]
+        public async Task JoinDatabase()
         {
-            IUser user = command.User;
+            IUser user = Context.Interaction.User;
             bool userInDatabase = false;
 
-            foreach(var member in database.Members)
+            foreach(var member in _Database.Members)
             {
                 if (member.Id == user.Id)
                 {
@@ -146,17 +133,17 @@ namespace AradiaBot.CommandHandlers
                 }
             }
             if (userInDatabase) {
-                await command.RespondAsync($"Youre already in the database", ephemeral: true);
+                await RespondAsync($"Youre already in the database", ephemeral: true);
             }
             else
             {
                 ServerMember serverMember = new ServerMember(user.Id);
-                database.Members.Add(serverMember);
+                _Database.Members.Add(serverMember);
 
                 Console.WriteLine("Added user");
-                await command.RespondAsync($"Added  you to the DB!", ephemeral: true);
+                await RespondAsync($"Added  you to the DB!", ephemeral: true);
 
-                database.SaveData();
+                _Database.SaveData();
             }
             
 

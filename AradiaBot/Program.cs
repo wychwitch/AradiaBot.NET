@@ -18,6 +18,7 @@ using AradiaBot.CommandHandlers;
 using Discord;
 using Discord.Net;
 using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 
 public class Program
@@ -30,30 +31,38 @@ public class Program
     private static ImageServer _imageServer;
     public static string _version = "0.4.2";
 
+    private static IServiceProvider _services;
+
+    static IServiceProvider CreateServices()
+    {
+        var socket_config = new DiscordSocketConfig()
+        {
+
+            //Requesting all the intents, which is needed to read channels' messages for AZ game and check the channel's members
+            GatewayIntents = GatewayIntents.All
+        };
+        var collection = new ServiceCollection()
+            .AddSingleton(socket_config)
+            .AddSingleton<DiscordSocketClient>();
+        return collection.BuildServiceProvider();
+
+    }
+
 
     public static async Task Main()
     {
+        _services = CreateServices();
+
         Config config = JsonConvert.DeserializeObject<Config>(File.ReadAllText("config.json"));
 
         _tarotDeck = JsonConvert.DeserializeObject<List<Tarot>>(File.ReadAllText("StaticData/tarot.json"));
 
-
-        //Requesting all the intents, which is needed to read channels' messages for AZ game and check the channel's members
-        var socket_config = new DiscordSocketConfig()
-        {
-            GatewayIntents = GatewayIntents.All
-        };
-       
-
-
-
-        _client = new DiscordSocketClient(socket_config);
+        _client = _services.GetRequiredService<DiscordSocketClient>();
 
         _guildIDs = config.guildIds;
 
         _client.Log += Log;
 
-        //_imageServer = new ImageServer(config.palmrUrl, config.palmrUsername, config.palmrPassword);
         _imageServer = new ImageServer(config.ImageServerUrl, config.ImageServerToken);
 
 
@@ -248,8 +257,6 @@ public class Program
        
         //Building up the slash commands
         List<SlashCommandBuilder> slashCommandBuilders = [
-
-
 
             //Quotes
             new SlashCommandBuilder()
@@ -459,7 +466,7 @@ public class Program
 
         //Registering the commands to the client
         //await CommandSetup.RegisterMessageCommands(_client, messageCommandBuilders, _guildIDs);
-        await CommandSetup.RegisterSlashCommandsAsync(_client, slashCommandBuilders, _guildIDs);
+        //await CommandSetup.RegisterSlashCommandsAsync(_client, slashCommandBuilders, _guildIDs);
 
 
     }
