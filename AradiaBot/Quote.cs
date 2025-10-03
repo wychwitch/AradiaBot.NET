@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace AradiaBot
 {
-    internal class Quote
+    public class Quote
     {
         public string Author { get; set; }
         public ulong? Quoter { get; set; }
@@ -69,6 +69,7 @@ namespace AradiaBot
             QuoteBody = quoteBody;
             MessageLink = null;
         }
+
 
         //Formats the quote with all information
         public static string QuoteFormatter(Database database, Quote quote)

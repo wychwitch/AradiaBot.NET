@@ -14,11 +14,7 @@ namespace AradiaBot.CommandHandlers
     [Discord.Interactions.Group("db", "Database Management")]
     internal class DatabaseHandler : InteractionModuleBase<SocketInteractionContext>
     {
-        private Database _Database { get; set; }
 
-        public DatabaseHandler(ref Database database)         {
-            _Database = database;
-        }
 
         
         [SlashCommand("view-settings", "View your settings")]

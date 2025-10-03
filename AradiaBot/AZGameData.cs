@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace AradiaBot
 {
 
-    internal class AZGameState
+    public class AZGameState
     {
         public string gameKey;
         public string rangeStart;

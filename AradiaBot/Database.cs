@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -10,8 +12,126 @@ using Discord.WebSocket;
 using Newtonsoft.Json;
 
 namespace AradiaBot
+
 {
-    internal class Database
+    static public class IDatabase
+    {
+        private static Database _db {  get; set; }
+
+        static IDatabase() { 
+        try
+        {
+            _db = JsonConvert.DeserializeObject<Database>(File.ReadAllText("db.json"));
+        }
+        catch (FileNotFoundException)
+        {
+            //If the file isn't found, make it
+            _db = new Database();
+            _db.SaveData();
+            Console.WriteLine("Database not found, initializing new one.");
+            
+        } catch (Exception exception)
+        {
+
+           //Something went terribly wrong, send it out to the Terminal
+            Console.WriteLine(exception);
+
+        }
+
+        }
+
+        public static void QuoteAdd(Quote quote, bool is_nsfw = false)
+        {
+            if (is_nsfw)
+            {
+                _db.NSFWQuotes.Add(quote);
+            }
+            else
+            {
+                _db.Quotes.Add(quote);
+            }
+            _db.SaveData();
+        }
+
+        public static int QuoteCount(bool is_nsfw = false)
+        {
+            if (is_nsfw)
+            {
+                return _db.NSFWQuotes.Count;
+            }
+            else { return _db.Quotes.Count; }
+        }
+
+        public static string QuoteFormatter(Quote quote, bool details=false)
+        {
+            return Quote.QuoteFormatter(_db, quote);
+        }
+
+        public static Quote QuoteGet(int quote_id, bool is_nsfw=false)
+        {
+
+            List<Quote> quotes = is_nsfw ? _db.NSFWQuotes : _db.Quotes;
+
+            Quote quote = quotes[quote_id - 1];
+
+            return quote;
+        }
+
+        public static void QuoteDelete(int quote_id, bool is_nsfw=false)
+        {
+            int quote_num = QuoteCount(is_nsfw);
+            if (quote_id > 0 && quote_id <= quote_num )
+            {
+                if (is_nsfw)
+                {
+                    _db.NSFWQuotes.RemoveAt(quote_id - 1);
+                }
+                else
+                {
+
+                    _db.Quotes.RemoveAt(quote_id - 1);
+                }
+            }
+            _db.SaveData();
+        }
+
+        public static void QuoteEdit(int quote_id, IUser? author_user, string? author_string, string? body, IUser? quoter, string? message_link, bool is_nsfw=false)
+        {
+            int quote_num = QuoteCount(is_nsfw);
+            if (quote_id > 0 && quote_id <= quote_num)
+            {
+                List<Quote> quotes = is_nsfw ? _db.NSFWQuotes : _db.Quotes;
+
+                if (author_user != null)
+                {
+                    quotes[quote_id - 1].Author = $"{author_user.Id}";
+                }
+
+                if (author_string != null)
+                {
+                    quotes[quote_id - 1].Author = author_string;
+                }
+
+                if (body != null)
+                {
+                    quotes[quote_id - 1].QuoteBody = body;
+                }
+
+                if (quoter != null)
+                {
+                    quotes[quote_id - 1].Quoter = quoter.Id;
+                }
+
+                if (quoter != null)
+                {
+                    quotes[quote_id - 1].MessageLink = message_link;
+                }
+
+                _db.SaveData();
+            }
+        }
+    }
+    public class Database
     {
         public List<ServerMember> Members { get; set; }
         public Dictionary<string, Dictionary<ulong, int>> GameScores { get; set; }

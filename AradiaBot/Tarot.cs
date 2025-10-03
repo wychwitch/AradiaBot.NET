@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AradiaBot
 {
-    internal class Tarot(string name, string rank, string suit, string planet, string element, string[] sign, Dictionary<string, string[]> meanings, string img, string rev_img)
+    public class Tarot(string name, string rank, string suit, string planet, string element, string[] sign, Dictionary<string, string[]> meanings, string img, string rev_img)
     {
         public string name { get; set; } = name;
         public string rank { get; set; } = rank;

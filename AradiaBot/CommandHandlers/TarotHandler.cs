@@ -1,5 +1,7 @@
 ﻿using Discord;
+using Discord.Interactions;
 using Discord.WebSocket;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,71 +11,63 @@ using System.Threading.Tasks;
 
 namespace AradiaBot.CommandHandlers
 {
-    internal class TarotHandler
+    public static class ITarot
     {
-        public static async Task ProcessSlashCommand(List<Tarot> tarotDeck, SocketSlashCommand command)
-        {
-            var commandName = command.Data.Options.First().Name;
-            Console.WriteLine(commandName);
-
-
-            switch (commandName)
+            private static List<Tarot> _deck { get; set; }
+            
+            static ITarot()
             {
-                case "draw":
-                    await DrawCards(tarotDeck, command);
-                    break;
+                try
+                {
+                    _deck = JsonConvert.DeserializeObject<List<Tarot>>(File.ReadAllText("StaticData/tarot.json"));
+                }
+                catch (Exception exception)
+                {
+                    //Something went terribly wrong, send it out to the Terminal
+                    Console.WriteLine(exception);
+                }
 
             }
-        }
-
-        public static async Task DrawCards(List<Tarot> tarotDeck, SocketSlashCommand command)
+        public static Tarot DrawCard()
         {
-            var commandOptions = command.Data.Options.First().Options;
+            Random random = new Random();
+            return _deck[random.Next(_deck.Count)];
+        }
+    }
+
+    [Discord.Interactions.Group("tarot", "sfw Quotes")]
+    internal class TarotHandler() : InteractionModuleBase<SocketInteractionContext>
+
+    {
+        
+        [SlashCommand("draw", "Draw a set of cards")]
+        public async Task DrawCards([MinValue(1)]int cards=1, bool reversed_allowed=true)
+        {
             Random random = new Random();
             List<string> spread = new();
-            int numberOfCards = 1;
             bool reversedPossible = true;
             List<FileAttachment> imgs = new List<FileAttachment>();
             EmbedBuilder embed = new EmbedBuilder();
 
 
-
-
-            if (commandOptions != null)
+            while (spread.Count < cards) 
             {
-                foreach (var commandOption in commandOptions)
-                {
-                    switch(commandOption.Name) 
-                    {
-                        case "cards":
-                            numberOfCards = Convert.ToInt32(commandOption.Value);
-                            break;
-                        case "reversed":
-                            reversedPossible = (bool)commandOption.Value;
-                            break;
-                    }
-                }
-            }
-
-            while (spread.Count < numberOfCards) 
-            {
-                int isReversed = 1;
                 string reversedUprightText;
                 string reversedUprightTitleText;
                 string keywordsFormatted;
+                int isReversed = 1;
                 List<string> keywords = new List<string>();
-                Tarot card = tarotDeck[random.Next(tarotDeck.Count)];
                 string cardImg;
+                Tarot card = ITarot.DrawCard();
                 if (spread.Contains(card.name))
                 {
                     continue;
                 }
 
-                if (reversedPossible)
+                if (reversed_allowed)
                 {
                     isReversed = random.Next(2);
                 }
-
                 reversedUprightText = (isReversed == 1) ? "upright" : "reversed";
                 reversedUprightTitleText = (isReversed == 1) ? "" : "Reversed ";
                 cardImg = (isReversed == 1)? card.img : card.rev_img;
@@ -98,11 +92,6 @@ namespace AradiaBot.CommandHandlers
 
                 keywordsFormatted = String.Join(", ", keywords);
 
-               
-               
-                    
-                
-
 
                 EmbedFieldBuilder embedField = new EmbedFieldBuilder()
                 .WithIsInline(true)
@@ -116,9 +105,9 @@ namespace AradiaBot.CommandHandlers
 
             }
 
-            embed.Title = (numberOfCards == 1) ? "Spread" : $"{numberOfCards} Card Spread";
+            embed.Title = (cards== 1) ? "Spread" : $"{cards} Card Spread";
 
-            await command.RespondWithFilesAsync(imgs, embed: embed.Build());
+            await RespondWithFilesAsync(imgs, embed: embed.Build());
 
         }
     }
