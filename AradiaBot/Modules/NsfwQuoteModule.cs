@@ -12,12 +12,13 @@ using Discord.WebSocket;
 using System.Reflection;
 using Discord.Commands;
 using Newtonsoft.Json;
+using AradiaBot.Classes;
 
-namespace AradiaBot.CommandHandlers
+namespace AradiaBot.Modules
 {
 
     [Discord.Interactions.Group("nsfw-quote", "nsfw Quotes")]
-    internal class NSFWQuoteHandler() : InteractionModuleBase<SocketInteractionContext>
+    internal class NsfwQuoteModule() : InteractionModuleBase<SocketInteractionContext>
     {
    
         string AddQuote(Quote quote, bool is_nsfw=false)
@@ -63,11 +64,11 @@ namespace AradiaBot.CommandHandlers
 
                 IDatabase.QuoteDelete(quote_id, true);
 
-                await ModifyOriginalResponseAsync(x => x.Content = $"Deleted the following quote: \n\n {formattedQuote}");
+                await RespondAsync($"Deleted the following quote: \n\n {formattedQuote}");
             }
             else
             {
-                await ModifyOriginalResponseAsync(x => x.Content = "Couldn't find that quote.");
+                await RespondAsync("Couldn't find that quote.");
             }
         }
 
@@ -85,18 +86,18 @@ namespace AradiaBot.CommandHandlers
                     && message_link == null)
                 {
 
-                    await ModifyOriginalResponseAsync(x => x.Content = "You need to provide an edit!");
+                    await RespondAsync("You need to provide an edit!");
                 }
                 else {
                     IDatabase.QuoteEdit(quote_id, author_user, author_string, body, quoter, message_link, true);
                     Quote edited_quote = IDatabase.QuoteGet(quote_id, true);
                     string formattedQuote = IDatabase.QuoteFormatter(edited_quote); 
-                    await ModifyOriginalResponseAsync(x => x.Content = $"Edited quote #" + $"{quote_id}\n\n{formattedQuote}");
+                    await RespondAsync($"Edited quote #" + $"{quote_id}\n\n{formattedQuote}");
                 }
             }
             else
             {
-                await ModifyOriginalResponseAsync(x => x.Content = $"That number is too large! There are only {quote_count} in the database");
+                await RespondAsync($"That number is too large! There are only {quote_count} nsfw quotes in the database");
             }
         }
 
@@ -105,7 +106,7 @@ namespace AradiaBot.CommandHandlers
         public async Task CountQuote()
         {
             int count = IDatabase.QuoteCount(true);
-            await ModifyOriginalResponseAsync(x => x.Content = $"There are {count} quotes in the database!");
+            await RespondAsync($"There are {count} nsfw quotes in the database!");
         }
 
         [SlashCommand("add-dynamic", "add quote with dynamic")]
@@ -116,7 +117,7 @@ namespace AradiaBot.CommandHandlers
 
             string response = AddQuote(quote, true);
 
-            await ModifyOriginalResponseAsync(x => x.Content = response);
+            await RespondAsync(response);
 
 
         }
@@ -129,7 +130,7 @@ namespace AradiaBot.CommandHandlers
 
             string response = AddQuote(quote, true);
 
-            await ModifyOriginalResponseAsync(x => x.Content = response);
+            await RespondAsync(response);
         }
 
         [SlashCommand("rain", "get a random bunch of quotes")]
@@ -145,7 +146,7 @@ namespace AradiaBot.CommandHandlers
                 Quote quote = IDatabase.QuoteGet(num, true);
                 responseString += $"#{num + 1} {IDatabase.QuoteFormatter(quote)}\n";
             }
-            await ModifyOriginalResponseAsync(x => x.Content = responseString);
+            await RespondAsync(responseString);
         }
 
 
@@ -156,13 +157,13 @@ namespace AradiaBot.CommandHandlers
             var author = msg.Author;
             var quoter = Context.User;
             var body = msg.Content;
-            var messageLink = Discord.MessageExtensions.GetJumpUrl(msg);
+            var messageLink = msg.GetJumpUrl();
 
             Quote quote = new Quote(author, quoter, body, messageLink);
 
             string response = AddQuote(quote, true);
 
-            await ModifyOriginalResponseAsync(x => x.Content = response);
+            await RespondAsync(response);
         }
 
         

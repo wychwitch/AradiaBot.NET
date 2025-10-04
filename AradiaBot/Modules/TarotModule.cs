@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using AradiaBot.Classes;
+using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
 using Newtonsoft.Json;
@@ -9,34 +10,11 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AradiaBot.CommandHandlers
+namespace AradiaBot.Modules
 {
-    public static class ITarot
-    {
-            private static List<Tarot> _deck { get; set; }
-            
-            static ITarot()
-            {
-                try
-                {
-                    _deck = JsonConvert.DeserializeObject<List<Tarot>>(File.ReadAllText("StaticData/tarot.json"));
-                }
-                catch (Exception exception)
-                {
-                    //Something went terribly wrong, send it out to the Terminal
-                    Console.WriteLine(exception);
-                }
-
-            }
-        public static Tarot DrawCard()
-        {
-            Random random = new Random();
-            return _deck[random.Next(_deck.Count)];
-        }
-    }
-
-    [Discord.Interactions.Group("tarot", "sfw Quotes")]
-    internal class TarotHandler() : InteractionModuleBase<SocketInteractionContext>
+   
+    [Group("tarot", "sfw Quotes")]
+    internal class TarotModule() : InteractionModuleBase<SocketInteractionContext>
 
     {
         
@@ -68,9 +46,9 @@ namespace AradiaBot.CommandHandlers
                 {
                     isReversed = random.Next(2);
                 }
-                reversedUprightText = (isReversed == 1) ? "upright" : "reversed";
-                reversedUprightTitleText = (isReversed == 1) ? "" : "Reversed ";
-                cardImg = (isReversed == 1)? card.img : card.rev_img;
+                reversedUprightText = isReversed == 1 ? "upright" : "reversed";
+                reversedUprightTitleText = isReversed == 1 ? "" : "Reversed ";
+                cardImg = isReversed == 1? card.img : card.rev_img;
 
                 spread.Add(card.name);
 
@@ -90,7 +68,7 @@ namespace AradiaBot.CommandHandlers
                     i++;
                 }
 
-                keywordsFormatted = String.Join(", ", keywords);
+                keywordsFormatted = string.Join(", ", keywords);
 
 
                 EmbedFieldBuilder embedField = new EmbedFieldBuilder()
@@ -105,7 +83,7 @@ namespace AradiaBot.CommandHandlers
 
             }
 
-            embed.Title = (cards== 1) ? "Spread" : $"{cards} Card Spread";
+            embed.Title = cards== 1 ? "Spread" : $"{cards} Card Spread";
 
             await RespondWithFilesAsync(imgs, embed: embed.Build());
 

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AradiaBot
+namespace AradiaBot.Classes
 {
-    internal class ServerMemberSettings
+    public class ServerMemberSettings
     {
         public List<string> PingNames { get; set; } = [];
         public bool UseNickname { get; set; } = true;

@@ -6,10 +6,10 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace AradiaBot
+namespace AradiaBot.Classes
 {
     [method: JsonConstructor]
-    internal class ServerMember(ulong id)
+    public class ServerMember(ulong id)
     {
         public ulong Id { get; set; } = id;
         public string NickName { get; set; } = "";

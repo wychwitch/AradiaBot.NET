@@ -3,9 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
-namespace AradiaBot
+namespace AradiaBot.Classes
 {
+ public static class ITarot
+    {
+            private static List<Tarot> _deck { get; set; }
+            
+            static ITarot()
+            {
+                try
+                {
+                    _deck = JsonConvert.DeserializeObject<List<Tarot>>(File.ReadAllText("StaticData/tarot.json"));
+                }
+                catch (Exception exception)
+                {
+                    //Something went terribly wrong, send it out to the Terminal
+                    Console.WriteLine(exception);
+                }
+
+            }
+        public static Tarot DrawCard()
+        {
+            Random random = new Random();
+            return _deck[random.Next(_deck.Count)];
+        }
+    }
+
     public class Tarot(string name, string rank, string suit, string planet, string element, string[] sign, Dictionary<string, string[]> meanings, string img, string rev_img)
     {
         public string name { get; set; } = name;

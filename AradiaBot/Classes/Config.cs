@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace AradiaBot
+namespace AradiaBot.Classes
 {
     internal class Config
     {

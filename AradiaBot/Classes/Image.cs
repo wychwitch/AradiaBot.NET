@@ -10,8 +10,26 @@ using System.Net.Http;
 using System.Net;
 
 
-namespace AradiaBot
+namespace AradiaBot.Classes
 {
+    static public class ImageServerInterface
+    {
+        private static ImageServer _imageServer { get; set; }
+
+        static ImageServerInterface()
+        {
+            Config config = JsonConvert.DeserializeObject<Config>(File.ReadAllText("config.json"));
+            _imageServer =  new ImageServer(config.ImageServerUrl, config.ImageServerToken);
+        }
+
+        public async static Task<string> UploadAttachment(IAttachment attachment)
+        {
+            string? url = await _imageServer.Upload(attachment);
+            return url;
+
+        }
+    }
+
     internal class ResultObj
     {
         public string? Url { get; set; }
@@ -75,7 +93,7 @@ namespace AradiaBot
         }
 
     }
-    internal class React
+    public class React
     {
         public ulong Uploader { get; set; }
         public Image Image_SRC { get; set; }
@@ -93,7 +111,7 @@ namespace AradiaBot
         
     }
 
-    internal class Image
+    public class Image
     {
         public string? Link { get; set; }
         public DateTime? Timestamp { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Discord;
 using Newtonsoft.Json;
 
-namespace AradiaBot
+namespace AradiaBot.Classes
 {
     public class Quote
     {

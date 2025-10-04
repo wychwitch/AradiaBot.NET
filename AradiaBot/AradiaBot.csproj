@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Discord.Addons.Hosting" Version="6.1.0" />
     <PackageReference Include="Discord.Net" Version="3.18.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-rc.1.25451.107" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.0-rc.1.25451.107" />
@@ -536,10 +537,6 @@
     <None Update="StaticData\WordLists\pokemon_moves.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Commands\" />
   </ItemGroup>
 
 </Project>
