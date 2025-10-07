@@ -50,34 +50,34 @@ namespace AradiaBot.Classes
 
         public async Task<string?> Upload(IAttachment attachment, string id)
         {
-            Console.WriteLine("in Upload Attachment");
-            Console.WriteLine(attachment.ContentType);
             string responseString;
-            MultipartFormDataContent form = new MultipartFormDataContent();
             if (attachment.ContentType.Contains("image") || attachment.ContentType.Contains("video"))
             
             {
-                Console.WriteLine("in the if");
                 string output = $"./temp/temp_{attachment.Filename}";
                 if (!Directory.Exists("./temp/"))
                 {
                     Directory.CreateDirectory("./temp/");
                 }
 
-         
+                //This section is downloading the file from the discord message
                 var httpResult = await HClient.GetAsync(attachment.ProxyUrl);
                 var resultStream = await httpResult.Content.ReadAsStreamAsync();
                 var fileStream = File.Create(output);
                 await resultStream.CopyToAsync(fileStream);
                 fileStream.Close();
+
+                //getting the binary data from the temp download
                 var byteArray = File.ReadAllBytes(output);
                 var content = new ByteArrayContent(byteArray);
                 string file_ext = attachment.Filename.Split('.').Last();
-                string url_string = $"{URL}?j&pw={Password}";
-                Console.WriteLine(url_string);
                 id = id.Replace(" ", "-");
-                form.Add(content, "file", $"{id}.{file_ext}");
-                var response = await HClient.PostAsync(url_string, form);
+                //url is formatted like https://copyarty.a.com/folder/
+                //Putting the password in the url is the only way it has worked for me
+                //I get a forbidden, so I th
+                string url_string = $"{URL}{id}.{file_ext}?j&pw={Password}";
+                Console.WriteLine(url_string);
+                var response = await HClient.PutAsync(url_string, content);
                 responseString = await response.Content.ReadAsStringAsync();
                 ResultObj? obj = JsonConvert.DeserializeObject<ResultObj>(responseString);
                 Console.WriteLine(responseString);
