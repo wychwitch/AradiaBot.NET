@@ -87,8 +87,34 @@ public class Program
 
         _client.Ready += Client_Ready;
 
+        Console.CancelKeyPress += async delegate
+        {
+            Console.WriteLine("Quitting!");
+            if ((bool)config.debug)
+            {
+                Console.WriteLine("debug!");
+
+                foreach (ulong id in _guildIDs)
+                {
+                    Console.WriteLine("removing modules");
+                    await _interactionService.RemoveModuleAsync<DatabaseModule>();
+                    await _interactionService.RemoveModuleAsync<AZGameModule>();
+                    await _interactionService.RemoveModuleAsync<DatabaseModule>();
+                    await _interactionService.RemoveModuleAsync<NsfwQuoteModule>();
+                    await _interactionService.RemoveModuleAsync<QuoteModule>();
+                    await _interactionService.RemoveModuleAsync<ReactModule>();
+                    await _interactionService.RemoveModuleAsync<TarotModule>();
+                    await _interactionService.RemoveModuleAsync<ReactButtonsModule>();
+
+                    await _interactionService.RegisterCommandsToGuildAsync(id);
+                }
+            }
+        };
+
         
         await Task.Delay(-1);
+
+
     }
 
     //Handler that gets fired every time the bot sees a message in a channel

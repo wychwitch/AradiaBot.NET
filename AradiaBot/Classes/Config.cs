@@ -16,6 +16,9 @@ namespace AradiaBot.Classes
         public string palmrPassword{ get; set; }
         public string ImageServerUrl { get; set; }
         public string ImageServerToken { get; set; }
+        public string ImageServerPass { get; set; }
+
+        public bool? debug { get; set; }
 
         
     }

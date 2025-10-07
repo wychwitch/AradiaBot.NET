@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace AradiaBot.Modules
 {
    
-    [Group("tarot", "sfw Quotes")]
+    [Group("tarot", "Tarot cards")]
     internal class TarotModule() : InteractionModuleBase<SocketInteractionContext>
 
     {

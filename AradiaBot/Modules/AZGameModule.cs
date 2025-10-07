@@ -55,11 +55,10 @@ namespace AradiaBot.Modules
         public async Task QuitAZGameHandler()
         {
             string response_string = IDatabase.QuitAZGame();
-
             await RespondAsync(response_string);
         }
 
-        [SlashCommand("get-range", "gets range")]
+        [SlashCommand("range", "gets range")]
         public async Task GetRange()
         {
             string response_string = IDatabase.GetRange();
@@ -67,10 +66,11 @@ namespace AradiaBot.Modules
         }
 
 
-        [SlashCommand("get-scores", "quit")]
+        [SlashCommand("scores", "gets the score!")]
         public async Task GetScores()
         {
             string response_string = IDatabase.GetScores();
+            await RespondAsync($"{response_string}");
         }
 
     }

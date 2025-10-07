@@ -13,8 +13,8 @@ using AradiaBot.Classes;
 
 namespace AradiaBot.Modules
 {
-    [Discord.Interactions.Group("react", "sfw Quotes")]
-    internal class ReactModule() : InteractionModuleBase<SocketInteractionContext>
+    [Discord.Interactions.Group("react", "reaction photos!")]
+    public class ReactModule() : InteractionModuleBase<SocketInteractionContext>
 
     {
         
@@ -73,7 +73,7 @@ namespace AradiaBot.Modules
 
         }
 
-        [SlashCommand("get", "add reaction images")]
+        [SlashCommand("get", "posts a reaction images")]
         public async Task Get([Autocomplete]string id)
         {
             string response_string = IDatabase.GetReaction(id);
@@ -88,4 +88,5 @@ namespace AradiaBot.Modules
             await RespondAsync(response);
         }
     }
+
 }

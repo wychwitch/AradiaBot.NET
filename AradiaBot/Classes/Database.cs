@@ -279,7 +279,7 @@ namespace AradiaBot.Classes
             }
             else
             {
-                string? url = await ImageServerInterface.UploadAttachment(attachment);
+                string? url = await ImageServerInterface.UploadAttachment(attachment, id);
                 if (url != null)
                 {
                     Image image = new Image(url);
@@ -377,7 +377,7 @@ namespace AradiaBot.Classes
         {
             if (_db.IsGLobalAZGameRunning())
             {
-                 return $"Range: {_db.GlobalGameState.rangeStart} - {_db.GlobalGameState.rangeEnd}";
+                 return $"${IAZGame._available_az_games[_db.GlobalGameState.gameKey].Name}\nRange: {_db.GlobalGameState.rangeStart} - {_db.GlobalGameState.rangeEnd}";
             }
             else
             {
