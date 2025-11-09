@@ -565,7 +565,7 @@ namespace AradiaBot.Classes
         public async Task CheckPings(DiscordSocketClient client, SocketMessage message)
         {
             
-            string messageContent = message.Content;
+            string messageContent = message.Content.Replace("\n", "\n> ");
             HashSet<int> memberIndexes = new();
             for (var i = 0; i < Members.Count; i++)
             {
