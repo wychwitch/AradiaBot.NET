@@ -664,6 +664,11 @@ namespace AradiaBot.Classes
                 }
                 
             }
+            
+            if (message.Content.ToLower() == "good bot")
+            {
+                await message.AddReactionAsync(Emote.Parse("<:squeak:938411254823927808>"));
+            }
         }
 
         public bool IsGLobalAZGameRunning()
