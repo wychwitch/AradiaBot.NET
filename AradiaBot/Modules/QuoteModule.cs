@@ -73,7 +73,7 @@ namespace AradiaBot.Modules
         }
 
         [SlashCommand("edit", "Edits a quote")]
-        public async Task EditQuote([MinValue(1)] int quote_id, IUser? author_user, string? author_string, string? body, IUser? quoter, string? message_link)
+        public async Task EditQuote([MinValue(1)] int quote_id, IUser? author_user = null, string? author_string = null, string? body = null, IUser? quoter = null, string? message_link = null)
         {
             int quote_count = IDatabase.QuoteCount();
 
