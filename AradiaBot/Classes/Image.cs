@@ -8,6 +8,7 @@ using Discord;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net;
+using System.Diagnostics;
 
 
 namespace AradiaBot.Classes
@@ -28,6 +29,16 @@ namespace AradiaBot.Classes
             return url;
 
         }
+
+        public async static Task<bool> DeleteMedia(string filename)
+        {
+            return await _imageServer.Delete(filename);
+        }
+        public async static Task<(bool, string?)> RenameFile(string filename, string new_filename)
+        {
+            return await _imageServer.Rename(filename, new_filename);
+        }
+
     }
 
     internal class ResultObj
@@ -74,7 +85,6 @@ namespace AradiaBot.Classes
                 id = id.Replace(" ", "-");
                 //url is formatted like https://copyarty.a.com/folder/
                 //Putting the password in the url is the only way it has worked for me
-                //I get a forbidden, so I th
                 string url_string = $"{URL}{id}.{file_ext}?j&pw={Password}";
                 Console.WriteLine(url_string);
                 var response = await HClient.PutAsync(url_string, content);
@@ -90,14 +100,53 @@ namespace AradiaBot.Classes
                 }   
                 else
                 {
-                    Console.WriteLine("Nope!");
+                    Console.WriteLine("Nope! Upload Failed!");
                     return null;
                 }
             }
             return null;
         }
 
+
+        public async Task<(bool, string?)> Rename(string filename, string new_filename)
+        {
+            string aradia_bot_folder = URL[URL.LastIndexOf("aradiabot_reaction_images/")..];
+           
+            new_filename = new_filename.Replace(" ", "-");
+
+            string url_string = $"{URL}{filename}";
+            var response = await HClient.PostAsync($"{url_string}?move=/{aradia_bot_folder}{new_filename}&pw={Password}", null);
+
+            string new_url = $"{URL}{new_filename}";
+            Console.WriteLine(response);
+            Console.WriteLine(new_url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Renamed!");
+                return (true, new_filename);
+            }
+            Console.WriteLine("Failed to rename!");
+            return (false, null);
+        }
+
+        public async Task<bool> Delete(string filename)
+        {
+            string url_string = $"{URL}{filename}";
+            var response = await HClient.PostAsync($"{url_string}?delete&pw={Password}", null);
+            Console.WriteLine(response);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Deleted!");
+                return true;
+            }
+            Console.WriteLine("Failed to delete!");
+            return false;
+        }
+
     }
+
     public class React
     {
         public ulong Uploader { get; set; }

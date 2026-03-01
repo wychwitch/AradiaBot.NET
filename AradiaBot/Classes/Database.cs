@@ -296,6 +296,80 @@ namespace AradiaBot.Classes
             return response_string;
         }
 
+        public async static Task<string> EditReaction(string original_id, IAttachment? attachment=null, string? new_id = null)
+        {
+            string id = original_id.ToLower();
+            string response_string = "";
+            List<string> responses = new List<string>();
+            if (!_db.ReactionImages.ContainsKey(id))
+            {
+                response_string = $"No reaction named `{id}` found!";
+            }
+            else
+            {
+                React reaction = _db.ReactionImages[id];
+                if (new_id != null)
+                {
+                    if (_db.ReactionImages.ContainsKey(new_id))
+                    {
+                        return $"There's another reaction with the name `{new_id}`!";
+                    }
+                    id = new_id;
+                    if (attachment == null)
+                    {
+                        string old_image_filename = reaction.GetLink().Split("/").Last();
+                        string file_type = old_image_filename.Split(".").Last();
+                        (bool, string?) renamed_file = await ImageServerInterface.RenameFile(old_image_filename, $"{new_id}.{file_type}");
+                        if (renamed_file.Item1 && renamed_file.Item2 != null)
+                        {
+                            Console.WriteLine("renamed file!");
+                            Image image = new Image(renamed_file.Item2);
+                            reaction.Image_SRC = image;
+                        }
+                        else
+                        {
+                            Console.WriteLine("whoops mistake was made");
+                        }
+
+
+                    }
+                    responses.Add("changed Reaction Id");
+                }
+
+                if (attachment != null)
+                {
+                    string old_image_filename = reaction.GetLink().Split("/").Last();
+                    bool image_deleted = await ImageServerInterface.DeleteMedia(old_image_filename);
+
+                    if (image_deleted)
+                    {
+                        string? url = await ImageServerInterface.UploadAttachment(attachment, id);
+                        if (url != null)
+                        {
+                            Image image = new Image(url);
+                            reaction.Image_SRC = image;
+                            responses.Add("changed Image");
+                        }
+                        else
+                        {
+                            return "Uploading failed! Whoops! Something broke Badly!";
+                        }
+                    }
+                    else
+                    {
+                        return "Couldn't delete old image!";
+                    }
+                }
+
+                _db.ReactionImages.Remove(original_id);
+                _db.ReactionImages.Add(id, reaction);
+                _db.SaveData();
+
+                response_string = string.Join(" and ", responses);
+            }
+            return response_string;
+        }
+
         public static string GetReaction(string id)
         {
             id = id.ToLower();
@@ -309,6 +383,7 @@ namespace AradiaBot.Classes
             }
             else
             {
+           
                 content = $"{id} couldn't be found!";
             }
 

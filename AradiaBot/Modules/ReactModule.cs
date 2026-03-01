@@ -87,6 +87,28 @@ namespace AradiaBot.Modules
             string response = IDatabase.DeleteReaction(id);
             await RespondAsync(response);
         }
+
+        [SlashCommand("edit", "edit a reaction image")]
+        public async Task Add(string id, IAttachment? attachment=null, string? new_id=null)
+        {
+            await DeferAsync();
+            string response_string;
+
+            if (attachment == null && new_id == null)
+            {
+                response_string = "You need to give an edit!"; 
+            }
+            else
+            {
+
+                Console.WriteLine("Edit Entered");
+                response_string = await IDatabase.EditReaction(id, attachment, new_id);
+            }
+            
+            await ModifyOriginalResponseAsync(x => x.Content = response_string); 
+
+        }
+
     }
 
 }
