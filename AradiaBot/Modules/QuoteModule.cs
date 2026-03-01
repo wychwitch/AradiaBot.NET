@@ -59,7 +59,7 @@ namespace AradiaBot.Modules
 
             if (quote_id <= quotes_count)
             {
-                Quote quote = IDatabase.QuoteGet(quote_id - 1);
+                Quote quote = IDatabase.QuoteGet(quote_id);
                 string formattedQuote = IDatabase.QuoteFormatter(quote);
 
                 IDatabase.QuoteDelete(quote_id);
