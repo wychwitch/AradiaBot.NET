@@ -108,6 +108,8 @@ public class Program
 
                     await _interactionService.RegisterCommandsToGuildAsync(id);
                 }
+                Console.WriteLine("Modules removed! Stopping now");
+                Environment.Exit(0);
             }
         };
 
