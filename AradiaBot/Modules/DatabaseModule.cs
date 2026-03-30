@@ -35,7 +35,7 @@ namespace AradiaBot.Modules
             }
 
             [SlashCommand("edit", "edit your settings")]
-            public async Task EditSettings(string? add_ping, string? remove_ping, bool? use_nickname, [Summary(description: "consolidate az scores")] bool? consolidate_az_scores, string? new_nickname)
+            public async Task EditSettings(string? add_ping = null, string? remove_ping = null, bool? use_nickname = null, [Summary(description: "consolidate az scores")] bool? consolidate_az_scores = null, string? new_nickname = null)
             {
                 string responseString = "";
                 IUser user = Context.User;
