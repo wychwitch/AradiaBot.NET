@@ -13,6 +13,7 @@ using System.Reflection;
 using Discord.Commands;
 using Newtonsoft.Json;
 using AradiaBot.Classes;
+using System.Diagnostics.Tracing;
 
 namespace AradiaBot.Modules
 {
@@ -49,13 +50,13 @@ namespace AradiaBot.Modules
             }
             else
             {
-                Quote quote = IDatabase.QuoteGet(quote_id); 
-                string quoteString = IDatabase.QuoteFormatter(quote, details); 
+                Quote quote = IDatabase.QuoteGet(quote_id);
+                string quoteString = IDatabase.QuoteFormatter(quote, details);
                 string formattedQuote = $"#{quote_id} " + quoteString;
                 response_string = formattedQuote;
             }
 
-            await ModifyOriginalResponseAsync(x => x.Content = response_string); 
+            await ModifyOriginalResponseAsync(x => { x.Content = response_string; x.AllowedMentions = new AllowedMentions(AllowedMentionTypes.None); }); 
         }
 
         [SlashCommand("delete", "Deletes a quote")]
@@ -78,7 +79,7 @@ namespace AradiaBot.Modules
             {
                 response_string = "Couldn't find that quote.";
             }
-            await ModifyOriginalResponseAsync(x => x.Content = response_string); 
+            await ModifyOriginalResponseAsync(x => { x.Content = response_string; x.AllowedMentions = new AllowedMentions(AllowedMentionTypes.None); }); 
         }
 
         [SlashCommand("edit", "Edits a quote")]
@@ -111,7 +112,7 @@ namespace AradiaBot.Modules
                 response_string = $"That number is too large! There are only {quote_count} in the database";
             }
 
-            await ModifyOriginalResponseAsync(x => x.Content = response_string); 
+            await ModifyOriginalResponseAsync(x => { x.Content = response_string; x.AllowedMentions = new AllowedMentions(AllowedMentionTypes.None); }); 
         }
 
         //[SlashCommand("","")]
@@ -132,7 +133,7 @@ namespace AradiaBot.Modules
 
             string response_string = AddQuote(quote);
 
-            await ModifyOriginalResponseAsync(x => x.Content = response_string); 
+            await ModifyOriginalResponseAsync(x => { x.Content = response_string; x.AllowedMentions = new AllowedMentions(AllowedMentionTypes.None); }); 
 
 
         }
@@ -146,7 +147,7 @@ namespace AradiaBot.Modules
 
             string response_string = AddQuote(quote);
 
-            await ModifyOriginalResponseAsync(x => x.Content = response_string); 
+            await ModifyOriginalResponseAsync(x => { x.Content = response_string; x.AllowedMentions = new AllowedMentions(AllowedMentionTypes.None); }); 
         }
 
         [SlashCommand("rain", "get a random bunch of quotes")]
@@ -163,7 +164,7 @@ namespace AradiaBot.Modules
                 Quote quote = IDatabase.QuoteGet(num);
                 response_string += $"#{num + 1} {IDatabase.QuoteFormatter(quote)}\n";
             }
-            await ModifyOriginalResponseAsync(x => x.Content = response_string); 
+            await ModifyOriginalResponseAsync(x => { x.Content = response_string; x.AllowedMentions = new AllowedMentions(AllowedMentionTypes.None); }); 
         }
 
 
@@ -181,7 +182,7 @@ namespace AradiaBot.Modules
 
             string response_string = AddQuote(quote, false);
 
-            await ModifyOriginalResponseAsync(x => x.Content = response_string); 
+            await ModifyOriginalResponseAsync(x => { x.Content = response_string; x.AllowedMentions = new AllowedMentions(AllowedMentionTypes.None); }); 
         }
 
         

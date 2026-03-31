@@ -31,7 +31,7 @@ public class Program
     private static List<Tarot> _tarotDeck;
     private static ImageServer _imageServer;
     private static InteractionService _interactionService;
-    public static string _version = "1.0.1";
+    public static string _version = "1.0.3";
 
     private static IServiceProvider _services;
 
