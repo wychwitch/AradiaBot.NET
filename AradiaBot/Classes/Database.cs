@@ -53,6 +53,11 @@ namespace AradiaBot.Classes
             _db.SaveData();
         }
 
+        public static List<Quote> SearchQuotes(string? author_string, IUser? author_user, string? quoter_string, IUser? quoter_user, string? body, bool isNSFW)
+        {
+
+        }
+
         public static int QuoteCount(bool is_nsfw = false)
         {
             if (is_nsfw)

@@ -89,6 +89,13 @@ namespace AradiaBot.Modules
         }
 
 
+        [SlashCommand("search", "searches the quotes")]
+        public async Task SearchQuote(string? author_string = null, IUser? author_user = null, string? quoter_string = null, IUser? quoter_user = null, string? body = null)
+        {
+            await QuoteModuleBase.SearchQuote(author_string, author_user, quoter_string, quoter_user, body);
+        }
+
+
         [MessageCommand("Add Quote")]
         public async Task AddSFWQuoteMenu(IMessage msg)
         {

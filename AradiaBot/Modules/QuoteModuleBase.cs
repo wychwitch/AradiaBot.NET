@@ -156,6 +156,14 @@ public static class QuoteModuleBase
         return response_string;
         }
 
+        static public async Task<string> SearchQuote(string? author_string, IUser? author_user, string? quoter_string, IUser? quoter_user, string? body, bool isNSFW = false) 
+        {
+            string response_string = "";
+        List<Quote> found_quotes = IDatabase.SearchQuotes(author_string, author_user, quoter_string, quoter_user, body, isNSFW);
+        //set up paginaiton
+        return response_string;
+        }
+
 
     }
 
