@@ -18,6 +18,8 @@ namespace AradiaBot.Classes
     {
         private static Database _db {  get; set; }
 
+        private static List<string> _quote_search_results {  get; set; }
+
         static IDatabase() { 
         try
         {
@@ -53,8 +55,114 @@ namespace AradiaBot.Classes
             _db.SaveData();
         }
 
-        public static List<Quote> SearchQuotes(string? author_string, IUser? author_user, string? quoter_string, IUser? quoter_user, string? body, bool isNSFW)
+        public static List<string> GetQuoteSearch()
         {
+            return _quote_search_results;
+        }
+
+        public static List<(int, Quote)> SearchQuotes(string? author_string, IUser? author_user, string? quoter_string, IUser? quoter_user, string? body, bool isNSFW)
+        {
+            List<Quote> all_quotes = isNSFW ? _db.NSFWQuotes : _db.Quotes;
+
+            List<string> author_nickname_ids = new List<string>();
+
+            List<ulong?> quoter_nickname_ids = new List<ulong?>();
+
+            List<(int, Quote)> filtered_quotes = new List<(int, Quote)>();
+
+            for (int i = 0; i < all_quotes.Count; i++)
+            {
+                filtered_quotes.Add((i, all_quotes[i]));
+            }
+
+
+            // Moving to the user id to the list
+            if (author_user != null)
+            {
+                string author_id  = author_user.Id.ToString();
+                author_nickname_ids.Add(author_id.ToString());
+            }
+
+            // moving the user id to the list
+            if (quoter_user != null)
+            {
+                quoter_nickname_ids.Add(quoter_user.Id);
+            }
+
+
+            if (author_string != null || author_user != null)
+            {
+                if (author_string != null)
+                {
+                    foreach (ServerMember member in _db.Members)
+                    {
+                        if (member.NickName != null && member.NickName.ToLower() == author_string.ToLower())
+                        {
+                            author_nickname_ids.Add(member.Id.ToString());
+                        }
+                    }
+
+                }
+               
+                List<(int, Quote)> found_quotes = new List<(int, Quote)>();
+
+                foreach ((int, Quote) quote_pair in filtered_quotes)
+                {
+                    if (author_string != null && quote_pair.Item2.Author.ToLower() == author_string.ToLower())
+                    {
+                        found_quotes.Add(quote_pair);
+                    }
+                    else if (author_nickname_ids.Contains(quote_pair.Item2.Author))
+                    {
+                        found_quotes.Add(quote_pair);
+                    }
+                }
+                filtered_quotes = found_quotes;
+            }
+
+            if (quoter_string != null || quoter_user != null)
+            {
+                if (quoter_string != null)
+                {
+                    foreach (ServerMember member in _db.Members)
+                    {
+                        if (member.NickName != null && member.NickName.ToLower() == quoter_string.ToLower())
+                        {
+                            quoter_nickname_ids.Add(member.Id);
+                        }
+                    }
+                }
+
+                List<(int,Quote)> found_quotes = new List<(int, Quote)>();
+
+                foreach ((int, Quote) quote_pair in filtered_quotes)
+                {
+                    if (quote_pair.Item2.Quoter != null && quoter_nickname_ids.Contains(quote_pair.Item2.Quoter))
+                    {
+                        found_quotes.Add(quote_pair);
+                    }
+                    if (quoter_user != null && quoter_user.Id == quote_pair.Item2.Quoter)
+                    {
+                        found_quotes.Add(quote_pair);
+                    }
+                }
+                filtered_quotes = found_quotes;
+            }
+
+            if (body != null)
+            {
+                List<(int,Quote)> found_quotes = new List<(int, Quote)>();
+                foreach ((int, Quote) quote_pair in filtered_quotes)
+                {
+                    if (quote_pair.Item2.QuoteBody.ToLower().Contains(body.ToLower()))
+                    {
+                        found_quotes.Add(quote_pair);
+                    }
+                }
+                filtered_quotes = found_quotes;
+            }
+
+            return filtered_quotes;
 
         }
 
@@ -243,6 +351,38 @@ namespace AradiaBot.Classes
 
             }
         }
+
+        public static List<string> PaginateQuoteSearch(List<(int, Quote)> quotes)
+        {
+
+
+            List<string> contentArray = [];
+            var reacts = _db.ReactionImages;
+            int contentArrayIndex = 0;
+            contentArray.Add("");
+            for (var i = 0; i < quotes.Count; i++)
+            {
+                string formattedQuote = QuoteFormatter(quotes[i].Item2);
+                formattedQuote = $"{quotes[i].Item1 +1}: {formattedQuote}";
+                var newContent = contentArray[contentArrayIndex] + formattedQuote;
+                if (newContent.Length + 2 > 1000)
+                {
+                    contentArrayIndex++;
+                    contentArray.Add("");
+                    newContent = formattedQuote;
+                }
+                if (i < quotes.Count - 1)
+                {
+                    newContent += "\n";
+                }
+                contentArray[contentArrayIndex] = newContent;
+            }
+
+            _quote_search_results = contentArray;
+            return contentArray;
+
+        }
+
 
         public static List<string> PaginateReactionNames()
         {

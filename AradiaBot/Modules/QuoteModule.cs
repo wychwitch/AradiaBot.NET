@@ -92,7 +92,50 @@ namespace AradiaBot.Modules
         [SlashCommand("search", "searches the quotes")]
         public async Task SearchQuote(string? author_string = null, IUser? author_user = null, string? quoter_string = null, IUser? quoter_user = null, string? body = null)
         {
-            await QuoteModuleBase.SearchQuote(author_string, author_user, quoter_string, quoter_user, body);
+            await DeferAsync();
+    
+            if (author_string != null && author_user != null)
+            {
+
+                await ModifyOriginalResponseAsync(x => { x.Content = "You can't search for author string AND author user"; x.AllowedMentions = new AllowedMentions(AllowedMentionTypes.None);}); 
+            }
+
+            else if (quoter_string != null && quoter_user != null)
+            {
+
+                await ModifyOriginalResponseAsync(x => { x.Content = "You can't search for author string AND author user"; x.AllowedMentions = new AllowedMentions(AllowedMentionTypes.None);}); 
+            }
+
+            else
+            {
+
+                List<(int, Quote)> found_quotes = await QuoteModuleBase.SearchQuote(author_string, author_user, quoter_string, quoter_user, body);
+
+                if (found_quotes.Count == 0)
+                {
+
+                    await ModifyOriginalResponseAsync(x => { x.Content = "No results!"; x.AllowedMentions = new AllowedMentions(AllowedMentionTypes.None);}); 
+                }
+
+                else
+                {
+
+                    List<string> contentArray = IDatabase.PaginateQuoteSearch(found_quotes); 
+           
+                    MessageComponent component = null;
+                    if (contentArray.Count > 1)
+                    {
+                        component = new ComponentBuilder()
+                            .WithButton($"1", $"searchedQuotesNext-0", disabled: true)
+                            .WithButton("2->", "searchedQuotesNext-1").Build();
+                    }
+
+                    await ModifyOriginalResponseAsync(x => { x.Content = contentArray[0]; x.AllowedMentions = new AllowedMentions(AllowedMentionTypes.None); x.Components = component; }); 
+
+
+                }
+            }
+
         }
 
 

@@ -45,5 +45,45 @@ namespace AradiaBot.Modules
         }
 
     }
+ public class QuoteButtonsModule : InteractionModuleBase<SocketInteractionContext>
+    {
+        [ComponentInteraction("searchedQuotesNext-*")]
+        public async Task QuotesPageMove(string buttonId)
+        {
+            Console.WriteLine(buttonId);
+            int pageNum = int.Parse(buttonId);
+            var contentArray = IDatabase.GetQuoteSearch();
+
+            MessageComponent component = null;
+            if (pageNum-1 >= 0 && pageNum+1 < contentArray.Count)
+            {
+                 component = new ComponentBuilder()
+                    .WithButton($"<- {pageNum}", $"searchedQuotesNext-{pageNum-1}")
+                    .WithButton($"{pageNum+1}", $"searchedQuotesNext-{pageNum}", disabled: true)
+                    .WithButton($"{pageNum+2} ->", $"searchedQuotesNext-{pageNum+1}")
+                    .Build();
+            }
+            else if (pageNum-1 >= 0)
+            {
+                 component = new ComponentBuilder()
+                    .WithButton($"<- {pageNum}", $"searchedQuotesNext-{pageNum-1}")
+                    .WithButton($"{pageNum+1}", $"searchedQuotesNext-{pageNum}", disabled: true)
+                    .Build();
+            }
+            else if (pageNum + 1 < contentArray.Count)
+            {
+                component = new ComponentBuilder()
+                    .WithButton($"{pageNum+1}", $"searchedQuotesNext-{pageNum}",disabled: true)
+                    .WithButton($"{pageNum + 2} ->", $"searchedQuotesNext-{pageNum + 1}")
+                    .Build();
+            }
+
+            IComponentInteraction interaction = (IComponentInteraction)Context.Interaction;
+
+            await interaction.UpdateAsync(x => { x.Content = contentArray[pageNum]; x.AllowedMentions = new AllowedMentions(AllowedMentionTypes.None); x.Components = component; });
+        }
+
+    }
+
 
 }

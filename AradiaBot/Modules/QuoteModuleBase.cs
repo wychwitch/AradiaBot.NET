@@ -9,6 +9,8 @@ using System.Reflection;
 using Discord.Commands;
 using Newtonsoft.Json;
 using AradiaBot.Classes;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 public static class QuoteModuleBase
 {
 
@@ -156,12 +158,12 @@ public static class QuoteModuleBase
         return response_string;
         }
 
-        static public async Task<string> SearchQuote(string? author_string, IUser? author_user, string? quoter_string, IUser? quoter_user, string? body, bool isNSFW = false) 
+        static public async Task<List<(int,Quote)>> SearchQuote(string? author_string, IUser? author_user, string? quoter_string, IUser? quoter_user, string? body, bool isNSFW = false) 
         {
-            string response_string = "";
-        List<Quote> found_quotes = IDatabase.SearchQuotes(author_string, author_user, quoter_string, quoter_user, body, isNSFW);
-        //set up paginaiton
-        return response_string;
+
+        List<(int, Quote)> found_quotes = IDatabase.SearchQuotes(author_string, author_user, quoter_string, quoter_user, body, isNSFW);
+
+        return found_quotes;
         }
 
 

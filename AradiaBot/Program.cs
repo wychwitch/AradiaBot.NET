@@ -31,7 +31,7 @@ public class Program
     private static List<Tarot> _tarotDeck;
     private static ImageServer _imageServer;
     private static InteractionService _interactionService;
-    public static string _version = "1.0.3";
+    public static string _version = "1.0.5";
 
     private static IServiceProvider _services;
 
@@ -139,6 +139,7 @@ public class Program
             await _interactionService.AddModuleAsync<ReactModule>(_services);
             await _interactionService.AddModuleAsync<TarotModule>(_services);
             await _interactionService.AddModuleAsync<ReactButtonsModule>(_services);
+            await _interactionService.AddModuleAsync<QuoteButtonsModule>(_services);
             await _interactionService.RegisterCommandsToGuildAsync(guildid);
         }
 
